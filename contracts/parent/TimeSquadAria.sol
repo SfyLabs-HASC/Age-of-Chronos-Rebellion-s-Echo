@@ -29,7 +29,7 @@ import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 error ERC721OutOfBoundsIndex(address owner, uint256 index);
 error OnlyNFTOwnerCanTransferTokensFromIt();
 
-contract ParentSample is
+contract TimeSquadAria is
     RMRKAbstractEquippable,
     RMRKTokenURIEnumerated,
     RMRKSoulboundPerToken,

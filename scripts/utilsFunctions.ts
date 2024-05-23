@@ -9,15 +9,15 @@ import { getRegistry } from './get-gegistry';
 import { delay, isHardhatNetwork } from './utils';
 import * as C from './constants';
 
-export async function deployxPARENTx(): Promise<ParentSample> {
-    console.log(`Deploying ParentSample to ${network.name} blockchain...`);
+export async function deployParent(name: string,parentCollectionMetadata: String, mintEnumerateParent: string): Promise<ParentSample> {
+    console.log(`Deploying ${name} to ${network.name} blockchain...`);
 
-    const contractFactory = await ethers.getContractFactory('ParentSample');
-    const collectionMeta = C.PARENT_COLLECTION_METADATA;
+    const contractFactory = await ethers.getContractFactory(name);
+    const collectionMeta = parentCollectionMetadata;
     const maxSupply = ethers.MaxUint256;
     const royaltyRecipient = (await ethers.getSigners())[0].address;
-    const royaltyPercentageBps = 300; // 3%
-    const baseTokenURI = C.MINT_ENUMERATE_PARENT;
+    const royaltyPercentageBps = 1000; // 10%
+    const baseTokenURI = mintEnumerateParent;
 
     const args = [collectionMeta, maxSupply, royaltyRecipient, royaltyPercentageBps, baseTokenURI] as const;
     const parentContract: ParentSample = await contractFactory.deploy(...args);
@@ -36,7 +36,7 @@ export async function deployxPARENTx(): Promise<ParentSample> {
         await run('verify:verify', {
             address: contractAddress,
             constructorArguments: args,
-            contract: 'contracts/parent/ParentSample.sol:ParentSample',
+            contract: `contracts/parent/${name}.sol:${name}`,
         });
     }
 

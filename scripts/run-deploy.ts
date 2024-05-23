@@ -7,8 +7,8 @@ import {
 } from '../typechain-types';
 import { delay, isHardhatNetwork } from './utils';
 import {
-  deployxPARENTx,
-  deployCHILD,
+  deployParent,
+  deployChild,
   deployManager,
   deployCatalog,
   configureCatalog,
@@ -24,18 +24,20 @@ import {
   addAssetToChildToken,
   configureManager
 } from './utilsFunctions';
-
+import * as C from './constants';
 
 async function main() {
-  const [deployer, addr1] = await ethers.getSigners();
+  const [deployer, addr1,addr2] = await ethers.getSigners();
   console.log('Deployer:', deployer.address);
   console.log('Addr1:', addr1 ? addr1.address : 'undefined');
+  console.log('Addr2:', addr2 ? addr2.address : 'undefined');
 
-  //const parent = await deployxPARENTx();
-  //const child = await deployCHILD();
-
-  const parent = await deployxPARENTx();  //QUELLI BUONI
-  const child = await deployCHILD();
+  const TimeSquadAria = await deployParent('TimeSquadAria',C.SQUAD_METADATA_ARIA,C.MINT_ENUMERATE_ARIA);
+  const TimeSquadLuna = await deployParent('TimeSquadLuna',C.SQUAD_METADATA_LUNA,C.MINT_ENUMERATE_LUNA);
+  const TimeSquadRyker = await deployParent('TimeSquadRyker',C.SQUAD_METADATA_RYKER,C.MINT_ENUMERATE_RYKER);
+  const TimeSquadThaddeus = await deployParent('TimeSquadThaddeus',C.SQUAD_METADATA_THADDEUS,C.MINT_ENUMERATE_THADDEUS);
+  await delay(10000)
+  const ariaBody = await deployCHILD();
 
   const manager = await deployManager();
   const catalog = await deployCatalog();
