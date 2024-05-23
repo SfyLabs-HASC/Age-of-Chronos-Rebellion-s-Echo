@@ -383,14 +383,37 @@ export async function configureManager(
 }
 
 
-export async function setEquippableAddresses(catalog: RMRKCatalogImpl, equippableChildAddresses: string[]) {
-    const partId = C.SLOT_FOR_CHILD_ID
-    console.log(`Setting equippable addresses for partId: ${partId}, addresses: ${equippableChildAddresses}`);
+export async function setEquippableAddresses(catalog: RMRKCatalogImpl, 
+    equippableChildAddressBody: string,
+    equippableChildAddressHead: string,
+    equippableChildAddressLeftHand: string,
+    equippableChildAddressRightHand: string
+) {
 
     try {
-        const tx = await catalog.setEquippableAddresses(partId, equippableChildAddresses);
+        const tx = await catalog.setEquippableAddresses(C.SQUAD_BODY_SLOT_PART_ID, equippableChildAddressBody);
         await tx.wait();
-        console.log('Equippable addresses set successfully.');
+    } catch (error) {
+        console.error('Error setting equippable addresses:', error);
+        throw error;
+    }
+    try {
+        const tx = await catalog.setEquippableAddresses(C.SQUAD_HEAD_SLOT_PART_ID, equippableChildAddressHead);
+        await tx.wait();
+    } catch (error) {
+        console.error('Error setting equippable addresses:', error);
+        throw error;
+    }
+    try {
+        const tx = await catalog.setEquippableAddresses(C.SQUAD_LEFT_HAND_SLOT_PART_ID, equippableChildAddressLeftHand);
+        await tx.wait();  
+    } catch (error) {
+        console.error('Error setting equippable addresses:', error);
+        throw error;
+    }
+    try {
+        const tx = await catalog.setEquippableAddresses(C.SQUAD_RIGHT_HAND_SLOT_PART_ID, equippableChildAddressRightHand);
+        await tx.wait();
     } catch (error) {
         console.error('Error setting equippable addresses:', error);
         throw error;

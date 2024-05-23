@@ -125,21 +125,91 @@ async function main() {
   await addAssets(TimeSquadRyker, [rykerBody, rykerHead, rykerLeftHand, rykerRightHand], catalogRyker);
   await delay(5000)
   await addAssets(TimeSquadThaddeus, [thaddeusBody, thaddeusHead, thaddeusLeftHand, thaddeusRightHand], catalogThaddeus);
-  await delay(5000)
+  await delay(20000)
 
-
-  const tx01 = await parent.setAutoAcceptCollection(await child.getAddress(), true);
+  const tx01 = await TimeSquadAria.setAutoAcceptCollection(await ariaBody.getAddress(), true);
   await tx01.wait();
+  await delay(2000)
 
-  //await readAssets(parent, child, catalog)
+  const tx02 = await TimeSquadAria.setAutoAcceptCollection(await ariaHead.getAddress(), true);
+  await tx02.wait();
+  await delay(2000);
 
-  //await delay(10000)
+  const tx03 = await TimeSquadAria.setAutoAcceptCollection(await ariaLeftHand.getAddress(), true);
+  await tx03.wait();
+  await delay(2000);
 
-  await setEquippableAddresses(catalog, [await child.getAddress()]);
+  const tx04 = await TimeSquadAria.setAutoAcceptCollection(await ariaRightHand.getAddress(), true);
+  await tx04.wait();
+  await delay(2000);
+
+  const tx05 = await TimeSquadLuna.setAutoAcceptCollection(await lunaBody.getAddress(), true);
+  await tx05.wait();
+  await delay(2000);
+
+  const tx06 = await TimeSquadLuna.setAutoAcceptCollection(await lunaHead.getAddress(), true);
+  await tx06.wait();
+  await delay(2000);
+
+  const tx07 = await TimeSquadLuna.setAutoAcceptCollection(await lunaLeftHand.getAddress(), true);
+  await tx07.wait();
+  await delay(2000);
+
+  const tx08 = await TimeSquadLuna.setAutoAcceptCollection(await lunaRightHand.getAddress(), true);
+  await tx08.wait();
+  await delay(2000);
+
+  const tx09 = await TimeSquadRyker.setAutoAcceptCollection(await rykerBody.getAddress(), true);
+  await tx09.wait();
+  await delay(2000);
+
+  const tx10 = await TimeSquadRyker.setAutoAcceptCollection(await rykerHead.getAddress(), true);
+  await tx10.wait();
+  await delay(2000);
+
+  const tx11 = await TimeSquadRyker.setAutoAcceptCollection(await rykerLeftHand.getAddress(), true);
+  await tx11.wait();
+  await delay(2000);
+
+  const tx12 = await TimeSquadRyker.setAutoAcceptCollection(await rykerRightHand.getAddress(), true);
+  await tx12.wait();
+  await delay(2000);
+
+  const tx13 = await TimeSquadThaddeus.setAutoAcceptCollection(await thaddeusBody.getAddress(), true);
+  await tx13.wait();
+  await delay(2000);
+
+  const tx14 = await TimeSquadThaddeus.setAutoAcceptCollection(await thaddeusHead.getAddress(), true);
+  await tx14.wait();
+  await delay(2000);
+
+  const tx15 = await TimeSquadThaddeus.setAutoAcceptCollection(await thaddeusLeftHand.getAddress(), true);
+  await tx15.wait();
+  await delay(2000);
+
+  const tx16 = await TimeSquadThaddeus.setAutoAcceptCollection(await thaddeusRightHand.getAddress(), true);
+  await tx16.wait();
+  await delay(2000);
+
+
+
+  await delay(10000)
+
+  await setEquippableAddresses(catalogAria, ariaBody, ariaHead, ariaLeftHand, ariaRightHand);
+  await delay(10000)
+  await setEquippableAddresses(catalogLuna, lunaBody, lunaHead, lunaLeftHand, lunaRightHand);
+  await delay(10000)
+  await setEquippableAddresses(catalogRyker, rykerBody, rykerHead, rykerLeftHand, rykerRightHand);
+  await delay(10000)
+  await setEquippableAddresses(catalogThaddeus, thaddeusBody, thaddeusHead, thaddeusLeftHand, thaddeusRightHand);
 
   console.log('Deployment complete!');
   await delay(10000);
 
+
+
+  //TODO MINTARE DUE PARENT CON DUE ADDRESS DIVERSI E DUE CHILD (LEFT_HAND) CON DUE ADDRESS DIVERSI
+  
   await mintParentNFT(parent, deployer.address);
   console.log('Minted parent with id 1');
   await delay(10000);
