@@ -16,7 +16,7 @@ import {IERC165} from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 error ERC721OutOfBoundsIndex(address owner, uint256 index);
 error LengthMismatch();
 
-contract ChildSample is RMRKAbstractEquippable {
+contract LunaBody is RMRKAbstractEquippable {
     // Events
     /**
      * @notice From ERC4906 This event emits when the metadata of a token is changed.
@@ -43,8 +43,8 @@ contract ChildSample is RMRKAbstractEquippable {
         uint16 royaltyPercentageBps
     )
         RMRKImplementationBase(
-            "LEFT HAND - Ryker Blade",
-            "LHRB",
+            "BODY - Luna Stronghold",
+            "BDLS",
             collectionMetadata,
             maxSupply,
             royaltyRecipient,
@@ -77,30 +77,6 @@ contract ChildSample is RMRKAbstractEquippable {
         }
     }
 
-
-/*
-    function nestMint(
-        address to,
-        uint256 destinationId,
-        uint64[] memory assetIds
-    ) public returns (uint256) {
-        uint256 numToMint = assetIds.length;
-        (uint256 nextToken, uint256 totalSupplyOffset) = _prepareMint(
-            numToMint
-        );
-
-        for (uint256 i = nextToken; i < totalSupplyOffset; ) {
-            _nestMint(to, i, destinationId, "");
-            _addAssetToToken(i, assetIds[i - nextToken], 0);
-            unchecked {
-                ++i;
-            }
-        }
-
-        return nextToken;
-    }
-*/
-    
     function mintWithAssets(
         address to,
         uint64[] memory assetIds
@@ -121,31 +97,7 @@ contract ChildSample is RMRKAbstractEquippable {
         }
         _externalPermission[msg.sender] = false;
     }
-/*
-    function nestMintWithAssets(
-        address parentContract,
-        uint256 destinationId,
-        uint64[] memory assetIds
-    ) public virtual onlyOwnerOrContributor {
-        require(_externalPermission[msg.sender], "Permission denied");
-        require(assetIds.length > 0, "No assets to mint");
-        (uint256 tokenId, ) = _prepareMint(1);
-        uint256 length = assetIds.length;
-        _nestMint(parentContract, tokenId, destinationId, "");
-        for (uint256 i; i < length; ) {
-            uint64 assetId = assetIds[i];
-            _addAssetToToken(tokenId, assetId, 0);
-            // Only first asset or assets added by token owner are auto-accepted, so we might need to accept for the rest of cases
-            if (_pendingAssets[tokenId].length != 0) {
-                _acceptAsset(tokenId, 0, assetIds[i]);
-            }
-            unchecked {
-                ++i;
-            }
-        }
-        _externalPermission[msg.sender] = false;
-    }
-*/
+
     /**
      * @notice Grants or revokes minting permission for an external account.
      * @dev This function can only be called by an authorized contract.
@@ -314,30 +266,4 @@ contract ChildSample is RMRKAbstractEquippable {
         }
     }
 
-    //Provides a method to add multiple equippable assets in a single call.
-    function batchAddEquippableAssetEntries(
-        string[] memory metadataURIs,
-        uint64[][] memory partIds,
-        address catalogAddress,
-        uint64 equippableGroupId
-    ) public virtual onlyOwnerOrContributor {
-        uint256 length = metadataURIs.length;
-        if (length != partIds.length) revert LengthMismatch();
-
-        for (uint256 i; i < length; ) {
-            unchecked {
-                ++_totalAssets;
-            }
-            _addAssetEntry(
-                uint64(_totalAssets),
-                equippableGroupId,
-                catalogAddress,
-                metadataURIs[i],
-                partIds[i]
-            );
-            unchecked {
-                ++i;
-            }
-        }
-    }
 }
