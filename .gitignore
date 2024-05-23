@@ -1,0 +1,18 @@
+node_modules
+.env
+coverage
+coverage.json
+typechain
+typechain-types
+scripts/dist
+pythonAutomation/output
+pythonAutomation/output.zip
+temp
+.idea
+
+#Hardhat files
+cache
+artifacts
+
+#sec notes
+sec-review.md

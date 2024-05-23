@@ -1,0 +1,36 @@
+{
+    "name": "Luna Stronghold #1",
+    "description": "GUARDIAN - Luna is a brave and resilient fighter who wears impenetrable armor. Her prowess in defense is unmatched, and she is capable of protecting herself and her companions from the most powerful blows. Luna comes from a family of master armor smiths and grew up learning to create and wear durable armor. She honed her defensive skills during countless battles.",
+    "externalUri": "https://www.ageofchronos.com/",
+    "external_url": "https://www.ageofchronos.com/",
+    "mediaUri": "ipfs://QmYWV8fo4zPYFX6zgoHh7wvSrRYTkE6StQjtA2SXgt3cCx",
+    "animation_url": "ipfs://QmYWV8fo4zPYFX6zgoHh7wvSrRYTkE6StQjtA2SXgt3cCx",
+    "license": "PERSONAL LICENSE (\"CBE-PERSONAL\")",
+    "licenseUri": "https://rmrk.app/license",
+    "attributes": [
+        {
+            "label": "Attack",
+            "type": "number",
+            "value": "50",
+            "trait_type": "Attack"
+        },
+        {
+            "label": "Defence",
+            "type": "number",
+            "value": "5",
+            "trait_type": "Defence"
+        },
+        {
+            "label": "Magic",
+            "type": "number",
+            "value": "0",
+            "trait_type": "Magic"
+        },
+        {
+            "label": "Fortune",
+            "type": "number",
+            "value": "0",
+            "trait_type": "Fortune"
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "name": "Samurai Swords",
+    "description": "Increase your attack +10",
+   
+    "image": "ipfs://QmTSv2Aoaq9KmD7EQxM1S3MYe3dpNLTze3fu1DFmFHouYu",
+    "mediaUri": "ipfs://QmTSv2Aoaq9KmD7EQxM1S3MYe3dpNLTze3fu1DFmFHouYu",
+    "animation_url": "ipfs://QmTSv2Aoaq9KmD7EQxM1S3MYe3dpNLTze3fu1DFmFHouYu",
+    "thumbnailUri": "ipfs://QmfYeZoyiUZrn583UJEMUayhXSFbruibdyRvE544kdBE1g",
+    "preferThumb": false,
+    "attributes": [
+        {
+            "label": "Attack",
+            "type": "number",
+            "value": 10,
+            "trait_type": "Generation",
+            "display_type": "number"
+        }
+    ]
+}

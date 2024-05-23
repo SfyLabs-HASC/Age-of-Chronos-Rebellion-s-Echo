@@ -1,0 +1,15 @@
+{
+    "name": "xPARENTx - AGE OF CHRONOS",
+    "description": "Description Parent xxx",
+    "mediaUri": "ipfs://QmQNVfxwNjan3aYKo44WKr2yLfhBGb1dCggU3GUfVTDWLq/character/aria/logo.jpeg",
+    "externalUri": "https://www.ageofchronos.com/",
+    "thumbnailUri": "ipfs://QmQNVfxwNjan3aYKo44WKr2yLfhBGb1dCggU3GUfVTDWLq/character/aria/logo.jpeg",
+    "license": "MIT",
+    "licenseUri": "https://rmrk.app/license",
+    "tags": [
+        "ageofchronos",
+        "nft",
+        "rmrk",
+        "SFY"
+    ]
+  }

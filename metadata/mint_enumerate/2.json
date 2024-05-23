@@ -1,0 +1,37 @@
+{
+    "name": "Ryker Blade #2",
+    "description": "DAMAGER - Ryker Blade is a muscular warrior with astonishing mastery in the use of swords and combat weapons. He is known for his extraordinary physical strength and skill in close combat. Ryker has been trained in martial arts since a young age and has perfected his skills through years of constant training. His superhuman strength allows him to defeat opponents with powerful strikes and skillful maneuvers.",
+    "externalUri": "https://www.ageofchronos.com/",
+    "external_url": "https://www.ageofchronos.com/",
+    "mediaUri": "ipfs://QmV81Ewo9Fwox2PbkFASNMF3efnZrR9rkigL5Y7ZJaVNbW",
+    "animation_url": "ipfs://QmV81Ewo9Fwox2PbkFASNMF3efnZrR9rkigL5Y7ZJaVNbW",
+    "license": "PERSONAL LICENSE (\"CBE-PERSONAL\")",
+    "licenseUri": "https://rmrk.app/license",
+    "attributes": [
+		{
+            "label": "Attack",
+            "type": "number",
+            "value": "55",
+            "trait_type": "Attack"
+        },
+	
+        {
+            "label": "Defence",
+            "type": "number",
+            "value": "5",
+            "trait_type": "Defence"
+        },
+        {
+            "label": "Magic",
+            "type": "number",
+            "value": "0",
+            "trait_type": "Magic"
+        },
+        {
+            "label": "Fortune",
+            "type": "number",
+            "value": "0",
+            "trait_type": "Fortune"
+        }
+    ]
+}
