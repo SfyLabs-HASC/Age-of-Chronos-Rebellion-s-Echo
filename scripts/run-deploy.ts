@@ -1,7 +1,7 @@
 import { ethers, run, network } from 'hardhat';
 import {
-  ParentSample,
-  ChildSample,
+  TimeSquadAria,
+  AriaBody,
   AgeOfChronosManager,
   RMRKCatalogImpl
 } from '../typechain-types';
@@ -191,17 +191,21 @@ async function main() {
   await tx16.wait();
   await delay(2000);
 
+  console.log("SetAutoAcceptCollection complete");
 
+  await delay(10000)
+  await setEquippableAddresses(catalogAria, await ariaBody.getAddress(), await ariaHead.getAddress(), await ariaLeftHand.getAddress(), await ariaRightHand.getAddress());
+  await delay(10000);
 
-  await delay(10000)
+  await setEquippableAddresses(catalogLuna, await lunaBody.getAddress(), await lunaHead.getAddress(), await lunaLeftHand.getAddress(), await lunaRightHand.getAddress());
+  await delay(10000);
 
-  await setEquippableAddresses(catalogAria, ariaBody, ariaHead, ariaLeftHand, ariaRightHand);
-  await delay(10000)
-  await setEquippableAddresses(catalogLuna, lunaBody, lunaHead, lunaLeftHand, lunaRightHand);
-  await delay(10000)
-  await setEquippableAddresses(catalogRyker, rykerBody, rykerHead, rykerLeftHand, rykerRightHand);
-  await delay(10000)
-  await setEquippableAddresses(catalogThaddeus, thaddeusBody, thaddeusHead, thaddeusLeftHand, thaddeusRightHand);
+  await setEquippableAddresses(catalogRyker, await rykerBody.getAddress(), await rykerHead.getAddress(), await rykerLeftHand.getAddress(), await rykerRightHand.getAddress());
+  await delay(10000);
+
+  await setEquippableAddresses(catalogThaddeus, await thaddeusBody.getAddress(), await thaddeusHead.getAddress(), await thaddeusLeftHand.getAddress(), await thaddeusRightHand.getAddress());
+  await delay(10000);
+
 
   console.log('Deployment complete!');
   await delay(10000);
@@ -209,43 +213,127 @@ async function main() {
 
 
   //TODO MINTARE DUE PARENT CON DUE ADDRESS DIVERSI E DUE CHILD (LEFT_HAND) CON DUE ADDRESS DIVERSI
-  
-  await mintParentNFT(parent, deployer.address);
-  console.log('Minted parent with id 1');
+
+  await mintParentNFT(TimeSquadAria, deployer.address);
+  await delay(1000);
+  await mintParentNFT(TimeSquadLuna, deployer.address);
+  await delay(1000);
+  await mintParentNFT(TimeSquadRyker, deployer.address);
+  await delay(1000);
+  await mintParentNFT(TimeSquadThaddeus, deployer.address);
+  console.log(`Minted parents NFT by ${deployer.address} with id 1`);
   await delay(10000);
 
-  await setExternalPermission(child, deployer.address, true);
 
-  await mintChildNFT(child, deployer.address)
+
+  await setExternalPermission(ariaBody, deployer.address, true);
+  await setExternalPermission(ariaHead, deployer.address, true);
+  await setExternalPermission(ariaLeftHand, deployer.address, true);
+  await setExternalPermission(ariaRightHand, deployer.address, true);
+  await delay(10000);
+  await setExternalPermission(lunaBody, deployer.address, true);
+  await setExternalPermission(lunaHead, deployer.address, true);
+  await setExternalPermission(lunaLeftHand, deployer.address, true);
+  await setExternalPermission(lunaRightHand, deployer.address, true);
+  await delay(10000);
+  await setExternalPermission(rykerBody, deployer.address, true);
+  await setExternalPermission(rykerHead, deployer.address, true);
+  await setExternalPermission(rykerLeftHand, deployer.address, true);
+  await setExternalPermission(rykerRightHand, deployer.address, true);
+  await delay(10000);
+  await setExternalPermission(thaddeusBody, deployer.address, true);
+  await setExternalPermission(thaddeusHead, deployer.address, true);
+  await setExternalPermission(thaddeusLeftHand, deployer.address, true);
+  await setExternalPermission(thaddeusRightHand, deployer.address, true);
+  await delay(10000);
+
+  //await mintChildNFT(ariaBody, deployer.address);
+  //await mintChildNFT(ariaHead, deployer.address);
+  await mintChildNFT(ariaLeftHand, deployer.address);
+  //await mintChildNFT(ariaRightHand, deployer.address);
+  await delay(10000);
+  //await mintChildNFT(lunaBody, deployer.address);
+  //await mintChildNFT(lunaHead, deployer.address);
+  await mintChildNFT(lunaLeftHand, deployer.address);
+  //await mintChildNFT(lunaRightHand, deployer.address);
+  await delay(10000);
+  //await mintChildNFT(rykerBody, deployer.address);
+  //await mintChildNFT(rykerHead, deployer.address);
+  await mintChildNFT(rykerLeftHand, deployer.address);
+  //await mintChildNFT(rykerRightHand, deployer.address);
+  await delay(10000);
+  //await mintChildNFT(thaddeusBody, deployer.address);
+  //await mintChildNFT(thaddeusHead, deployer.address);
+  await mintChildNFT(thaddeusLeftHand, deployer.address);
+  //await mintChildNFT(thaddeusRightHand, deployer.address);
+  await delay(10000);
+
   console.log('Minted child with id 1');
+
+
+  await mintParentNFT(TimeSquadAria, addr1.address);
+  await delay(10000);
+  await mintParentNFT(TimeSquadLuna, addr1.address);
+  await delay(10000);
+  await mintParentNFT(TimeSquadRyker, addr1.address);
+  await delay(10000);
+  await mintParentNFT(TimeSquadThaddeus, addr1.address);
+  console.log(`Minted parents NFT by ${addr1.address} with id 2`);
+  await delay(10000);
+
+
+
+  await setExternalPermission(ariaBody, addr1.address, true);
+  await setExternalPermission(ariaHead, addr1.address, true);
+  await setExternalPermission(ariaLeftHand, addr1.address, true);
+  await setExternalPermission(ariaRightHand, addr1.address, true);
+  await delay(10000);
+  await setExternalPermission(lunaBody, addr1.address, true);
+  await setExternalPermission(lunaHead, addr1.address, true);
+  await setExternalPermission(lunaLeftHand, addr1.address, true);
+  await setExternalPermission(lunaRightHand, addr1.address, true);
+  await delay(10000);
+  await setExternalPermission(rykerBody, addr1.address, true);
+  await setExternalPermission(rykerHead, addr1.address, true);
+  await setExternalPermission(rykerLeftHand, addr1.address, true);
+  await setExternalPermission(rykerRightHand, addr1.address, true);
+  await delay(10000);
+  await setExternalPermission(thaddeusBody, addr1.address, true);
+  await setExternalPermission(thaddeusHead, addr1.address, true);
+  await setExternalPermission(thaddeusLeftHand, addr1.address, true);
+  await setExternalPermission(thaddeusRightHand, addr1.address, true);
+  await delay(10000);
+
+
+
+
+  //NON WORKA PERCHé DOVRESTI PASSARGLI IL CONTRATTO FACTORY ASSOCIATO AD ADDR1 E NON DEPLOYER
   /*
-  const assetIds = [1];
-  const txchild = await child.mintWithAssets(deployer.address, assetIds);
-  await txchild.wait();
-
-  
-  const tokenId = 1;
-  const assetId=2n;
-  const replacesAssetWithId=0n;
-  await addAssetToChildToken(child, tokenId, assetId, replacesAssetWithId)  
+  //await mintChildNFT(ariaBody, addr1.address);
+  //await mintChildNFT(ariaHead, addr1.address);
+  await mintChildNFT(ariaLeftHand, addr1.address);
+  //await mintChildNFT(ariaRightHand, addr1.address);
+  await delay(20000);
+  //await mintChildNFT(lunaBody, addr1.address);
+  //await mintChildNFT(lunaHead, addr1.address);
+  await mintChildNFT(lunaLeftHand, addr1.address);
+  //await mintChildNFT(lunaRightHand, addr1.address);
+  await delay(20000);
+  //await mintChildNFT(rykerBody, addr1.address);
+  //await mintChildNFT(rykerHead, addr1.address);
+  await mintChildNFT(rykerLeftHand, addr1.address);
+  //await mintChildNFT(rykerRightHand, addr1.address);
+  await delay(20000);
+  //await mintChildNFT(thaddeusBody, addr1.address);
+  //await mintChildNFT(thaddeusHead, addr1.address);
+  await mintChildNFT(thaddeusLeftHand, addr1.address);
+  //await mintChildNFT(thaddeusRightHand, addr1.address);
+  await delay(20000);
 */
-
   console.log(" fine")
   /*
-  //await setExternalPermission(child, deployer.address, true);
-  const assetIds02 = [1,2];
-  const txchild2 = await child.nestMint(await parent.getAddress(),parentId01, assetIds02);
-  await txchild2.wait();
-  console.log('Minted child with id 2');
-*/
-  // Esegui il nest transfer del Child al Parent
-  //await addAssetToChildToken(child, 1, 2n, 0n)
   //await nestTransferChildToParent(parent, child, 1, 1, deployer.address);  // Assumi che sia il token ID 1 per entrambi
-
-  //await verifyEquippableStatus(catalog, await child.getAddress(), 1000n);
-  //await delay(1000)
-  //await equipChildOnParent(parent, 1, 1, 1000);
-  //await verifyEquippableStatus(catalog, await child.getAddress(), 1000n);
+*/
 }
 
 main().catch((error) => {

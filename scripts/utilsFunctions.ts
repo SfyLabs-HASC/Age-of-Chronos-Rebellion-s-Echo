@@ -25,12 +25,15 @@ export async function deployParent(name: string, parentCollectionMetadata: Strin
     const contractAddress = await parentContract.getAddress();
     console.log(`${name} deployed to ${contractAddress}`);
 
-    const registry = await getRegistry();
-    await registry.addExternalCollection(contractAddress, args[0]);
-    console.log('Collection added to Singular Registry');
+
 
 
     if (!isHardhatNetwork()) {
+        const registry = await getRegistry();
+        await registry.addExternalCollection(contractAddress, args[0]);
+        console.log('Collection added to Singular Registry');
+
+
         console.log('Waiting 20 seconds before verifying contract...');
         await delay(20000);
         await run('verify:verify', {
@@ -41,7 +44,7 @@ export async function deployParent(name: string, parentCollectionMetadata: Strin
     }
 
 
-    return parentContract;
+    return parentContract as TimeSquadAria;
 }
 
 export async function deployChild(name: string, childCollectionMetadata: String): Promise<AriaBody> {
@@ -59,11 +62,14 @@ export async function deployChild(name: string, childCollectionMetadata: String)
     const contractAddress = await childContract.getAddress();
     console.log(`${name} deployed to ${contractAddress}`);
 
-    const registry = await getRegistry();
-    await registry.addExternalCollection(contractAddress, args[0]);
-    console.log('Collection added to Singular Registry');
+
 
     if (!isHardhatNetwork()) {
+        const registry = await getRegistry();
+        await registry.addExternalCollection(contractAddress, args[0]);
+        console.log('Collection added to Singular Registry');
+
+
         console.log('Waiting 20 seconds before verifying contract...');
         await delay(20000);
         await run('verify:verify', {
@@ -72,7 +78,7 @@ export async function deployChild(name: string, childCollectionMetadata: String)
             contract: `contracts/child/${name}.sol:${name}`,
         });
     }
-    return childContract;
+    return childContract as AriaBody;
 }
 
 export async function deployManager(): Promise<AgeOfChronosManager> {
@@ -128,7 +134,7 @@ export async function configureCatalog(
     childRightHand: string,
     fixed_part_parent_metadata: string
 ): Promise<void> {
-    console.log('Configuring Catalog...', await catalog.name());
+    console.log('Configuring Catalog...', await catalog.getAddress());
 
     //fixed
     const tx00 = await catalog.addPart({
@@ -208,11 +214,11 @@ export async function addAssets(
         C.SQUAD_RIGHT_HAND_SLOT_PART_ID
         ]);
     await tx1.wait();
-
+        await delay(1000)
 
 
     for (const child of childs) {
-
+        await delay(5000)
 
         //BODY
         //set primary asset
@@ -220,7 +226,7 @@ export async function addAssets(
             C.ARIA_ASSET_METADATA_BODY_URI_1,
         );
         await txChild01_body.wait();
-
+        await delay(1000)
         //set secondary asset
         const txChild02_body = await child.addEquippableAssetEntry(
             C.EQUIPPABLE_GROUP_FOR_ITEMS_BODY,
@@ -229,14 +235,14 @@ export async function addAssets(
             [],
         );
         await txChild02_body.wait();
-
+        await delay(1000)
         const txChild03_body = await child.setValidParentForEquippableGroup(
             C.EQUIPPABLE_GROUP_FOR_ITEMS_BODY,
             await parent.getAddress(),
             C.SQUAD_BODY_SLOT_PART_ID,
         );
         await txChild03_body.wait();
-
+        await delay(1000)
         
         //HEAD
         //set primary asset
@@ -244,7 +250,7 @@ export async function addAssets(
             C.ARIA_ASSET_METADATA_HEAD_URI_1,
         );
         await txChild01_head.wait();
-
+        await delay(1000)
         //set secondary asset
         const txChild02_head = await child.addEquippableAssetEntry(
             C.EQUIPPABLE_GROUP_FOR_ITEMS_HEAD,
@@ -253,14 +259,14 @@ export async function addAssets(
             [],
         );
         await txChild02_head.wait();
-
+        await delay(1000)
         const txChild03_head = await child.setValidParentForEquippableGroup(
             C.EQUIPPABLE_GROUP_FOR_ITEMS_HEAD,
             await parent.getAddress(),
             C.SQUAD_HEAD_SLOT_PART_ID,
         );
         await txChild03_head.wait();
-
+        await delay(1000)
         
 
         //LEFT HAND
@@ -269,7 +275,7 @@ export async function addAssets(
             C.ARIA_ASSET_METADATA_LEFT_HAND_URI_1,
         );
         await txChild01_left_hand.wait();
-
+        await delay(1000)
         //set secondary asset
         const txChild02_left_hand = await child.addEquippableAssetEntry(
             C.EQUIPPABLE_GROUP_FOR_ITEMS_LEFT_HAND,
@@ -278,14 +284,14 @@ export async function addAssets(
             [],
         );
         await txChild02_left_hand.wait();
-
+        await delay(1000)
         const txChild03_left_hand = await child.setValidParentForEquippableGroup(
             C.EQUIPPABLE_GROUP_FOR_ITEMS_LEFT_HAND,
             await parent.getAddress(),
             C.SQUAD_LEFT_HAND_SLOT_PART_ID,
         );
         await txChild03_left_hand.wait();
-
+        await delay(1000)
         
 
         //RIGHT HAND
@@ -294,7 +300,7 @@ export async function addAssets(
             C.ARIA_ASSET_METADATA_RIGHT_HAND_URI_1,
         );
         await txChild01_right_hand.wait();
-
+        await delay(1000)
         //set secondary asset
         const txChild02_right_hand = await child.addEquippableAssetEntry(
             C.EQUIPPABLE_GROUP_FOR_ITEMS_RIGHT_HAND,
@@ -303,13 +309,15 @@ export async function addAssets(
             [],
         );
         await txChild02_right_hand.wait();
-
+        await delay(1000)
         const txChild03_right_hand = await child.setValidParentForEquippableGroup(
             C.EQUIPPABLE_GROUP_FOR_ITEMS_RIGHT_HAND,
             await parent.getAddress(),
             C.SQUAD_RIGHT_HAND_SLOT_PART_ID,
         );
         await txChild03_right_hand.wait();
+        await delay(1000)
+
     }
 
 
@@ -391,28 +399,28 @@ export async function setEquippableAddresses(catalog: RMRKCatalogImpl,
 ) {
 
     try {
-        const tx = await catalog.setEquippableAddresses(C.SQUAD_BODY_SLOT_PART_ID, equippableChildAddressBody);
+        const tx = await catalog.setEquippableAddresses(C.SQUAD_BODY_SLOT_PART_ID, [equippableChildAddressBody]);
         await tx.wait();
     } catch (error) {
         console.error('Error setting equippable addresses:', error);
         throw error;
     }
     try {
-        const tx = await catalog.setEquippableAddresses(C.SQUAD_HEAD_SLOT_PART_ID, equippableChildAddressHead);
+        const tx = await catalog.setEquippableAddresses(C.SQUAD_HEAD_SLOT_PART_ID, [equippableChildAddressHead]);
         await tx.wait();
     } catch (error) {
         console.error('Error setting equippable addresses:', error);
         throw error;
     }
     try {
-        const tx = await catalog.setEquippableAddresses(C.SQUAD_LEFT_HAND_SLOT_PART_ID, equippableChildAddressLeftHand);
+        const tx = await catalog.setEquippableAddresses(C.SQUAD_LEFT_HAND_SLOT_PART_ID, [equippableChildAddressLeftHand]);
         await tx.wait();  
     } catch (error) {
         console.error('Error setting equippable addresses:', error);
         throw error;
     }
     try {
-        const tx = await catalog.setEquippableAddresses(C.SQUAD_RIGHT_HAND_SLOT_PART_ID, equippableChildAddressRightHand);
+        const tx = await catalog.setEquippableAddresses(C.SQUAD_RIGHT_HAND_SLOT_PART_ID, [equippableChildAddressRightHand]);
         await tx.wait();
     } catch (error) {
         console.error('Error setting equippable addresses:', error);
@@ -420,7 +428,7 @@ export async function setEquippableAddresses(catalog: RMRKCatalogImpl,
     }
 }
 
-export async function setExternalPermission(child: ChildSample, account: string, permission: boolean) {
+export async function setExternalPermission(child: AriaBody, account: string, permission: boolean) {
     console.log('Setting external permission for minting Child NFT...');
 
     const tx = await child.setExternalPermission(account, permission);
@@ -550,15 +558,16 @@ export async function verifyEquippableStatus(catalog: RMRKCatalogImpl, childAddr
 }
 
 
-export async function mintParentNFT(parent: ParentSample, recipient: string) {
-    console.log('Minting Parent NFT...');
+export async function mintParentNFT(parent: TimeSquadAria, recipient: string) {
+    const nameContract = await parent.name()
+    console.log(`Minting ${nameContract} NFT...`);
     const tx = await parent.mint(recipient);
     await tx.wait();
     console.log('Minted Parent NFT with ID 1 to:', recipient);
 }
 
 
-export async function mintChildNFT(child: ChildSample, recipient: string) {
+export async function mintChildNFT(child: AriaBody, recipient: string) {
     console.log('Minting Child NFT...');
     const assetIds = [1, 2]; // Replace with actual asset IDs as needed.
     const txchild = await child.mintWithAssets(recipient, assetIds);
