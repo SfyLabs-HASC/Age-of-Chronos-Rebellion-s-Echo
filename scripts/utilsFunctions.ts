@@ -1,7 +1,7 @@
 import { ethers, run, network } from 'hardhat';
 import {
-    ParentSample,
-    ChildSample,
+    TimeSquadAria,
+    AriaBody,
     AgeOfChronosManager,
     RMRKCatalogImpl
 } from '../typechain-types';
@@ -9,7 +9,7 @@ import { getRegistry } from './get-gegistry';
 import { delay, isHardhatNetwork } from './utils';
 import * as C from './constants';
 
-export async function deployParent(name: string,parentCollectionMetadata: String, mintEnumerateParent: string): Promise<ParentSample> {
+export async function deployParent(name: string, parentCollectionMetadata: String, mintEnumerateParent: string): Promise<TimeSquadAria> {
     console.log(`Deploying ${name} to ${network.name} blockchain...`);
 
     const contractFactory = await ethers.getContractFactory(name);
@@ -20,10 +20,10 @@ export async function deployParent(name: string,parentCollectionMetadata: String
     const baseTokenURI = mintEnumerateParent;
 
     const args = [collectionMeta, maxSupply, royaltyRecipient, royaltyPercentageBps, baseTokenURI] as const;
-    const parentContract: ParentSample = await contractFactory.deploy(...args);
+    const parentContract: TimeSquadAria = await contractFactory.deploy(...args);
     await parentContract.waitForDeployment();
     const contractAddress = await parentContract.getAddress();
-    console.log(`ParentSample deployed to ${contractAddress}`);
+    console.log(`${name} deployed to ${contractAddress}`);
 
     const registry = await getRegistry();
     await registry.addExternalCollection(contractAddress, args[0]);
@@ -44,20 +44,20 @@ export async function deployParent(name: string,parentCollectionMetadata: String
     return parentContract;
 }
 
-export async function deployCHILD(): Promise<ChildSample> {
-    console.log(`Deploying ChildSample to ${network.name} blockchain...`);
+export async function deployChild(name: string, childCollectionMetadata: String): Promise<AriaBody> {
+    console.log(`Deploying ${name} to ${network.name} blockchain...`);
 
-    const contractFactory = await ethers.getContractFactory('ChildSample');
-    const collectionMeta = C.CHILD_COLLECTION_METADATA;
+    const contractFactory = await ethers.getContractFactory(name);
+    const collectionMeta = childCollectionMetadata;
     const maxSupply = ethers.MaxUint256;
     const royaltyRecipient = (await ethers.getSigners())[0].address;
-    const royaltyPercentageBps = 300; // 3%
+    const royaltyPercentageBps = 1000; // 10%
 
     const args = [collectionMeta, maxSupply, royaltyRecipient, royaltyPercentageBps] as const;
-    const childContract: ChildSample = await contractFactory.deploy(...args);
+    const childContract: AriaBody = await contractFactory.deploy(...args);
     await childContract.waitForDeployment();
     const contractAddress = await childContract.getAddress();
-    console.log(`ChildSample deployed to ${contractAddress}`);
+    console.log(`${name} deployed to ${contractAddress}`);
 
     const registry = await getRegistry();
     await registry.addExternalCollection(contractAddress, args[0]);
@@ -69,7 +69,7 @@ export async function deployCHILD(): Promise<ChildSample> {
         await run('verify:verify', {
             address: contractAddress,
             constructorArguments: args,
-            contract: 'contracts/child/ChildSample.sol:ChildSample',
+            contract: `contracts/child/${name}.sol:${name}`,
         });
     }
     return childContract;
@@ -97,15 +97,15 @@ export async function deployManager(): Promise<AgeOfChronosManager> {
     return managerContract;
 }
 
-export async function deployCatalog(): Promise<RMRKCatalogImpl> {
-    const catalogMetadataUri = C.CATALOG_METADATA;
-    const catalogType = C.CATALOG_TYPE;
+export async function deployCatalog(name: string, catalogMetadata: string, catalogStringType: string): Promise<RMRKCatalogImpl> {
+    const catalogMetadataUri = catalogMetadata;
+    const catalogType = catalogStringType;
 
     const catalogFactory = await ethers.getContractFactory('RMRKCatalogImpl');
     const catalog = await catalogFactory.deploy(catalogMetadataUri, catalogType);
     await catalog.waitForDeployment();
     const catalogAddress = await catalog.getAddress();
-    console.log('Catalog deployed to:', catalogAddress);
+    console.log(`Catalog ${name} deployed to:`, catalogAddress);
 
     if (!isHardhatNetwork()) {
         console.log('Waiting 20 seconds before verifying contract...');
@@ -117,89 +117,210 @@ export async function deployCatalog(): Promise<RMRKCatalogImpl> {
         });
     }
 
-
     return catalog;
 }
 
 export async function configureCatalog(
     catalog: RMRKCatalogImpl,
-    childAddress: string,
+    childBody: string,
+    childHead: string,
+    childLeftHand: string,
+    childRightHand: string,
+    fixed_part_parent_metadata: string
 ): Promise<void> {
-    console.log('Configuring Catalog...');
+    console.log('Configuring Catalog...', await catalog.name());
 
-    //todo forse non è piu necessario
+    //fixed
     const tx00 = await catalog.addPart({
         partId: C.FIXED_PART_PARENT_ID,
         part: {
             itemType: C.PART_TYPE_FIXED,
-            z: C.Z_INDEX_FOR_PARENT,
+            z: C.Z_INDEX_BACKGROUND,
             equippable: [],
-            metadataURI: C.FIXED_PART_CHILD_METADATA,
+            metadataURI: fixed_part_parent_metadata,
         },
     });
     await tx00.wait();
 
-    const tx01 = await catalog.addPart({
-        partId: C.SLOT_FOR_CHILD_ID,
+    //slots
+    const txBody = await catalog.addPart({
+        partId: C.SQUAD_BODY_SLOT_PART_ID,
         part: {
             itemType: C.PART_TYPE_SLOT,
-            z: C.Z_INDEX_FOR_CHILD,
-            equippable: [childAddress],
-            metadataURI: C.SLOT_FOR_CHILD_METADATA,
+            z: C.Z_INDEX_BODY_ITEMS,
+            equippable: [childBody],
+            metadataURI: C.SQUAD_ITEM_BODY_SLOT_METADATA,
         },
     });
-    await tx01.wait();
+    await txBody.wait();
+
+    const txHead = await catalog.addPart({
+        partId: C.SQUAD_HEAD_SLOT_PART_ID,
+        part: {
+            itemType: C.PART_TYPE_SLOT,
+            z: C.Z_INDEX_HEAD_ITEMS,
+            equippable: [childHead],
+            metadataURI: C.SQUAD_ITEM_HEAD_SLOT_METADATA,
+        },
+    });
+    await txHead.wait();
+
+    const txLeftHand = await catalog.addPart({
+        partId: C.SQUAD_LEFT_HAND_SLOT_PART_ID,
+        part: {
+            itemType: C.PART_TYPE_SLOT,
+            z: C.Z_INDEX_LEFT_HAND_ITEMS,
+            equippable: [childLeftHand],
+            metadataURI: C.SQUAD_ITEM_LEFT_SLOT_METADATA,
+        },
+    });
+    await txLeftHand.wait();
+
+    const txRightHand = await catalog.addPart({
+        partId: C.SQUAD_RIGHT_HAND_SLOT_PART_ID,
+        part: {
+            itemType: C.PART_TYPE_SLOT,
+            z: C.Z_INDEX_RIGHT_HAND_ITEMS,
+            equippable: [childRightHand],
+            metadataURI: C.SQUAD_ITEM_RIGHT_SLOT_METADATA,
+        },
+    });
+    await txRightHand.wait();
     console.log('Catalog configured');
 }
 
 export async function addAssets(
-    parent: ParentSample,
-    child: ChildSample,
+    parent: TimeSquadAria,
+    childs: AriaBody[],
     catalog: RMRKCatalogImpl,
 ): Promise<void> {
     console.log('Adding assets to parent...');
 
-    //forse non piu necessario?
+    //forse non piu necessario? PARENT
     const tx1 = await parent.addEquippableAssetEntry(
         0n,
         await catalog.getAddress(),
-        C.PARENT_ASSET_METADATA_URI,
-        [C.FIXED_PART_PARENT_ID, C.SLOT_FOR_CHILD_ID],
-    );
+        C.ARIA_ASSET_METADATA_URI,
+        [C.FIXED_PART_PARENT_ID,
+        C.SQUAD_BODY_SLOT_PART_ID,
+        C.SQUAD_HEAD_SLOT_PART_ID,
+        C.SQUAD_LEFT_HAND_SLOT_PART_ID,
+        C.SQUAD_RIGHT_HAND_SLOT_PART_ID
+        ]);
     await tx1.wait();
 
-    
-    //setprimary asset
-    const tx2 = await child.addAssetEntry(
-        C.CHILD_ASSET_METADATA_URI_1,
-    );
-    await tx2.wait();
 
 
-    const tx3 = await child.addEquippableAssetEntry(
-        C.CHILD_EQUIPPABLE_GROUP_ID,
-        ethers.ZeroAddress,
-        C.CHILD_ASSET_METADATA_URI_2,
-        [],
-    );
-    await tx3.wait();
+    for (const child of childs) {
 
-    const tx4 = await child.setValidParentForEquippableGroup(
-        C.CHILD_EQUIPPABLE_GROUP_ID,
-        await parent.getAddress(),
-        C.SLOT_FOR_CHILD_ID,
-    );
-    await tx4.wait();
+
+        //BODY
+        //set primary asset
+        const txChild01_body = await child.addAssetEntry(
+            C.ARIA_ASSET_METADATA_BODY_URI_1,
+        );
+        await txChild01_body.wait();
+
+        //set secondary asset
+        const txChild02_body = await child.addEquippableAssetEntry(
+            C.EQUIPPABLE_GROUP_FOR_ITEMS_BODY,
+            ethers.ZeroAddress,
+            C.ARIA_ASSET_METADATA_BODY_URI_2,
+            [],
+        );
+        await txChild02_body.wait();
+
+        const txChild03_body = await child.setValidParentForEquippableGroup(
+            C.EQUIPPABLE_GROUP_FOR_ITEMS_BODY,
+            await parent.getAddress(),
+            C.SQUAD_BODY_SLOT_PART_ID,
+        );
+        await txChild03_body.wait();
+
+        
+        //HEAD
+        //set primary asset
+        const txChild01_head = await child.addAssetEntry(
+            C.ARIA_ASSET_METADATA_HEAD_URI_1,
+        );
+        await txChild01_head.wait();
+
+        //set secondary asset
+        const txChild02_head = await child.addEquippableAssetEntry(
+            C.EQUIPPABLE_GROUP_FOR_ITEMS_HEAD,
+            ethers.ZeroAddress,
+            C.ARIA_ASSET_METADATA_HEAD_URI_2,
+            [],
+        );
+        await txChild02_head.wait();
+
+        const txChild03_head = await child.setValidParentForEquippableGroup(
+            C.EQUIPPABLE_GROUP_FOR_ITEMS_HEAD,
+            await parent.getAddress(),
+            C.SQUAD_HEAD_SLOT_PART_ID,
+        );
+        await txChild03_head.wait();
+
+        
+
+        //LEFT HAND
+        //set primary asset
+        const txChild01_left_hand = await child.addAssetEntry(
+            C.ARIA_ASSET_METADATA_LEFT_HAND_URI_1,
+        );
+        await txChild01_left_hand.wait();
+
+        //set secondary asset
+        const txChild02_left_hand = await child.addEquippableAssetEntry(
+            C.EQUIPPABLE_GROUP_FOR_ITEMS_LEFT_HAND,
+            ethers.ZeroAddress,
+            C.ARIA_ASSET_METADATA_LEFT_HAND_URI_2,
+            [],
+        );
+        await txChild02_left_hand.wait();
+
+        const txChild03_left_hand = await child.setValidParentForEquippableGroup(
+            C.EQUIPPABLE_GROUP_FOR_ITEMS_LEFT_HAND,
+            await parent.getAddress(),
+            C.SQUAD_LEFT_HAND_SLOT_PART_ID,
+        );
+        await txChild03_left_hand.wait();
+
+        
+
+        //RIGHT HAND
+        //set primary asset
+        const txChild01_right_hand = await child.addAssetEntry(
+            C.ARIA_ASSET_METADATA_RIGHT_HAND_URI_1,
+        );
+        await txChild01_right_hand.wait();
+
+        //set secondary asset
+        const txChild02_right_hand = await child.addEquippableAssetEntry(
+            C.EQUIPPABLE_GROUP_FOR_ITEMS_RIGHT_HAND,
+            ethers.ZeroAddress,
+            C.ARIA_ASSET_METADATA_RIGHT_HAND_URI_2,
+            [],
+        );
+        await txChild02_right_hand.wait();
+
+        const txChild03_right_hand = await child.setValidParentForEquippableGroup(
+            C.EQUIPPABLE_GROUP_FOR_ITEMS_RIGHT_HAND,
+            await parent.getAddress(),
+            C.SQUAD_RIGHT_HAND_SLOT_PART_ID,
+        );
+        await txChild03_right_hand.wait();
+    }
 
 
 }
 
 
-export async function checkEquipConditions(childContract: ChildSample, 
-    parentContract: ParentSample, 
-    catalogContract: RMRKCatalogImpl, 
-    childTokenId: number, 
-    parentTokenId: number, 
+export async function checkEquipConditions(childContract: ChildSample,
+    parentContract: ParentSample,
+    catalogContract: RMRKCatalogImpl,
+    childTokenId: number,
+    parentTokenId: number,
     partId: number) {
     const childAddress = await childContract.getAddress();
     const parentAddress = await parentContract.getAddress();
@@ -235,25 +356,29 @@ export async function checkEquipConditions(childContract: ChildSample,
 
 
 export async function configureManager(
-    parent: ParentSample,
-    child: ChildSample,
+    parent: TimeSquadAria,
+    childs: AriaBody[],
     catalog: RMRKCatalogImpl,
     manager: AgeOfChronosManager
 ): Promise<void> {
-    console.log('Configuring Manager...');
+    const parentName = await parent.name()
+    console.log('Configuring Manager...', parentName);
 
     const managerAddress = await manager.getAddress();
 
     // Adding manager as a contributor in the parent contract
     const tx1 = await parent.manageContributor(managerAddress, true);
     await tx1.wait();
-    console.log('Manager added as a contributor in Parent contract');
+    console.log(`Manager added as a contributor in ${parentName} contract`);
 
     // Adding manager as a contributor in the child contract
-    const tx2 = await child.manageContributor(managerAddress, true);
-    await tx2.wait();
-    console.log('Manager added as a contributor in Child contract');
-
+    for (const child of childs) {
+        let childName = await child.name()
+        let tx2 = await child.manageContributor(managerAddress, true);
+        await tx2.wait();
+        console.log(`Manager added as a contributor in ${childName} contract`);
+        await delay(1000)
+    }
     console.log('Manager configuration complete.');
 }
 
@@ -281,10 +406,10 @@ export async function setExternalPermission(child: ChildSample, account: string,
     console.log(`Set external permission for ${account} to ${permission}`);
 }
 
-export async function nestTransferChildToParent(parent: ParentSample, 
-    child: ChildSample, 
-    childTokenId: number, 
-    parentTokenId: number, 
+export async function nestTransferChildToParent(parent: ParentSample,
+    child: ChildSample,
+    childTokenId: number,
+    parentTokenId: number,
     fromAddress: string) {
     console.log(`Nesting child token ${childTokenId} to parent token ${parentTokenId}...`);
 
@@ -301,9 +426,9 @@ export async function nestTransferChildToParent(parent: ParentSample,
     console.log(`Nested child token ${childTokenId} under parent token ${parentTokenId} successfully.`);
 }
 
-export async function addAssetToChildToken(child: ChildSample, 
-    tokenId: number, 
-    assetId: bigint, 
+export async function addAssetToChildToken(child: ChildSample,
+    tokenId: number,
+    assetId: bigint,
     replacesAssetWithId: bigint) {
     console.log(`Adding asset ${assetId} to token ${tokenId}...`);
 
@@ -320,9 +445,9 @@ export async function addAssetToChildToken(child: ChildSample,
 // Nel file utilsFunctions.js o utilsFunctions.ts
 
 
-export async function setValidParentForEquippableGroupMain(childContract: ChildSample, 
-    equippableGroupId: number, 
-    parentAddress: string, 
+export async function setValidParentForEquippableGroupMain(childContract: ChildSample,
+    equippableGroupId: number,
+    parentAddress: string,
     partId: number) {
     // Codice per configurare il gruppo equipaggiabile
     const tx = await childContract.setValidParentForEquippableGroup(
@@ -336,7 +461,7 @@ export async function setValidParentForEquippableGroupMain(childContract: ChildS
 
 
 
-export async function readAssetsToToken(child: ChildSample, tokenId:bigint) {
+export async function readAssetsToToken(child: ChildSample, tokenId: bigint) {
     console.log(`Reading assets for token ${tokenId}...`);
 
     try {
@@ -356,9 +481,9 @@ export async function readAssetsToToken(child: ChildSample, tokenId:bigint) {
 
 
 
-export async function equipChildOnParent(parent: ParentSample, 
-    parentTokenId: bigint, 
-    childTokenId: bigint, 
+export async function equipChildOnParent(parent: ParentSample,
+    parentTokenId: bigint,
+    childTokenId: bigint,
     slotId: number) {
     console.log(`Preparing to equip child token ${childTokenId} on parent token ${parentTokenId} at slot ${slotId}...`);
 
