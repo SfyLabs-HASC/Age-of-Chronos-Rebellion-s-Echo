@@ -70,8 +70,8 @@ contract ParentSample is
         string memory baseTokenURI
     )
         RMRKImplementationBase(
-            "Ryker Blade - Age Of Chronos",
-            "RYKERBLADE",
+            "Aria Zephyrion - Age Of Chronos",
+            "ARIAZEPHYRION",
             collectionMetadata,
             maxSupply,
             royaltyRecipient,
