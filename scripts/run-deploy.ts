@@ -118,13 +118,13 @@ async function main() {
 
 
 
-  await addAssets(TimeSquadAria, [ariaBody, ariaHead, ariaLeftHand, ariaRightHand], catalogAria);
+  await addAssets(TimeSquadAria, ariaBody, ariaHead, ariaLeftHand, ariaRightHand, catalogAria);
   await delay(5000)
-  await addAssets(TimeSquadLuna, [lunaBody, lunaHead, lunaLeftHand, lunaRightHand], catalogLuna);
+  await addAssets(TimeSquadLuna, lunaBody, lunaHead, lunaLeftHand, lunaRightHand, catalogLuna);
   await delay(5000)
-  await addAssets(TimeSquadRyker, [rykerBody, rykerHead, rykerLeftHand, rykerRightHand], catalogRyker);
+  await addAssets(TimeSquadRyker, rykerBody, rykerHead, rykerLeftHand, rykerRightHand, catalogRyker);
   await delay(5000)
-  await addAssets(TimeSquadThaddeus, [thaddeusBody, thaddeusHead, thaddeusLeftHand, thaddeusRightHand], catalogThaddeus);
+  await addAssets(TimeSquadThaddeus, thaddeusBody, thaddeusHead, thaddeusLeftHand, thaddeusRightHand, catalogThaddeus);
   await delay(20000)
 
   const tx01 = await TimeSquadAria.setAutoAcceptCollection(await ariaBody.getAddress(), true);
@@ -251,22 +251,22 @@ async function main() {
   //await mintChildNFT(ariaHead, deployer.address);
   await mintChildNFT(ariaLeftHand, deployer.address);
   //await mintChildNFT(ariaRightHand, deployer.address);
-  await delay(10000);
+  await delay(1000);
   //await mintChildNFT(lunaBody, deployer.address);
   //await mintChildNFT(lunaHead, deployer.address);
   await mintChildNFT(lunaLeftHand, deployer.address);
   //await mintChildNFT(lunaRightHand, deployer.address);
-  await delay(10000);
+  await delay(1000);
   //await mintChildNFT(rykerBody, deployer.address);
   //await mintChildNFT(rykerHead, deployer.address);
   await mintChildNFT(rykerLeftHand, deployer.address);
   //await mintChildNFT(rykerRightHand, deployer.address);
-  await delay(10000);
+  await delay(1000);
   //await mintChildNFT(thaddeusBody, deployer.address);
   //await mintChildNFT(thaddeusHead, deployer.address);
   await mintChildNFT(thaddeusLeftHand, deployer.address);
   //await mintChildNFT(thaddeusRightHand, deployer.address);
-  await delay(10000);
+  await delay(1000);
 
   console.log('Minted child with id 1');
 

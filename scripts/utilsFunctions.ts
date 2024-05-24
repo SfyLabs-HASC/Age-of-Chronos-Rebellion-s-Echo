@@ -2,6 +2,9 @@ import { ethers, run, network } from 'hardhat';
 import {
     TimeSquadAria,
     AriaBody,
+    AriaHead,
+    AriaLeftHand,
+    AriaRightHand,
     AgeOfChronosManager,
     RMRKCatalogImpl
 } from '../typechain-types';
@@ -197,7 +200,10 @@ export async function configureCatalog(
 
 export async function addAssets(
     parent: TimeSquadAria,
-    childs: AriaBody[],
+    childBody: AriaBody,
+    childHead: AriaHead,
+    childLeftHand: AriaLeftHand,
+    childRightHand: AriaRightHand,
     catalog: RMRKCatalogImpl,
 ): Promise<void> {
     console.log('Adding assets to parent...');
@@ -214,114 +220,112 @@ export async function addAssets(
         C.SQUAD_RIGHT_HAND_SLOT_PART_ID
         ]);
     await tx1.wait();
-        await delay(1000)
+    await delay(1000)
 
 
-    for (const child of childs) {
-        await delay(5000)
 
-        //BODY
-        //set primary asset
-        const txChild01_body = await child.addAssetEntry(
-            C.ARIA_ASSET_METADATA_BODY_URI_1,
-        );
-        await txChild01_body.wait();
-        await delay(1000)
-        //set secondary asset
-        const txChild02_body = await child.addEquippableAssetEntry(
-            C.EQUIPPABLE_GROUP_FOR_ITEMS_BODY,
-            ethers.ZeroAddress,
-            C.ARIA_ASSET_METADATA_BODY_URI_2,
-            [],
-        );
-        await txChild02_body.wait();
-        await delay(1000)
-        const txChild03_body = await child.setValidParentForEquippableGroup(
-            C.EQUIPPABLE_GROUP_FOR_ITEMS_BODY,
-            await parent.getAddress(),
-            C.SQUAD_BODY_SLOT_PART_ID,
-        );
-        await txChild03_body.wait();
-        await delay(1000)
-        
-        //HEAD
-        //set primary asset
-        const txChild01_head = await child.addAssetEntry(
-            C.ARIA_ASSET_METADATA_HEAD_URI_1,
-        );
-        await txChild01_head.wait();
-        await delay(1000)
-        //set secondary asset
-        const txChild02_head = await child.addEquippableAssetEntry(
-            C.EQUIPPABLE_GROUP_FOR_ITEMS_HEAD,
-            ethers.ZeroAddress,
-            C.ARIA_ASSET_METADATA_HEAD_URI_2,
-            [],
-        );
-        await txChild02_head.wait();
-        await delay(1000)
-        const txChild03_head = await child.setValidParentForEquippableGroup(
-            C.EQUIPPABLE_GROUP_FOR_ITEMS_HEAD,
-            await parent.getAddress(),
-            C.SQUAD_HEAD_SLOT_PART_ID,
-        );
-        await txChild03_head.wait();
-        await delay(1000)
-        
+    //BODY
+    //set primary asset
+    const txChild01_body = await childBody.addAssetEntry(
+        C.ARIA_ASSET_METADATA_BODY_URI_1,
+    );
+    await txChild01_body.wait();
+    await delay(1000)
+    //set secondary asset
+    const txChild02_body = await childBody.addEquippableAssetEntry(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_BODY,
+        ethers.ZeroAddress,
+        C.ARIA_ASSET_METADATA_BODY_URI_2,
+        [],
+    );
+    await txChild02_body.wait();
+    await delay(1000)
+    const txChild03_body = await childBody.setValidParentForEquippableGroup(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_BODY,
+        await parent.getAddress(),
+        C.SQUAD_BODY_SLOT_PART_ID,
+    );
+    await txChild03_body.wait();
+    await delay(1000)
 
-        //LEFT HAND
-        //set primary asset
-        const txChild01_left_hand = await child.addAssetEntry(
-            C.ARIA_ASSET_METADATA_LEFT_HAND_URI_1,
-        );
-        await txChild01_left_hand.wait();
-        await delay(1000)
-        //set secondary asset
-        const txChild02_left_hand = await child.addEquippableAssetEntry(
-            C.EQUIPPABLE_GROUP_FOR_ITEMS_LEFT_HAND,
-            ethers.ZeroAddress,
-            C.ARIA_ASSET_METADATA_LEFT_HAND_URI_2,
-            [],
-        );
-        await txChild02_left_hand.wait();
-        await delay(1000)
-        const txChild03_left_hand = await child.setValidParentForEquippableGroup(
-            C.EQUIPPABLE_GROUP_FOR_ITEMS_LEFT_HAND,
-            await parent.getAddress(),
-            C.SQUAD_LEFT_HAND_SLOT_PART_ID,
-        );
-        await txChild03_left_hand.wait();
-        await delay(1000)
-        
+    //HEAD
+    //set primary asset
+    const txChild01_head = await childHead.addAssetEntry(
+        C.ARIA_ASSET_METADATA_HEAD_URI_1,
+    );
+    await txChild01_head.wait();
+    await delay(1000)
+    //set secondary asset
+    const txChild02_head = await childHead.addEquippableAssetEntry(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_HEAD,
+        ethers.ZeroAddress,
+        C.ARIA_ASSET_METADATA_HEAD_URI_2,
+        [],
+    );
+    await txChild02_head.wait();
+    await delay(1000)
+    const txChild03_head = await childHead.setValidParentForEquippableGroup(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_HEAD,
+        await parent.getAddress(),
+        C.SQUAD_HEAD_SLOT_PART_ID,
+    );
+    await txChild03_head.wait();
+    await delay(1000)
 
-        //RIGHT HAND
-        //set primary asset
-        const txChild01_right_hand = await child.addAssetEntry(
-            C.ARIA_ASSET_METADATA_RIGHT_HAND_URI_1,
-        );
-        await txChild01_right_hand.wait();
-        await delay(1000)
-        //set secondary asset
-        const txChild02_right_hand = await child.addEquippableAssetEntry(
-            C.EQUIPPABLE_GROUP_FOR_ITEMS_RIGHT_HAND,
-            ethers.ZeroAddress,
-            C.ARIA_ASSET_METADATA_RIGHT_HAND_URI_2,
-            [],
-        );
-        await txChild02_right_hand.wait();
-        await delay(1000)
-        const txChild03_right_hand = await child.setValidParentForEquippableGroup(
-            C.EQUIPPABLE_GROUP_FOR_ITEMS_RIGHT_HAND,
-            await parent.getAddress(),
-            C.SQUAD_RIGHT_HAND_SLOT_PART_ID,
-        );
-        await txChild03_right_hand.wait();
-        await delay(1000)
 
-    }
+    //LEFT HAND
+    //set primary asset
+    const txChild01_left_hand = await childLeftHand.addAssetEntry(
+        C.ARIA_ASSET_METADATA_LEFT_HAND_URI_1,
+    );
+    await txChild01_left_hand.wait();
+    await delay(1000)
+    //set secondary asset
+    const txChild02_left_hand = await childLeftHand.addEquippableAssetEntry(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_LEFT_HAND,
+        ethers.ZeroAddress,
+        C.ARIA_ASSET_METADATA_LEFT_HAND_URI_2,
+        [],
+    );
+    await txChild02_left_hand.wait();
+    await delay(1000)
+    const txChild03_left_hand = await childLeftHand.setValidParentForEquippableGroup(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_LEFT_HAND,
+        await parent.getAddress(),
+        C.SQUAD_LEFT_HAND_SLOT_PART_ID,
+    );
+    await txChild03_left_hand.wait();
+    await delay(1000)
 
+
+    //RIGHT HAND
+    //set primary asset
+    const txChild01_right_hand = await childRightHand.addAssetEntry(
+        C.ARIA_ASSET_METADATA_RIGHT_HAND_URI_1,
+    );
+    await txChild01_right_hand.wait();
+    await delay(1000)
+    //set secondary asset
+    const txChild02_right_hand = await childRightHand.addEquippableAssetEntry(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_RIGHT_HAND,
+        ethers.ZeroAddress,
+        C.ARIA_ASSET_METADATA_RIGHT_HAND_URI_2,
+        [],
+    );
+    await txChild02_right_hand.wait();
+    await delay(1000)
+    const txChild03_right_hand = await childRightHand.setValidParentForEquippableGroup(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_RIGHT_HAND,
+        await parent.getAddress(),
+        C.SQUAD_RIGHT_HAND_SLOT_PART_ID,
+    );
+    await txChild03_right_hand.wait();
+    await delay(1000)
 
 }
+
+
+
 
 
 export async function checkEquipConditions(childContract: ChildSample,
@@ -391,7 +395,7 @@ export async function configureManager(
 }
 
 
-export async function setEquippableAddresses(catalog: RMRKCatalogImpl, 
+export async function setEquippableAddresses(catalog: RMRKCatalogImpl,
     equippableChildAddressBody: string,
     equippableChildAddressHead: string,
     equippableChildAddressLeftHand: string,
@@ -414,7 +418,7 @@ export async function setEquippableAddresses(catalog: RMRKCatalogImpl,
     }
     try {
         const tx = await catalog.setEquippableAddresses(C.SQUAD_LEFT_HAND_SLOT_PART_ID, [equippableChildAddressLeftHand]);
-        await tx.wait();  
+        await tx.wait();
     } catch (error) {
         console.error('Error setting equippable addresses:', error);
         throw error;

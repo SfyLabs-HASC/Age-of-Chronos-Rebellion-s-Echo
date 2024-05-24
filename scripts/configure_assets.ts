@@ -1,8 +1,14 @@
 import { ethers, run } from 'hardhat';
-import { ParentSample, ChildSample, RMRKCatalogImpl } from '../typechain-types';
 import {
-  deployxPARENTx,
-  deployCHILD,
+  TimeSquadAria,
+  AriaBody,
+  AriaHead,
+  AriaLeftHand,
+  AriaRightHand,
+  AgeOfChronosManager,
+  RMRKCatalogImpl
+} from '../typechain-types';
+import {
   deployManager,
   deployCatalog,
   configureCatalog,
@@ -25,17 +31,46 @@ import {
 } from './utilsFunctions';
 import { delay, isHardhatNetwork } from './utils';
 import * as C from './constants';
+
+
 async function main() {
   const [deployer, addr1, addr2] = await ethers.getSigners();
   console.log('Deployer:', deployer.address);
   console.log('Addr1:', addr1 ? addr1.address : 'undefined');
 
-  const contractAddresses = {
-    parent: '0x86b3A13928cadc2b25a632f856c4F6633d97214D',
-    child: '0xd9A2052C431136D9D7e74bCD744F4d393acc04FE',
-    manager: '0xB6C40De3f62CA1f77623Ae0C5a3dd83836A24D7D',
-    catalog: '0x6b8715023e3F451Fa759148B630D5E8296A4b7B3'
-  };
+  const contractParentAddresses: { [key: string]: string } = {
+    "Aria": "0xAEa861Ab8978231a7dB5f5EB82F669Eae12f022A",
+    "Luna": "0x767d80957deB3e98908C32EBfa8fd7A7D0f87F99",
+    "Ryker": "0x52764789B16db4CDBf29252b738b0A5E42186069",
+    "Thaddeus": "0x9DF502168dce8C0E9F8a366A328223f99517e59d"
+};
+
+const contractCatalogAddresses: { [key: string]: string } = {
+    "Aria": "0x8f710aa5629ee2bEa9E7962b9927018945e2103F",
+    "Luna": "0x029006e8130c559C007Cab63637D0fD5345A80DF",
+    "Ryker": "0xeC56152122C4eeEdf235A83e5D625B6eb093f274",
+    "Thaddeus": "0xe85FD0dB024F2B7Eead0d2b81c3F6D5A7f975b16"
+};
+
+const contractItemAddresses: { [key: string]: string } = {
+    "AriaBody": "0xeeAA3220d6996f9601AcF138479B3419eFe07Ab1",
+    "AriaHead": "0xEA8DDDEc49fFa7D188018CEFA6A64891ee893363",
+    "AriaLeftHand": "0x7C7ad018966EA6fb7D4b13E6158DeE85F6A03f7C",
+    "AriaRightHand": "0xCb0335e57d24252911c62DB8A1E2E818Ff0A6dCC",
+    "LunaBody": "0x6F4496c1DAAbA04Fb308cAa2F5ABfd4D6dd2cfA7",
+    "LunaHead": "0x2B24d1f36139e522f14816C65EBd43eEA58f3527",
+    "LunaLeftHand": "0xD89C8e2f9dBD7De2DD87eA84725313Fe4BDe265e",
+    "LunaRightHand": "0x37418464BcC64e6A80B6B227C078B9C6fa38E155",
+    "RykerBody": "0x7eb0Be602Ec013B2D8344f9dda8887A5Dac77D55",
+    "RykerHead": "0xA3610922C166F5CBF901C6De23f9a100A9C446B6",
+    "RykerLeftHand": "0xdf40ade78c05cfe9ADF91a2a4442F2899D7143C6",
+    "RykerRightHand": "0x6f5a4a778c2F75980e26B27D39Ff936fC85c4e3B",
+    "ThaddeusBody": "0x5E9182d691683B5DA16056a0A62eaf5D94E049cE",
+    "ThaddeusHead": "0x8B5032010F684e7EB5f36C40Fd0363e18De3d245",
+    "ThaddeusLeftHand": "0xdbadCEe6f3063449151f8454a49e9Dc7CFBF3a74",
+    "ThaddeusRightHand": "0x7781aA5E216665bc5A644C65c94404F9C891f4ba"
+};
+
 
   const parentDeployer: ParentSample = await ethers.getContractAt('ParentSample', contractAddresses.parent, deployer);
   const childDeployer: ChildSample = await ethers.getContractAt('ChildSample', contractAddresses.child, deployer);
