@@ -47,8 +47,8 @@ base_json_luna = {
     "description": "GUARDIAN - Luna is a brave and resilient fighter who wears impenetrable armor. Her prowess in defense is unmatched, and she is capable of protecting herself and her companions from the most powerful blows. Luna comes from a family of master armor smiths and grew up learning to create and wear durable armor. She honed her defensive skills during countless battles.",
     "externalUri": "https://www.ageofchronos.com/",
     "external_url": "https://www.ageofchronos.com/",
-    "mediaUri": "ipfs://QmYWV8fo4zPYFX6zgoHh7wvSrRYTkE6StQjtA2SXgt3cCx",
-    "animation_url": "ipfs://QmYWV8fo4zPYFX6zgoHh7wvSrRYTkE6StQjtA2SXgt3cCx",
+    "mediaUri": "ipfs://QmV6Q4wQJniqzGqWg21JvnaQyz9dBZmecMuqTQumaEfcYB",
+    "animation_url": "ipfs://QmV6Q4wQJniqzGqWg21JvnaQyz9dBZmecMuqTQumaEfcYB",
     "license": "PERSONAL LICENSE (\"CBE-PERSONAL\")",
     "licenseUri": "https://rmrk.app/license",
     "attributes": [

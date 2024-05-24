@@ -47,8 +47,8 @@ base_json_aria = {
     "description": "TECHNOMANCER - Aria is a technomancer mage with the extraordinary ability to combine magical objects and ancient artifacts with modern technology, thereby creating new items of incredible power. Her presence is accompanied by an aura of mystery, with peculiar traits that clearly indicate a connection to a non-human race, although these traits are barely perceptible. In her appearance, Aria had bright eyes of a silvery color that seemed to reflect the secrets of the universe.",
     "externalUri": "https://www.ageofchronos.com/",
     "external_url": "https://www.ageofchronos.com/",
-    "mediaUri": "ipfs://QmNksBrH2p2yR6KAvE3eP4Vtrfmhkq9PjgxuJNDhJsD6DD",
-    "animation_url": "ipfs://QmNksBrH2p2yR6KAvE3eP4Vtrfmhkq9PjgxuJNDhJsD6DD",
+    "mediaUri": "ipfs://QmNjiVtygErGpc5quhGs3cQDDCDV65DF8eVoxRVchQgFUF",
+    "animation_url": "ipfs://QmNjiVtygErGpc5quhGs3cQDDCDV65DF8eVoxRVchQgFUF",
     "license": "PERSONAL LICENSE (\"CBE-PERSONAL\")",
     "licenseUri": "https://rmrk.app/license",
     "attributes": [

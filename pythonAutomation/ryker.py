@@ -43,8 +43,8 @@ base_json_1 = {
     "description": "DAMAGER - Ryker Blade is a muscular warrior with astonishing mastery in the use of swords and combat weapons. He is known for his extraordinary physical strength and skill in close combat. Ryker has been trained in martial arts since a young age and has perfected his skills through years of constant training. His superhuman strength allows him to defeat opponents with powerful strikes and skillful maneuvers.",
     "externalUri": "https://www.ageofchronos.com/",
     "external_url": "https://www.ageofchronos.com/",
-    "mediaUri": "ipfs://QmV81Ewo9Fwox2PbkFASNMF3efnZrR9rkigL5Y7ZJaVNbW",
-    "animation_url": "ipfs://QmV81Ewo9Fwox2PbkFASNMF3efnZrR9rkigL5Y7ZJaVNbW",
+    "mediaUri": "ipfs://QmNyb6vHcRj8nocLdnQXTRXyuyabgQJAfvBPMemtZ9aKeh",
+    "animation_url": "ipfs://QmNyb6vHcRj8nocLdnQXTRXyuyabgQJAfvBPMemtZ9aKeh",
     "license": "PERSONAL LICENSE (\"CBE-PERSONAL\")",
     "licenseUri": "https://rmrk.app/license",
     "attributes": [

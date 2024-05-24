@@ -48,8 +48,8 @@ base_json_thaddeus = {
     "description": "MASTER OF LUCK - Thaddeus is a fortunate adventurer who always seems to find the best way out. He can avoid traps and exploit unexpected opportunities. Thaddeus was born with an extraordinary dose of luck, which has helped him in countless dangerous situations. This luck enables him to make wise choices and find valuable items at the most opportune moments.",
     "externalUri": "https://www.ageofchronos.com/",
     "external_url": "https://www.ageofchronos.com/",
-    "mediaUri": "ipfs://Qmew4v1d8hamWcw2CkUGEijjBc6seCd2pAP1REYzuYAZRJ",
-    "animation_url": "ipfs://Qmew4v1d8hamWcw2CkUGEijjBc6seCd2pAP1REYzuYAZRJ",
+    "mediaUri": "ipfs://QmeBbna9HBR82pvEr3QgV3prqAjQK2KvcwJGriLWm67Fri",
+    "animation_url": "ipfs://QmeBbna9HBR82pvEr3QgV3prqAjQK2KvcwJGriLWm67Fri",
     "license": "PERSONAL LICENSE (\"CBE-PERSONAL\")",
     "licenseUri": "https://rmrk.app/license",
     "attributes": [

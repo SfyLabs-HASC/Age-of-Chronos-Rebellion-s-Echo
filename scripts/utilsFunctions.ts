@@ -970,7 +970,7 @@ export async function mintParentNFT(parent: TimeSquadAria, recipient: string) {
 
 export async function mintChildNFT(child: AriaBody, recipient: string) {
     console.log('Minting Child NFT...');
-    const assetIds = [1, 2]; // Replace with actual asset IDs as needed.
+    const assetIds = [1, 2];
     const txchild = await child.mintWithAssets(recipient, assetIds);
     await txchild.wait();
     console.log('Minted Child NFT with asset ID 1 to:', recipient);
