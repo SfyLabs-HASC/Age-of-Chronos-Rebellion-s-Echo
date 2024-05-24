@@ -5,6 +5,25 @@ import {
     AriaHead,
     AriaLeftHand,
     AriaRightHand,
+
+    TimeSquadLuna,
+    LunaBody,
+    LunaHead,
+    LunaLeftHand,
+    LunaRightHand,
+
+    TimeSquadRyker,
+    RykerBody,
+    RykerHead,
+    RykerLeftHand,
+    RykerRightHand,
+
+    TimeSquadThaddeus,
+    ThaddeusBody,
+    ThaddeusHead,
+    ThaddeusLeftHand,
+    ThaddeusRightHand,
+
     AgeOfChronosManager,
     RMRKCatalogImpl
 } from '../typechain-types';
@@ -28,13 +47,13 @@ export async function deployParent(name: string, parentCollectionMetadata: Strin
     const contractAddress = await parentContract.getAddress();
     console.log(`${name} deployed to ${contractAddress}`);
 
-
+    const registry = await getRegistry();
+    await registry.addExternalCollection(contractAddress, args[0]);
+    console.log('Collection added to Singular Registry');
 
 
     if (!isHardhatNetwork()) {
-        const registry = await getRegistry();
-        await registry.addExternalCollection(contractAddress, args[0]);
-        console.log('Collection added to Singular Registry');
+
 
 
         console.log('Waiting 20 seconds before verifying contract...');
@@ -65,12 +84,12 @@ export async function deployChild(name: string, childCollectionMetadata: String)
     const contractAddress = await childContract.getAddress();
     console.log(`${name} deployed to ${contractAddress}`);
 
-
+    const registry = await getRegistry();
+    await registry.addExternalCollection(contractAddress, args[0]);
+    console.log('Collection added to Singular Registry');
 
     if (!isHardhatNetwork()) {
-        const registry = await getRegistry();
-        await registry.addExternalCollection(contractAddress, args[0]);
-        console.log('Collection added to Singular Registry');
+
 
 
         console.log('Waiting 20 seconds before verifying contract...');
@@ -198,7 +217,7 @@ export async function configureCatalog(
     console.log('Catalog configured');
 }
 
-export async function addAssets(
+export async function addAssetsAria(
     parent: TimeSquadAria,
     childBody: AriaBody,
     childHead: AriaHead,
@@ -310,6 +329,384 @@ export async function addAssets(
         C.EQUIPPABLE_GROUP_FOR_ITEMS_RIGHT_HAND,
         ethers.ZeroAddress,
         C.ARIA_ASSET_METADATA_RIGHT_HAND_URI_2,
+        [],
+    );
+    await txChild02_right_hand.wait();
+    await delay(1000)
+    const txChild03_right_hand = await childRightHand.setValidParentForEquippableGroup(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_RIGHT_HAND,
+        await parent.getAddress(),
+        C.SQUAD_RIGHT_HAND_SLOT_PART_ID,
+    );
+    await txChild03_right_hand.wait();
+    await delay(1000)
+
+}
+
+export async function addAssetsLuna(
+    parent: TimeSquadLuna,
+    childBody: LunaBody,
+    childHead: LunaHead,
+    childLeftHand: LunaLeftHand,
+    childRightHand: LunaRightHand,
+    catalog: RMRKCatalogImpl,
+): Promise<void> {
+    console.log('Adding assets to parent...');
+
+    //forse non piu necessario? PARENT
+    const tx1 = await parent.addEquippableAssetEntry(
+        0n,
+        await catalog.getAddress(),
+        C.LUNA_ASSET_METADATA_URI,
+        [C.FIXED_PART_PARENT_ID,
+        C.SQUAD_BODY_SLOT_PART_ID,
+        C.SQUAD_HEAD_SLOT_PART_ID,
+        C.SQUAD_LEFT_HAND_SLOT_PART_ID,
+        C.SQUAD_RIGHT_HAND_SLOT_PART_ID
+        ]);
+    await tx1.wait();
+    await delay(1000)
+
+
+
+    //BODY
+    //set primary asset
+    const txChild01_body = await childBody.addAssetEntry(
+        C.LUNA_ASSET_METADATA_BODY_URI_1,
+    );
+    await txChild01_body.wait();
+    await delay(1000)
+    //set secondary asset
+    const txChild02_body = await childBody.addEquippableAssetEntry(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_BODY,
+        ethers.ZeroAddress,
+        C.LUNA_ASSET_METADATA_BODY_URI_2,
+        [],
+    );
+    await txChild02_body.wait();
+    await delay(1000)
+    const txChild03_body = await childBody.setValidParentForEquippableGroup(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_BODY,
+        await parent.getAddress(),
+        C.SQUAD_BODY_SLOT_PART_ID,
+    );
+    await txChild03_body.wait();
+    await delay(1000)
+
+    //HEAD
+    //set primary asset
+    const txChild01_head = await childHead.addAssetEntry(
+        C.LUNA_ASSET_METADATA_HEAD_URI_1,
+    );
+    await txChild01_head.wait();
+    await delay(1000)
+    //set secondary asset
+    const txChild02_head = await childHead.addEquippableAssetEntry(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_HEAD,
+        ethers.ZeroAddress,
+        C.LUNA_ASSET_METADATA_HEAD_URI_2,
+        [],
+    );
+    await txChild02_head.wait();
+    await delay(1000)
+    const txChild03_head = await childHead.setValidParentForEquippableGroup(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_HEAD,
+        await parent.getAddress(),
+        C.SQUAD_HEAD_SLOT_PART_ID,
+    );
+    await txChild03_head.wait();
+    await delay(1000)
+
+
+    //LEFT HAND
+    //set primary asset
+    const txChild01_left_hand = await childLeftHand.addAssetEntry(
+        C.LUNA_ASSET_METADATA_LEFT_HAND_URI_1,
+    );
+    await txChild01_left_hand.wait();
+    await delay(1000)
+    //set secondary asset
+    const txChild02_left_hand = await childLeftHand.addEquippableAssetEntry(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_LEFT_HAND,
+        ethers.ZeroAddress,
+        C.LUNA_ASSET_METADATA_LEFT_HAND_URI_2,
+        [],
+    );
+    await txChild02_left_hand.wait();
+    await delay(1000)
+    const txChild03_left_hand = await childLeftHand.setValidParentForEquippableGroup(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_LEFT_HAND,
+        await parent.getAddress(),
+        C.SQUAD_LEFT_HAND_SLOT_PART_ID,
+    );
+    await txChild03_left_hand.wait();
+    await delay(1000)
+
+
+    //RIGHT HAND
+    //set primary asset
+    const txChild01_right_hand = await childRightHand.addAssetEntry(
+        C.LUNA_ASSET_METADATA_RIGHT_HAND_URI_1,
+    );
+    await txChild01_right_hand.wait();
+    await delay(1000)
+    //set secondary asset
+    const txChild02_right_hand = await childRightHand.addEquippableAssetEntry(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_RIGHT_HAND,
+        ethers.ZeroAddress,
+        C.LUNA_ASSET_METADATA_RIGHT_HAND_URI_2,
+        [],
+    );
+    await txChild02_right_hand.wait();
+    await delay(1000)
+    const txChild03_right_hand = await childRightHand.setValidParentForEquippableGroup(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_RIGHT_HAND,
+        await parent.getAddress(),
+        C.SQUAD_RIGHT_HAND_SLOT_PART_ID,
+    );
+    await txChild03_right_hand.wait();
+    await delay(1000)
+
+}
+
+export async function addAssetsRyker(
+    parent: TimeSquadRyker,
+    childBody: RykerBody,
+    childHead: RykerHead,
+    childLeftHand: RykerLeftHand,
+    childRightHand: RykerRightHand,
+    catalog: RMRKCatalogImpl,
+): Promise<void> {
+    console.log('Adding assets to parent...');
+
+    //forse non piu necessario? PARENT
+    const tx1 = await parent.addEquippableAssetEntry(
+        0n,
+        await catalog.getAddress(),
+        C.RYKER_ASSET_METADATA_URI,
+        [C.FIXED_PART_PARENT_ID,
+        C.SQUAD_BODY_SLOT_PART_ID,
+        C.SQUAD_HEAD_SLOT_PART_ID,
+        C.SQUAD_LEFT_HAND_SLOT_PART_ID,
+        C.SQUAD_RIGHT_HAND_SLOT_PART_ID
+        ]);
+    await tx1.wait();
+    await delay(1000)
+
+
+
+    //BODY
+    //set primary asset
+    const txChild01_body = await childBody.addAssetEntry(
+        C.RYKER_ASSET_METADATA_BODY_URI_1,
+    );
+    await txChild01_body.wait();
+    await delay(1000)
+    //set secondary asset
+    const txChild02_body = await childBody.addEquippableAssetEntry(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_BODY,
+        ethers.ZeroAddress,
+        C.RYKER_ASSET_METADATA_BODY_URI_2,
+        [],
+    );
+    await txChild02_body.wait();
+    await delay(1000)
+    const txChild03_body = await childBody.setValidParentForEquippableGroup(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_BODY,
+        await parent.getAddress(),
+        C.SQUAD_BODY_SLOT_PART_ID,
+    );
+    await txChild03_body.wait();
+    await delay(1000)
+
+    //HEAD
+    //set primary asset
+    const txChild01_head = await childHead.addAssetEntry(
+        C.RYKER_ASSET_METADATA_HEAD_URI_1,
+    );
+    await txChild01_head.wait();
+    await delay(1000)
+    //set secondary asset
+    const txChild02_head = await childHead.addEquippableAssetEntry(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_HEAD,
+        ethers.ZeroAddress,
+        C.RYKER_ASSET_METADATA_HEAD_URI_2,
+        [],
+    );
+    await txChild02_head.wait();
+    await delay(1000)
+    const txChild03_head = await childHead.setValidParentForEquippableGroup(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_HEAD,
+        await parent.getAddress(),
+        C.SQUAD_HEAD_SLOT_PART_ID,
+    );
+    await txChild03_head.wait();
+    await delay(1000)
+
+
+    //LEFT HAND
+    //set primary asset
+    const txChild01_left_hand = await childLeftHand.addAssetEntry(
+        C.RYKER_ASSET_METADATA_LEFT_HAND_URI_1,
+    );
+    await txChild01_left_hand.wait();
+    await delay(1000)
+    //set secondary asset
+    const txChild02_left_hand = await childLeftHand.addEquippableAssetEntry(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_LEFT_HAND,
+        ethers.ZeroAddress,
+        C.RYKER_ASSET_METADATA_LEFT_HAND_URI_2,
+        [],
+    );
+    await txChild02_left_hand.wait();
+    await delay(1000)
+    const txChild03_left_hand = await childLeftHand.setValidParentForEquippableGroup(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_LEFT_HAND,
+        await parent.getAddress(),
+        C.SQUAD_LEFT_HAND_SLOT_PART_ID,
+    );
+    await txChild03_left_hand.wait();
+    await delay(1000)
+
+
+    //RIGHT HAND
+    //set primary asset
+    const txChild01_right_hand = await childRightHand.addAssetEntry(
+        C.RYKER_ASSET_METADATA_RIGHT_HAND_URI_1,
+    );
+    await txChild01_right_hand.wait();
+    await delay(1000)
+    //set secondary asset
+    const txChild02_right_hand = await childRightHand.addEquippableAssetEntry(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_RIGHT_HAND,
+        ethers.ZeroAddress,
+        C.RYKER_ASSET_METADATA_RIGHT_HAND_URI_2,
+        [],
+    );
+    await txChild02_right_hand.wait();
+    await delay(1000)
+    const txChild03_right_hand = await childRightHand.setValidParentForEquippableGroup(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_RIGHT_HAND,
+        await parent.getAddress(),
+        C.SQUAD_RIGHT_HAND_SLOT_PART_ID,
+    );
+    await txChild03_right_hand.wait();
+    await delay(1000)
+
+}
+
+export async function addAssetsThaddeus(
+    parent: TimeSquadThaddeus,
+    childBody: ThaddeusBody,
+    childHead: ThaddeusHead,
+    childLeftHand: ThaddeusLeftHand,
+    childRightHand: ThaddeusRightHand,
+    catalog: RMRKCatalogImpl,
+): Promise<void> {
+    console.log('Adding assets to parent...');
+
+    //forse non piu necessario? PARENT
+    const tx1 = await parent.addEquippableAssetEntry(
+        0n,
+        await catalog.getAddress(),
+        C.THADDEUS_ASSET_METADATA_URI,
+        [C.FIXED_PART_PARENT_ID,
+        C.SQUAD_BODY_SLOT_PART_ID,
+        C.SQUAD_HEAD_SLOT_PART_ID,
+        C.SQUAD_LEFT_HAND_SLOT_PART_ID,
+        C.SQUAD_RIGHT_HAND_SLOT_PART_ID
+        ]);
+    await tx1.wait();
+    await delay(1000)
+
+
+
+    //BODY
+    //set primary asset
+    const txChild01_body = await childBody.addAssetEntry(
+        C.THADDEUS_ASSET_METADATA_BODY_URI_1,
+    );
+    await txChild01_body.wait();
+    await delay(1000)
+    //set secondary asset
+    const txChild02_body = await childBody.addEquippableAssetEntry(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_BODY,
+        ethers.ZeroAddress,
+        C.THADDEUS_ASSET_METADATA_BODY_URI_2,
+        [],
+    );
+    await txChild02_body.wait();
+    await delay(1000)
+    const txChild03_body = await childBody.setValidParentForEquippableGroup(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_BODY,
+        await parent.getAddress(),
+        C.SQUAD_BODY_SLOT_PART_ID,
+    );
+    await txChild03_body.wait();
+    await delay(1000)
+
+    //HEAD
+    //set primary asset
+    const txChild01_head = await childHead.addAssetEntry(
+        C.THADDEUS_ASSET_METADATA_HEAD_URI_1,
+    );
+    await txChild01_head.wait();
+    await delay(1000)
+    //set secondary asset
+    const txChild02_head = await childHead.addEquippableAssetEntry(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_HEAD,
+        ethers.ZeroAddress,
+        C.THADDEUS_ASSET_METADATA_HEAD_URI_2,
+        [],
+    );
+    await txChild02_head.wait();
+    await delay(1000)
+    const txChild03_head = await childHead.setValidParentForEquippableGroup(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_HEAD,
+        await parent.getAddress(),
+        C.SQUAD_HEAD_SLOT_PART_ID,
+    );
+    await txChild03_head.wait();
+    await delay(1000)
+
+
+    //LEFT HAND
+    //set primary asset
+    const txChild01_left_hand = await childLeftHand.addAssetEntry(
+        C.THADDEUS_ASSET_METADATA_LEFT_HAND_URI_1,
+    );
+    await txChild01_left_hand.wait();
+    await delay(1000)
+    //set secondary asset
+    const txChild02_left_hand = await childLeftHand.addEquippableAssetEntry(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_LEFT_HAND,
+        ethers.ZeroAddress,
+        C.THADDEUS_ASSET_METADATA_LEFT_HAND_URI_2,
+        [],
+    );
+    await txChild02_left_hand.wait();
+    await delay(1000)
+    const txChild03_left_hand = await childLeftHand.setValidParentForEquippableGroup(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_LEFT_HAND,
+        await parent.getAddress(),
+        C.SQUAD_LEFT_HAND_SLOT_PART_ID,
+    );
+    await txChild03_left_hand.wait();
+    await delay(1000)
+
+
+    //RIGHT HAND
+    //set primary asset
+    const txChild01_right_hand = await childRightHand.addAssetEntry(
+        C.THADDEUS_ASSET_METADATA_RIGHT_HAND_URI_1,
+    );
+    await txChild01_right_hand.wait();
+    await delay(1000)
+    //set secondary asset
+    const txChild02_right_hand = await childRightHand.addEquippableAssetEntry(
+        C.EQUIPPABLE_GROUP_FOR_ITEMS_RIGHT_HAND,
+        ethers.ZeroAddress,
+        C.THADDEUS_ASSET_METADATA_RIGHT_HAND_URI_2,
         [],
     );
     await txChild02_right_hand.wait();
@@ -461,7 +858,7 @@ export async function nestTransferChildToParent(parent: ParentSample,
     console.log(`Nested child token ${childTokenId} under parent token ${parentTokenId} successfully.`);
 }
 
-export async function addAssetToChildToken(child: ChildSample,
+export async function addAssetToChildToken(child: AriaBody,
     tokenId: number,
     assetId: bigint,
     replacesAssetWithId: bigint) {
@@ -496,7 +893,7 @@ export async function setValidParentForEquippableGroupMain(childContract: ChildS
 
 
 
-export async function readAssetsToToken(child: ChildSample, tokenId: bigint) {
+export async function readAssetsToToken(child: AriaBody, tokenId: bigint) {
     console.log(`Reading assets for token ${tokenId}...`);
 
     try {

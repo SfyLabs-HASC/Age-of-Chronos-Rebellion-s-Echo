@@ -12,7 +12,10 @@ import {
   deployManager,
   deployCatalog,
   configureCatalog,
-  addAssets,
+  addAssetsAria,
+  addAssetsLuna,
+  addAssetsRyker,
+  addAssetsThaddeus,
   setEquippableAddresses,
   setExternalPermission,
   nestTransferChildToParent,
@@ -33,38 +36,56 @@ async function main() {
   console.log('Addr2:', addr2 ? addr2.address : 'undefined');
 
   const TimeSquadAria = await deployParent('TimeSquadAria', C.SQUAD_METADATA_ARIA, C.MINT_ENUMERATE_ARIA);
+  await delay(1000)
   const TimeSquadLuna = await deployParent('TimeSquadLuna', C.SQUAD_METADATA_LUNA, C.MINT_ENUMERATE_LUNA);
+  await delay(1000)
   const TimeSquadRyker = await deployParent('TimeSquadRyker', C.SQUAD_METADATA_RYKER, C.MINT_ENUMERATE_RYKER);
+  await delay(1000)
   const TimeSquadThaddeus = await deployParent('TimeSquadThaddeus', C.SQUAD_METADATA_THADDEUS, C.MINT_ENUMERATE_THADDEUS);
   await delay(10000)
 
 
   const ariaBody = await deployChild('AriaBody', C.SQUAD_ITEM_METADATA_ARIA_BODY);
+  await delay(1000)
   const ariaHead = await deployChild('AriaHead', C.SQUAD_ITEM_METADATA_ARIA_HEAD);
+  await delay(1000)
   const ariaLeftHand = await deployChild('AriaLeftHand', C.SQUAD_ITEM_METADATA_ARIA_LEFT_HAND);
+  await delay(1000)
   const ariaRightHand = await deployChild('AriaRightHand', C.SQUAD_ITEM_METADATA_ARIA_RIGHT_HAND);
   await delay(10000)
   const lunaBody = await deployChild('LunaBody', C.SQUAD_ITEM_METADATA_LUNA_BODY);
+  await delay(1000)
   const lunaHead = await deployChild('LunaHead', C.SQUAD_ITEM_METADATA_LUNA_HEAD);
+  await delay(1000)
   const lunaLeftHand = await deployChild('LunaLeftHand', C.SQUAD_ITEM_METADATA_LUNA_LEFT_HAND);
+  await delay(1000)
   const lunaRightHand = await deployChild('LunaRightHand', C.SQUAD_ITEM_METADATA_LUNA_RIGHT_HAND);
   await delay(10000)
   const rykerBody = await deployChild('RykerBody', C.SQUAD_ITEM_METADATA_RYKER_BODY);
+  await delay(1000)
   const rykerHead = await deployChild('RykerHead', C.SQUAD_ITEM_METADATA_RYKER_HEAD);
+  await delay(1000)
   const rykerLeftHand = await deployChild('RykerLeftHand', C.SQUAD_ITEM_METADATA_RYKER_LEFT_HAND);
+  await delay(1000)
   const rykerRightHand = await deployChild('RykerRightHand', C.SQUAD_ITEM_METADATA_RYKER_RIGHT_HAND);
   await delay(10000)
   const thaddeusBody = await deployChild('ThaddeusBody', C.SQUAD_ITEM_METADATA_THADDEUS_BODY);
+  await delay(1000)
   const thaddeusHead = await deployChild('ThaddeusHead', C.SQUAD_ITEM_METADATA_THADDEUS_HEAD);
+  await delay(1000)
   const thaddeusLeftHand = await deployChild('ThaddeusLeftHand', C.SQUAD_ITEM_METADATA_THADDEUS_LEFT_HAND);
+  await delay(1000)
   const thaddeusRightHand = await deployChild('ThaddeusRightHand', C.SQUAD_ITEM_METADATA_THADDEUS_RIGHT_HAND);
   await delay(10000)
 
   const manager = await deployManager();
   await delay(5000)
   const catalogAria = await deployCatalog('CatalogAria', C.SQUAD_CATALOG_ARIA_METADATA, C.CATALOG_TYPE);
+  await delay(1000)
   const catalogLuna = await deployCatalog('CatalogLuna', C.SQUAD_CATALOG_LUNA_METADATA, C.CATALOG_TYPE);
+  await delay(1000)
   const catalogRyker = await deployCatalog('CatalogRyker', C.SQUAD_CATALOG_RYKER_METADATA, C.CATALOG_TYPE);
+  await delay(1000)
   const catalogThaddeus = await deployCatalog('CatalogThaddeus', C.SQUAD_CATALOG_THADDEUS_METADATA, C.CATALOG_TYPE);
   await delay(5000)
 
@@ -118,13 +139,17 @@ async function main() {
 
 
 
-  await addAssets(TimeSquadAria, ariaBody, ariaHead, ariaLeftHand, ariaRightHand, catalogAria);
+  await addAssetsAria(TimeSquadAria, ariaBody, ariaHead, ariaLeftHand, ariaRightHand, catalogAria);
+  console.log("Add Asset Aria complete")
   await delay(5000)
-  await addAssets(TimeSquadLuna, lunaBody, lunaHead, lunaLeftHand, lunaRightHand, catalogLuna);
+  await addAssetsLuna(TimeSquadLuna, lunaBody, lunaHead, lunaLeftHand, lunaRightHand, catalogLuna);
+  console.log("Add Asset Aria complete")
   await delay(5000)
-  await addAssets(TimeSquadRyker, rykerBody, rykerHead, rykerLeftHand, rykerRightHand, catalogRyker);
+  await addAssetsRyker(TimeSquadRyker, rykerBody, rykerHead, rykerLeftHand, rykerRightHand, catalogRyker);
+  console.log("Add Asset Aria complete")
   await delay(5000)
-  await addAssets(TimeSquadThaddeus, thaddeusBody, thaddeusHead, thaddeusLeftHand, thaddeusRightHand, catalogThaddeus);
+  await addAssetsThaddeus(TimeSquadThaddeus, thaddeusBody, thaddeusHead, thaddeusLeftHand, thaddeusRightHand, catalogThaddeus);
+  console.log("Add Asset Aria complete")
   await delay(20000)
 
   const tx01 = await TimeSquadAria.setAutoAcceptCollection(await ariaBody.getAddress(), true);
