@@ -59,10 +59,10 @@ export const PART_TYPE_FIXED = 2n;
 
 
 //ENUMERATE MINT  cartella da 10k
-export const MINT_ENUMERATE_ARIA = `${BASE_IPFS_URI}QmeAzBphXkUhoJCSTLiSDkwLEhApXCwRmFaRGt7qh5DyfL/`; 
-export const MINT_ENUMERATE_LUNA = `${BASE_IPFS_URI}QmSjxLw6rvizFc4A7m4N2LA73zRSsccp7gFxkyfXnUPR8m/`; 
-export const MINT_ENUMERATE_RYKER = `${BASE_IPFS_URI}QmNVU57Ygy4Z8xHczfWX7qPrYVnWtsHa72PRDaxgJ76a81/`; 
-export const MINT_ENUMERATE_THADDEUS = `${BASE_IPFS_URI}QmdYefJyvmV4tBAE2e832tMQi1XU3yoRxwTPL2AuxF5ehh/`; 
+export const MINT_ENUMERATE_ARIA = `${BASE_IPFS_URI}bafybeichg7egvreciwlru6mp77f746yyfjy5qgkcwkhxvawuxfw4kzmrnm/`; 
+export const MINT_ENUMERATE_LUNA = `${BASE_IPFS_URI}bafybeihmxyxyp23gryfwfxilssyx32txuyd74xh7cninam6ayti2f2aedq/`; 
+export const MINT_ENUMERATE_RYKER = `${BASE_IPFS_URI}bafybeibkpwesacbi3hlzmxrrpscziiaxspzx2uo62bpbtxgy25uwt2qllu/`; 
+export const MINT_ENUMERATE_THADDEUS = `${BASE_IPFS_URI}bafybeif2ntx2rceusqekf7xxr7ikvm5qlzz5koczr6ziekfiqkmc4b56jy/`; 
 
 export const FIXED_PART_ARIA_METADATA = `${MINT_ENUMERATE_ARIA}1.json`;
 export const FIXED_PART_LUNA_METADATA = `${MINT_ENUMERATE_LUNA}1.json`;

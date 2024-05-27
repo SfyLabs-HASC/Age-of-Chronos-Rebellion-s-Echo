@@ -2,7 +2,7 @@ import json
 import os
 import numpy as np
 
-FILES = 1000
+FILES = 10000
 
 def generate_json_files(base_json, attack_mean, attack_std_dev, defence_mean, defence_std_dev, magic_value, fortune_value, output_subdir):
     global FILES

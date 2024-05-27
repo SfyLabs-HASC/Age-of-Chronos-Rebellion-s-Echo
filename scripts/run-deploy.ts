@@ -295,6 +295,54 @@ async function main() {
 
   console.log('Minted child with id 1');
 
+  //mintro altri parenti
+  let lol2= await TimeSquadAria.manageContributor(deployer,true);
+  lol2= await TimeSquadLuna.manageContributor(deployer,true);
+  lol2= await TimeSquadRyker.manageContributor(deployer,true);
+  lol2= await TimeSquadThaddeus.manageContributor(deployer,true);
+  await delay(10000)
+  await mintParentNFT(TimeSquadAria, deployer.address);
+  await delay(1000);
+  await mintParentNFT(TimeSquadLuna, deployer.address);
+  await delay(1000);
+  await mintParentNFT(TimeSquadRyker, deployer.address);
+  await delay(1000);
+  await mintParentNFT(TimeSquadThaddeus, deployer.address);
+  console.log(`Minted parents NFT by ${deployer.address} with id 1`);
+  await delay(10000);
+
+  await mintParentNFT(TimeSquadAria, deployer.address);
+  await delay(1000);
+  await mintParentNFT(TimeSquadLuna, deployer.address);
+  await delay(1000);
+  await mintParentNFT(TimeSquadRyker, deployer.address);
+  await delay(1000);
+  await mintParentNFT(TimeSquadThaddeus, deployer.address);
+  console.log(`Minted parents NFT by ${deployer.address} with id 1`);
+  await delay(10000);
+
+  await mintParentNFT(TimeSquadAria, deployer.address);
+  await delay(1000);
+  await mintParentNFT(TimeSquadLuna, deployer.address);
+  await delay(1000);
+  await mintParentNFT(TimeSquadRyker, deployer.address);
+  await delay(1000);
+  await mintParentNFT(TimeSquadThaddeus, deployer.address);
+  console.log(`Minted parents NFT by ${deployer.address} with id 1`);
+  await delay(10000);
+
+  await mintParentNFT(TimeSquadAria, deployer.address);
+  await delay(1000);
+  await mintParentNFT(TimeSquadLuna, deployer.address);
+  await delay(1000);
+  await mintParentNFT(TimeSquadRyker, deployer.address);
+  await delay(1000);
+  await mintParentNFT(TimeSquadThaddeus, deployer.address);
+  console.log(`Minted parents NFT by ${deployer.address} with id 1`);
+  await delay(10000);
+
+  /*
+
 
   await mintParentNFT(TimeSquadAria, addr1.address);
   await delay(10000);
@@ -329,7 +377,7 @@ async function main() {
   await setExternalPermission(thaddeusRightHand, addr1.address, true);
   await delay(10000);
 
-
+*/
 
 
   //todo NON WORKA PERCHé DOVRESTI PASSARGLI IL CONTRATTO FACTORY ASSOCIATO AD ADDR1 E NON DEPLOYER
