@@ -91,7 +91,9 @@ contract TimeSquadLuna is
      * @return The ID of the first token to be minted in the current minting cycle
      */
     function mint(address to) public returns (uint256) {
-        require(!_hasMinted[to], "Address has already minted an NFT");
+        if (!isContributor(msg.sender)) {
+            require(!_hasMinted[to], "Address has already minted an NFT");
+        }
         require(!paused, "Minting is paused");
         (uint256 nextToken, uint256 totalSupplyOffset) = _prepareMint(1);
 

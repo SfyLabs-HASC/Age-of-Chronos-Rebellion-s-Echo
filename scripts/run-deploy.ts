@@ -332,7 +332,7 @@ async function main() {
 
 
 
-  //NON WORKA PERCHé DOVRESTI PASSARGLI IL CONTRATTO FACTORY ASSOCIATO AD ADDR1 E NON DEPLOYER
+  //todo NON WORKA PERCHé DOVRESTI PASSARGLI IL CONTRATTO FACTORY ASSOCIATO AD ADDR1 E NON DEPLOYER
   /*
   //await mintChildNFT(ariaBody, addr1.address);
   //await mintChildNFT(ariaHead, addr1.address);
