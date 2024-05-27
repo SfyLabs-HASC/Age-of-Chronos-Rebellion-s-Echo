@@ -90,7 +90,7 @@ contract TimeSquadThaddeus is
      * @param to Address to which to mint the token
      * @return The ID of the first token to be minted in the current minting cycle
      */
-     function mint(address to) public returns (uint256) {
+    function mint(address to) public returns (uint256) {
         require(!_hasMinted[to], "Address has already minted an NFT");
         require(!paused, "Minting is paused");
         (uint256 nextToken, uint256 totalSupplyOffset) = _prepareMint(1);
@@ -141,6 +141,26 @@ contract TimeSquadThaddeus is
         paused = _state;
     }
 
+    // Getter method to retrieve the current base URI
+    function getBaseURI() public view returns (string memory) {
+        return baseURI;
+    }
+
+    // Getter method to retrieve the current base extension (e.g., ".json")
+    function getBaseExtension() public view returns (string memory) {
+        return baseExtension;
+    }
+
+    // Getter method to retrieve the current main asset ID
+    function getMainAsset() public view returns (uint64) {
+        return mainAsset;
+    }
+
+    // Getter method to check if the minting is paused
+    function isPaused() public view returns (bool) {
+        return paused;
+    }
+
     /**
      * @dev Returns the token URI for the specified token ID.
      * @param tokenId The ID of the token.
@@ -154,14 +174,13 @@ contract TimeSquadThaddeus is
         return getAssetMetadata(tokenId, _activeAssets[tokenId][0]);
     }
 
-
     function getAssetMetadata(
         uint256 tokenId,
         uint64 assetId
     ) public view override returns (string memory) {
         string memory currentBaseURI = baseURI;
         //uint64 currentMainAsset = mainAsset;
-        if (assetId == 1)
+        if (assetId == mainAsset)
             return
                 string(
                     abi.encodePacked(
@@ -172,10 +191,6 @@ contract TimeSquadThaddeus is
                 );
         else return super.getAssetMetadata(tokenId, assetId);
     }
-
-
-
-    
 
     /**
      * @notice Hook that is called after an asset is accepted to a token's active assets array.

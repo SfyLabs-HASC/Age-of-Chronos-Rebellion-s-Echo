@@ -35,7 +35,7 @@ import {
   deployManager,
   deployCatalog,
   configureCatalog,
-  addAssets,
+  addAssetsAria,
   setEquippableAddresses,
   setExternalPermission,
   nestTransferChildToParent,
@@ -52,6 +52,7 @@ import {
   checkEquipConditions,
   getPartDetails
 } from './utilsFunctions';
+import { exit } from 'process';
 
 
 async function main() {
@@ -134,7 +135,7 @@ readAssetsToToken(thaddeusLeftHand,1n)
     const assetId = 1n;
 
 
-    await addAssetToChildToken(thaddeusLeftHand, tokenId, assetId, replacesAssetWithId)
+   // await addAssetToChildToken(thaddeusLeftHand, tokenId, assetId, replacesAssetWithId)
     
     
     
