@@ -1,10 +1,7 @@
 'use client'
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { createThirdwebClient, defineChain, getContract, readContract } from 'thirdweb';
-
- 
-
 
 const client = createThirdwebClient({
     clientId: '258f6a7e272e3b6e74b8ad1d24ad1343'
@@ -41,15 +38,31 @@ const contract = getContract({
 });
 
 const GetTotalSupply = () => {
-    const  data = readContract({
-        contract,
-        method: "totalSupply",
-        params: [],
-    });
+    const [totalSupply, setTotalSupply] = useState<bigint | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchTotalSupply = async () => {
+            try {
+                const data: bigint = await readContract({
+                    contract,
+                    method: "totalSupply",
+                    params: [],
+                });
+                setTotalSupply(data);
+            } catch (error) {
+                console.error('Error fetching total supply:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchTotalSupply();
+    }, []);
 
     return (
         <div>
-            <h3>Total Supply of Aria: {data}</h3>
+            <h3>Total Supply of Aria: {isLoading ? 'Loading...' : totalSupply?.toString()}</h3>
         </div>
     );
 }
