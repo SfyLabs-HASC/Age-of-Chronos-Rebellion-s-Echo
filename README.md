@@ -21,6 +21,8 @@ npm install --save-dev @nomiclabs/hardhat-ethers ethereum-waffle chai
 3. Optionally deploy utils, to do tests locally. `npx hardhat run scripts/run-deploy.ts --network baseSepolia`
 3. Optionally deploy utils, to do tests locally. `npx hardhat run scripts/configure_assets.ts --network baseSepolia`
 
+npx hardhat run scripts/snippet.ts --network baseSepolia
+
 ## Deploying on a real blockchain
 
 1. Deploy on testnet: `pnpm hardhat run scripts/deploy.ts --network NETWORK`
