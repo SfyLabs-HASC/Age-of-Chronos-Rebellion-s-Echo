@@ -19,6 +19,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@rmrk-team/evm-contracts": "^2.5.4",
+    "@tanstack/react-query": "^4.36.1",
     "@thirdweb-dev/react": "^4.6.28",
     "thirdweb": "^5.25.1"
   },
