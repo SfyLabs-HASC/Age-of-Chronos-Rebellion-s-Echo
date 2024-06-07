@@ -6,7 +6,7 @@ import 'hardhat-contract-sizer';
 import './tasks/emotes';
 import './tasks/attributes';
 import './tasks/metadata';
-
+import 'hardhat-gas-reporter'; // Import the gas reporter
 
 const accounts = process.env.PRIVATE_KEY && process.env.ADDR1_PRIVATE_KEY
   ? [
@@ -32,8 +32,13 @@ const config: HardhatUserConfig = {
     moonbaseAlpha: {
       url: process.env.MOONBASE_URL || 'https://rpc.testnet.moonbeam.network',
       chainId: 1287,
-      accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
-      gasPrice: 1100000000,
+      accounts: process.env.PRIVATE_KEY && process.env.ADDR1_PRIVATE_KEY
+      ? [
+          process.env.PRIVATE_KEY,
+          process.env.ADDR1_PRIVATE_KEY
+        ]
+      : [],
+      gasPrice: 125000000,
       timeout: 1000000,
     },
     sepolia: {
@@ -116,8 +121,12 @@ const config: HardhatUserConfig = {
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
     currency: 'USD',
+    gasPrice: 125, // gwei
+    token: 'GLMR', // Token name per prendere il prezzo
+    showMethodSig: true,
     coinmarketcap: process.env.COIN_MARKET_CAP_KEY || '',
-    gasPrice: 50,
+
+
   },
   etherscan: {
     apiKey: {

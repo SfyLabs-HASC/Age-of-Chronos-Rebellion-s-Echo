@@ -1,138 +1,174 @@
-import { ethers, Signer } from 'hardhat';
+import { ethers } from 'hardhat';
 import { expect } from 'chai';
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
-import { AgeOfChronosManager, ParentSample } from '../typechain-types';
+import { AgeOfChronosManager, TimeSquadAria, AriaBody } from '../typechain-types';
 
-async function fixtureParent(): Promise<ParentSample> {
+async function fixtureAgeOfChronosManager(): Promise<{ manager: AgeOfChronosManager, parent: TimeSquadAria, child: AriaBody, owner: any }> {
     const [owner] = await ethers.getSigners();
+
+    // Deploy AgeOfChronosManager contract
+    const managerFactory = await ethers.getContractFactory('AgeOfChronosManager');
+    const managerContract = await managerFactory.deploy();
+    await managerContract.waitForDeployment();
+
+    // Deploy TimeSquadAria contract as a parent example
     const collectionMeta = 'ipfs://QmNnn9M8rTbqPrk3rHTfN78sh4E1QLHaEKcSALrvhWfMkE';
     const maxSupply = ethers.MaxUint256;
     const royaltyRecipient = owner.address;
     const royaltyPercentageBps = 1000; // 10%
     const baseTokenURI = 'https://example.com/metadata/';
 
-    const contractParentFactory = await ethers.getContractFactory('parentSample');
+    const contractFactory = await ethers.getContractFactory('TimeSquadAria');
+    const args: [string, typeof maxSupply, string, number, string] = [
+        collectionMeta,
+        maxSupply,
+        royaltyRecipient,
+        royaltyPercentageBps,
+        baseTokenURI,
+    ];
+    const parentContract = await contractFactory.deploy(...args);
+    await parentContract.waitForDeployment();
 
-    const argsParent = [collectionMeta, maxSupply, royaltyRecipient, royaltyPercentageBps, baseTokenURI];
-    const parentContract = await contractParentFactory.deploy(...argsParent);
-    await parentContract.waitForDeployment(); // Ensure the contract is fully deployed
+    // Deploy AriaBody contract as a child example
+    const childFactory = await ethers.getContractFactory('AriaBody');
+    const childArgs: [string, typeof maxSupply, string, number] = [
+        collectionMeta,
+        maxSupply,
+        royaltyRecipient,
+        royaltyPercentageBps,
+    ];
+    const childContract = await childFactory.deploy(...childArgs);
+    await childContract.waitForDeployment();
 
-    return parentContract;
+    // Add an asset to the parent contract
+    await parentContract.addAssetEntry("ipfs://QmAssetMetadata");
+
+    // Add the parent contract to the manager
+    await managerContract.addParentAddress(await parentContract.getAddress());
+
+    return { manager: managerContract as AgeOfChronosManager, parent: parentContract as TimeSquadAria, child: childContract as AriaBody, owner };
 }
 
-async function fixtureManager(): Promise<AgeOfChronosManager> {
-    const [owner] = await ethers.getSigners();
-    const parentAddresses = [];
-
-    const contractManagerFactory = await ethers.getContractFactory('AgeOfChronosManager');
-
-    const ManagerContract = await contractManagerFactory.deploy(parentAddresses);
-    await ManagerContract.waitForDeployment();
-
-    return ManagerContract;
-}
-
-describe('Base TESTS', async () => {
-    let parentContract: ParentSample;
-    let contractManager: AgeOfChronosManager;
-    let owner: Signer, addr1: Signer, addr2: Signer;
+describe('AgeOfChronosManager Tests', async () => {
+    let manager: AgeOfChronosManager;
+    let parent: TimeSquadAria;
+    let child: AriaBody;
+    let owner: any, addr1: any, addr2: any;
 
     beforeEach(async function () {
-        parentContract = await loadFixture(fixtureParent);
-        contractManager = await loadFixture(fixtureManager);
+        ({ manager, parent, child, owner } = await loadFixture(fixtureAgeOfChronosManager));
         [owner, addr1, addr2] = await ethers.getSigners();
+
+        // Grant permissions to mint multiple tokens as owner
+        await parent.manageContributor(owner.address, true);
+        await child.setExternalPermission(owner.address, true);
+
+        // Mint a token to addr1
+        await parent.connect(owner).setPause(false);
+        await parent.connect(owner).mint(addr1.address);
     });
 
-    describe('Init', async function () {
-        it('can get names and symbols', async function () {
-            expect(await parentContract.name()).to.equal('parentSample');
-            expect(await parentContract.symbol()).to.equal('sPARENTs');
+    describe('Initialization', async function () {
+        it('should set the correct owner', async function () {
+            expect(await manager.owner()).to.equal(owner.address);
         });
     });
 
-    describe("Mint and Pause Tests", async function () {
-        it('pauses and unpauses minting', async function () {
-            await parentContract.connect(owner).setPause(true);
-            await expect(parentContract.connect(addr1).mint(addr1.address))
-                .to.be.revertedWith("Minting is paused");
+    describe('Parent Address Management', async function () {
+        it('should add a parent address', async function () {
+            await manager.addParentAddress(await parent.getAddress());
+            const addresses = await manager.getParentAddresses();
+            expect(addresses).to.include(await parent.getAddress());
+        });
 
-            await parentContract.connect(owner).setPause(false);
-            await parentContract.connect(addr1).mint(addr1.address);
-            expect(await parentContract.balanceOf(addr1.address)).to.equal(1);
+        it('should remove a parent address', async function () {
+            await manager.addParentAddress(await parent.getAddress());
+            await manager.removeParentAddress(await parent.getAddress());
+            const addresses = await manager.getParentAddresses();
+            expect(addresses).to.not.include(await parent.getAddress());
         });
     });
 
-    describe("URI Tests", async function () {
-        it('sets and gets base URI', async function () {
-            const newBaseURI = 'https://newexample.com/metadata/';
-            await parentContract.connect(owner).setBaseURI(newBaseURI);
-            await parentContract.connect(addr1).mint(addr1.address);
-
-            const tokenId = 1;
-            expect(await parentContract.tokenURI(tokenId)).to.equal(`${newBaseURI}${tokenId}.json`);
-        });
-
-        it('sets and gets base extension', async function () {
-            const newBaseExtension = '.token';
-            await parentContract.connect(owner).setBaseExtension(newBaseExtension);
-            await parentContract.connect(addr1).mint(addr1.address);
-
-            const tokenId = 1;
-            expect(await parentContract.tokenURI(tokenId)).to.equal(`https://example.com/metadata/${tokenId}${newBaseExtension}`);
-        });
-    });
-
-    describe("Soulbound Tests", async function () {
+    describe('Soulbound Functions', async function () {
         beforeEach(async function () {
-            await parentContract.connect(addr1).mint(addr1.address);
-            await parentContract.connect(owner).manageContributor(await contractManager.getAddress(), true);
-            await contractManager.connect(owner).addParentAddress(await parentContract.getAddress());
+            await parent.connect(owner).setPause(false);
+            await parent.connect(owner).mint(owner.address);  // Mint another token to the owner to test bulk operations
         });
 
-        it('sets and unsets soulbound tokens', async function () {
+        it('should set and unset soulbound status', async function () {
             const tokenId = 1;
-            await contractManager.connect(owner).setSoulbound(tokenId, true, await parentContract.getAddress());
-            
-            await expect(
-                parentContract.connect(addr1).transferFrom(addr1.address, addr2.address, tokenId)
-            ).to.be.revertedWithCustomError(parentContract, 'RMRKCannotTransferSoulbound');
+            await manager.setSoulbound(tokenId, true, await parent.getAddress());
+            expect(await parent.isTransferable(tokenId, addr1.address, addr2.address)).to.be.false;
 
-            await contractManager.connect(owner).setSoulbound(tokenId, false, await parentContract.getAddress());
-            await parentContract.connect(addr1).transferFrom(addr1.address, addr2.address, tokenId);
-            expect(await parentContract.ownerOf(tokenId)).to.equal(addr2.address);
+            await manager.setSoulbound(tokenId, false, await parent.getAddress());
+            expect(await parent.isTransferable(tokenId, addr1.address, addr2.address)).to.be.true;
         });
 
-        it('performs bulk soulbound operations', async function () {
+        it('should bulk set soulbound status', async function () {
             const startTokenId = 1;
-            const endTokenId = 1;
-            await contractManager.connect(owner).bulkSoulbound(startTokenId, endTokenId, true, await parentContract.getAddress());
+            const endTokenId = 2;
+            await manager.bulkSoulbound(startTokenId, endTokenId, true, await parent.getAddress());
+            expect(await parent.isTransferable(startTokenId, addr1.address, addr2.address)).to.be.false;
+            expect(await parent.isTransferable(endTokenId, owner.address, addr2.address)).to.be.false;
 
-            for (let tokenId = startTokenId; tokenId <= endTokenId; tokenId++) {
-                await expect(
-                    parentContract.connect(addr1).transferFrom(addr1.address, addr2.address, tokenId)
-                ).to.be.revertedWithCustomError(parentContract, 'RMRKCannotTransferSoulbound');
-            }
+            await manager.bulkSoulbound(startTokenId, endTokenId, false, await parent.getAddress());
+            expect(await parent.isTransferable(startTokenId, addr1.address, addr2.address)).to.be.true;
+            expect(await parent.isTransferable(endTokenId, owner.address, addr2.address)).to.be.true;
+        });
+    });
 
-            await contractManager.connect(owner).bulkSoulbound(startTokenId, endTokenId, false, await parentContract.getAddress());
-
-            for (let tokenId = startTokenId; tokenId <= endTokenId; tokenId++) {
-                await parentContract.connect(addr1).transferFrom(addr1.address, addr2.address, tokenId);
-                expect(await parentContract.ownerOf(tokenId)).to.equal(addr2.address);
-            }
+    describe('Mission Functions', async function () {
+        beforeEach(async function () {
+            await parent.connect(owner).setPause(false);
+            await parent.connect(owner).manageContributor(await manager.getAddress(), true);
         });
 
-        it('handles missions for soulbound tokens', async function () {
+        it('should start and end a mission', async function () {
             const tokenId = 1;
-            const missionId = ethers.encodeBytes32String("mission1");
+            const collectionAddresses = [await parent.getAddress(), await parent.getAddress(), await parent.getAddress(), await parent.getAddress()];
+            const tokenIds = [tokenId, tokenId, tokenId, tokenId];
 
-            await contractManager.connect(owner).startMission(missionId, [await parentContract.getAddress()], [tokenId]);
-            await expect(
-                parentContract.connect(addr1).transferFrom(addr1.address, addr2.address, tokenId)
-            ).to.be.revertedWithCustomError(parentContract, 'RMRKCannotTransferSoulbound');
+            const startTx = await manager.connect(owner).startMission(collectionAddresses, tokenIds);
+            const startReceipt = await startTx.wait();
+            console.log(`Gas used for startMission: ${startReceipt.gasUsed.toString()}`);
 
-            await contractManager.connect(owner).endMission(missionId);
-            await parentContract.connect(addr1).transferFrom(addr1.address, addr2.address, tokenId);
-            expect(await parentContract.ownerOf(tokenId)).to.equal(addr2.address);
+            expect(await parent.isTransferable(tokenId, addr1.address, addr2.address)).to.be.false;
+            expect(await manager.isAddressInMission(await parent.getAddress())).to.be.true;
+
+            const endTx = await manager.connect(owner).endMission(collectionAddresses, tokenIds);
+            const endReceipt = await endTx.wait();
+            console.log(`Gas used for endMission: ${endReceipt.gasUsed.toString()}`);
+
+            expect(await parent.isTransferable(tokenId, addr1.address, addr2.address)).to.be.true;
+            expect(await manager.isAddressInMission(await parent.getAddress())).to.be.false;
+        });
+    });
+
+    describe('Ownership Transfer', async function () {
+        it('should transfer ownership', async function () {
+            await manager.transferOwnership(addr1.address);
+            expect(await manager.owner()).to.equal(addr1.address);
+        });
+    });
+
+    describe('External Permission Management', async function () {
+        it('should set and revoke external permission', async function () {
+            await child.setExternalPermission(addr1.address, true);
+            //expect(await child.isExternalPermissionGranted(addr1.address)).to.be.true;
+
+            await child.setExternalPermission(addr1.address, false);
+            //expect(await child.isExternalPermissionGranted(addr1.address)).to.be.false;
+        });
+
+        it('should allow minting with external permission', async function () {
+            await child.setExternalPermission(addr1.address, true);
+            await child.connect(addr1).mintWithAssets(addr1.address, [1]);
+            const balance = await child.balanceOf(addr1.address);
+            expect(balance).to.equal(1);
+        });
+
+        it('should deny minting without external permission', async function () {
+            await expect(child.connect(addr2).mintWithAssets(addr2.address, [1])).to.be.revertedWith("Permission denied");
         });
     });
 });

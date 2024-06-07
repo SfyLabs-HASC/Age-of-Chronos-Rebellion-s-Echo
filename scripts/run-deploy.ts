@@ -296,11 +296,13 @@ async function main() {
   console.log('Minted child with id 1');
 
   //mintro altri parenti
-  let lol2= await TimeSquadAria.manageContributor(deployer,true);
-  lol2= await TimeSquadLuna.manageContributor(deployer,true);
-  lol2= await TimeSquadRyker.manageContributor(deployer,true);
-  lol2= await TimeSquadThaddeus.manageContributor(deployer,true);
-  await delay(10000)
+  await TimeSquadAria.manageContributor(deployer,true);
+  await TimeSquadLuna.manageContributor(deployer,true);
+  await TimeSquadRyker.manageContributor(deployer,true);
+  await TimeSquadThaddeus.manageContributor(deployer,true);
+
+  console.log(`Manage contributor finished`);
+  await delay(20000)
   await mintParentNFT(TimeSquadAria, deployer.address);
   await delay(1000);
   await mintParentNFT(TimeSquadLuna, deployer.address);
@@ -308,7 +310,7 @@ async function main() {
   await mintParentNFT(TimeSquadRyker, deployer.address);
   await delay(1000);
   await mintParentNFT(TimeSquadThaddeus, deployer.address);
-  console.log(`Minted parents NFT by ${deployer.address} with id 1`);
+  console.log(`Minted parents NFT by ${deployer.address} with id 2`);
   await delay(10000);
 
   await mintParentNFT(TimeSquadAria, deployer.address);
@@ -318,7 +320,7 @@ async function main() {
   await mintParentNFT(TimeSquadRyker, deployer.address);
   await delay(1000);
   await mintParentNFT(TimeSquadThaddeus, deployer.address);
-  console.log(`Minted parents NFT by ${deployer.address} with id 1`);
+  console.log(`Minted parents NFT by ${deployer.address} with id 3`);
   await delay(10000);
 
   await mintParentNFT(TimeSquadAria, deployer.address);
@@ -328,7 +330,7 @@ async function main() {
   await mintParentNFT(TimeSquadRyker, deployer.address);
   await delay(1000);
   await mintParentNFT(TimeSquadThaddeus, deployer.address);
-  console.log(`Minted parents NFT by ${deployer.address} with id 1`);
+  console.log(`Minted parents NFT by ${deployer.address} with id 4`);
   await delay(10000);
 
   await mintParentNFT(TimeSquadAria, deployer.address);
@@ -338,7 +340,7 @@ async function main() {
   await mintParentNFT(TimeSquadRyker, deployer.address);
   await delay(1000);
   await mintParentNFT(TimeSquadThaddeus, deployer.address);
-  console.log(`Minted parents NFT by ${deployer.address} with id 1`);
+  console.log(`Minted parents NFT by ${deployer.address} with id 5`);
   await delay(10000);
 
   /*
