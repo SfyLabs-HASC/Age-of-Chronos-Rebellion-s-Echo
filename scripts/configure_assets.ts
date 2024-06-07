@@ -92,7 +92,7 @@ async function main() {
     "ThaddeusRightHand": "0xb3A26D87103FE414c6d74AF77fb59c3574Eac916"
   };
 
-
+  const managerAddress:string ="0x5e4ad5edf5CDa7344f79F0Ea4d0dfCbd0eAb2572"
 
 
   const timeSquadAria: TimeSquadAria = await ethers.getContractAt('TimeSquadAria', contractParentAddresses.Aria, deployer);
@@ -148,7 +148,7 @@ async function main() {
     lol2 = await timeSquadThaddeus.manageContributor(deployer, true);
     await delay(10000)
 */
-
+/*
     await mintParentNFT(timeSquadAria, deployer.address);
     await delay(1000);
     await mintParentNFT(timeSquadLuna, deployer.address);
@@ -160,6 +160,8 @@ async function main() {
     
     let lol = await timeSquadThaddeus.isContributor(deployer);
     console.log(lol)
+
+    */
     //set approval to all per il parent2
 
     // Uncomment these lines if needed
@@ -270,21 +272,100 @@ async function main() {
 
     /*
     if (!isHardhatNetwork()) {
-      const collectionMeta =;
+        const collectionMeta = C.SQUAD_METADATA_ARIA;
         const maxSupply = ethers.MaxUint256;
         const royaltyRecipient = (await ethers.getSigners())[0].address;
         const royaltyPercentageBps = 1000; // 10%
-        const baseTokenURI = C.MINT_ENUMERATE_PARENT;
+        const baseTokenURI = C.MINT_ENUMERATE_ARIA;
     
         const args = [collectionMeta, maxSupply, royaltyRecipient, royaltyPercentageBps, baseTokenURI] as const;
           //console.log('Waiting 10 seconds before verifying contract...');
           //await delay(10000);
           await run('verify:verify', {
-            address: '0x264D52c0873977C9F6dea695da9b99F7D09EdfDe',
+            address: contractParentAddresses.Aria,
             constructorArguments: args,
-            contract: 'contracts/parent/ParentSample.sol:ParentSample',
+            contract: 'contracts/parent/TimeSquadAria.sol:TimeSquadAria',
           });
         }
+
+        if (!isHardhatNetwork()) {
+          const collectionMeta = C.SQUAD_METADATA_LUNA;
+          const maxSupply = ethers.MaxUint256;
+          const royaltyRecipient = (await ethers.getSigners())[0].address;
+          const royaltyPercentageBps = 1000; // 10%
+          const baseTokenURI = C.MINT_ENUMERATE_LUNA;
+      
+          const args = [collectionMeta, maxSupply, royaltyRecipient, royaltyPercentageBps, baseTokenURI] as const;
+            console.log('Waiting 10 seconds before verifying contract...');
+            await delay(10000);
+            await run('verify:verify', {
+              address: contractParentAddresses.Luna,
+              constructorArguments: args,
+              contract: 'contracts/parent/TimeSquadLuna.sol:TimeSquadLuna',
+            });
+          }
+
+          if (!isHardhatNetwork()) {
+            const collectionMeta = C.SQUAD_METADATA_RYKER;
+            const maxSupply = ethers.MaxUint256;
+            const royaltyRecipient = (await ethers.getSigners())[0].address;
+            const royaltyPercentageBps = 1000; // 10%
+            const baseTokenURI = C.MINT_ENUMERATE_RYKER;
+        
+            const args = [collectionMeta, maxSupply, royaltyRecipient, royaltyPercentageBps, baseTokenURI] as const;
+              console.log('Waiting 10 seconds before verifying contract...');
+              await delay(10000);
+              await run('verify:verify', {
+                address: contractParentAddresses.Ryker,
+                constructorArguments: args,
+                contract: 'contracts/parent/TimeSquadRyker.sol:TimeSquadRyker',
+              });
+            }
+
+            if (!isHardhatNetwork()) {
+              const collectionMeta = C.SQUAD_METADATA_THADDEUS;
+              const maxSupply = ethers.MaxUint256;
+              const royaltyRecipient = (await ethers.getSigners())[0].address;
+              const royaltyPercentageBps = 1000; // 10%
+              const baseTokenURI = C.MINT_ENUMERATE_THADDEUS;
+          
+              const args = [collectionMeta, maxSupply, royaltyRecipient, royaltyPercentageBps, baseTokenURI] as const;
+                console.log('Waiting 10 seconds before verifying contract...');
+                await delay(10000);
+                await run('verify:verify', {
+                  address: contractParentAddresses.Thaddeus,
+                  constructorArguments: args,
+                  contract: 'contracts/parent/TimeSquadThaddeus.sol:TimeSquadThaddeus',
+                });
+              }
+*/
+              if (!isHardhatNetwork()) {
+                const collectionMeta = C.SQUAD_ITEM_METADATA_RYKER_LEFT_HAND;
+                const maxSupply = ethers.MaxUint256;
+                const royaltyRecipient = (await ethers.getSigners())[0].address;
+                const royaltyPercentageBps = 1000; // 10%
+            
+                const args = [collectionMeta, maxSupply, royaltyRecipient, royaltyPercentageBps] as const;
+                  console.log('Waiting 10 seconds before verifying contract...');
+                  await delay(10000);
+                  await run('verify:verify', {
+                    address: contractItemAddresses.rykerLeftHand,
+                    constructorArguments: args,
+                    contract: 'contracts/parent/RykerLeftHand.sol:RykerLeftHand',
+                  });
+                }
+/*
+        if (!isHardhatNetwork()) {
+     
+          const args = [] as const;
+            console.log('Waiting 10 seconds before verifying contract...');
+            await delay(10000);
+            await run('verify:verify', {
+              address: managerAddress,
+              constructorArguments: args,
+              contract: 'contracts/parent/AgeOfChronosManager.sol:AgeOfChronosManager',
+            });
+          }
       */
 
     /*

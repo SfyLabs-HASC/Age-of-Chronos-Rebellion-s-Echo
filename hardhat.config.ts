@@ -62,7 +62,7 @@ const config: HardhatUserConfig = {
           process.env.ADDR1_PRIVATE_KEY
         ]
       : [],
-      gasPrice: 900000000,
+      gasPrice: 90000000,
     },
     shibuya: {
       chainId: 81,
