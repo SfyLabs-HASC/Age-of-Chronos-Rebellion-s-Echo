@@ -129,17 +129,25 @@ header .logo_inside {
   transition: .4s;
   display: inline-block;
   z-index: 2;
+  cursor: pointer;
+  border: none;
+}
+
+.hex_button:hover {
+  background: url(/img/normal-hover.webp) no-repeat center;
+  background-size: contain;
+  color: var(--clr-red);
+}
+
+.hex_button.claimed {
+  background: url(/img/button-claimed.webp) no-repeat center;
+  background-size: contain;
+  color: var(--clr-grey);
 }
 
 .special {
   background: url(/img/button-special.webp) no-repeat center;
   background-size: contain;
-}
-
-.hex_button:hover, .player.red .hex_button.claimed {
-  background: url(/img/normal-hover.webp) no-repeat center;
-  background-size: contain;
-  color: var(--clr-red);
 }
 
 .special:hover {
@@ -184,94 +192,6 @@ header .logo_inside {
   max-width: 210px;
 }
 
-.hex_button.mint-button {
-  display: inline-block;
-  background: url(/img/button-normal.webp) no-repeat center;
-  background-size: contain;
-  padding: 15px 35px;
-  min-width: 250px;
-  text-align: center;
-  color: var(--clr-white);
-  text-decoration: none;
-  font-size: 1.8em;
-  transition: .4s;
-  z-index: 2;
-  cursor: pointer;
-  border: none;
-}
-
-.hex_button.mint-button:hover {
-  background: url(/img/normal-hover.webp) no-repeat center;
-  background-size: contain;
-  color: var(--clr-red);
-}
-
-.player.red .hex_button.mint-button {
-  background: url(/img/raiker_blade.webp) no-repeat center;
-}
-
-.player.yellow .hex_button.mint-button {
-  background: url(/img/luna_stronghold.webp) no-repeat center;
-}
-
-.player.violet .hex_button.mint-button {
-  background: url(/img/aria_zephyrion.webp) no-repeat center;
-}
-
-.player.green .hex_button.mint-button {
-  background: url(/img/taddeus_luckstride.webp) no-repeat center;
-}
-
-.player.red .hex_button.mint-button:hover,
-.player.yellow .hex_button.mint-button:hover,
-.player.violet .hex_button.mint-button:hover,
-.player.green .hex_button.mint-button:hover {
-  background-size: contain;
-  color: var(--clr-red);
-}
-
-.player.green .hex_button:hover, .player.green .hex_button.claimed {
-  background: url(/img/green.webp) no-repeat center;
-  background-size: contain;
-  color: var(--clr-green);
-}
-
-.player.violet .hex_button:hover, .player.violet .hex_button.claimed {
-  background: url(/img/violet.webp) no-repeat center;
-  background-size: contain;
-  color: var(--clr-violet);
-}
-
-.player.yellow .hex_button:hover, .player.yellow .hex_button.claimed {
-  background: url(/img/yellow.webp) no-repeat center;
-  background-size: contain;
-  color: var(--clr-yellow);
-}
-
-.player span.name {
-  display: inline-block;
-}
-
-.player.red span.name {
-  color: var(--clr-red);
-  text-shadow: var(--clr-red) 1px 0 10px;
-}
-
-.player.yellow span.name {
-  color: var(--clr-yellow);
-  text-shadow: var(--clr-yellow) 1px 0 10px;
-}
-
-.player.violet span.name {
-  color: var(--clr-violet);
-  text-shadow: var(--clr-violet) 1px 0 10px;
-}
-
-.player.green span.name {
-  color: var(--clr-green);
-  text-shadow: var(--clr-green) 1px 0 10px;
-}
-
 .player .wrap_images {
   position: relative;
 }
@@ -294,6 +214,33 @@ header .logo_inside {
 
 .player .wrap_images img.backvisible {
   opacity: 1;
+}
+
+.player span.name {
+  display: inline-block;
+  font-family: "Turret Road", sans-serif;
+  font-weight: 700;
+  color: var(--clr-white);
+}
+
+.player.red span.name {
+  color: var(--clr-red);
+  text-shadow: var(--clr-red) 1px 0 10px;
+}
+
+.player.yellow span.name {
+  color: var(--clr-yellow);
+  text-shadow: var (--clr-yellow) 1px 0 10px;
+}
+
+.player.violet span.name {
+  color: var(--clr-violet);
+  text-shadow: var(--clr-violet) 1px 0 10px;
+}
+
+.player.green span.name {
+  color: var(--clr-green);
+  text-shadow: var(--clr-green) 1px 0 10px;
 }
 
 .absbutt {
@@ -329,138 +276,7 @@ header .logo_inside {
   background: contain;
 }
 
-/* Aggiungi o aggiorna questi stili nel tuo global.css */
-
-.hex_button.mint-button {
-  display: inline-block;
-  background: url('/img/button-normal.webp') no-repeat center;
-  background-size: contain;
-  padding: 15px 35px;
-  min-width: 250px;
-  text-align: center;
-  color: var(--clr-white);
-  text-decoration: none;
-  font-size: 1.8em;
-  transition: .4s;
-  z-index: 2;
-  cursor: pointer;
-  border: none;
-}
-
-.hex_button.mint-button:hover {
-  background: url('/img/normal-hover.webp') no-repeat center;
-  background-size: contain;
-  color: var(--clr-red);
-}
-
-/* Specific styles for each player's button */
-.player.red .hex_button.mint-button {
-  background: url('/img/raiker_blade.webp') no-repeat center;
-}
-
-.player.yellow .hex_button.mint-button {
-  background: url('/img/luna_stronghold.webp') no-repeat center;
-}
-
-.player.violet .hex_button.mint-button {
-  background: url('/img/aria_zephyrion.webp') no-repeat center;
-}
-
-.player.green .hex_button.mint-button {
-  background: url('/img/taddeus_luckstride.webp') no-repeat center;
-}
-
-.player.red .hex_button.mint-button:hover,
-.player.yellow .hex_button.mint-button:hover,
-.player.violet .hex_button.mint-button:hover,
-.player.green .hex_button.mint-button:hover {
-  background-size: contain;
-  color: var(--clr-red);
-}
-
-.player span.name {
-  display: inline-block;
-  font-family: "Turret Road", sans-serif;
-  font-weight: 700;
-  color: var(--clr-white);
-}
-
-.player.red span.name {
-  color: var(--clr-red);
-  text-shadow: var(--clr-red) 1px 0 10px;
-}
-
-.player.yellow span.name {
-  color: var(--clr-yellow);
-  text-shadow: var(--clr-yellow) 1px 0 10px;
-}
-
-.player.violet span.name {
-  color: var(--clr-violet);
-  text-shadow: var(--clr-violet) 1px 0 10px;
-}
-
-.player.green span.name {
-  color: var(--clr-green);
-  text-shadow: var(--clr-green) 1px 0 10px;
-}
-
-.hex_button.mint-button {
-  display: inline-block;
-  background: url('/img/button-normal.webp') no-repeat center;
-  background-size: contain;
-  padding: 15px 35px;
-  min-width: 250px;
-  text-align: center;
-  color: var(--clr-white);
-  text-decoration: none;
-  font-size: 1.8em;
-  transition: .4s;
-  z-index: 2;
-  cursor: pointer;
-  border: none;
-}
-
-.hex_button.mint-button:hover {
-  background: url('/img/normal-hover.webp') no-repeat center;
-  background-size: contain;
-  color: var(--clr-red);
-}
-
-/* Styles for Claimed buttons */
-.hex_button.claimed {
-  background: url('/img/button-claimed.webp') no-repeat center;
-  background-size: contain;
-  color: var(--clr-grey);
-}
-
-/* Specific styles for each player's button */
-.player.red .hex_button.mint-button {
-  background: url('/img/raiker_blade.webp') no-repeat center;
-}
-
-.player.yellow .hex_button.mint-button {
-  background: url('/img/luna_stronghold.webp') no-repeat center;
-}
-
-.player.violet .hex_button.mint-button {
-  background: url('/img/aria_zephyrion.webp') no-repeat center;
-}
-
-.player.green .hex_button.mint-button {
-  background: url('/img/taddeus_luckstride.webp') no-repeat center;
-}
-
-.player.red .hex_button.mint-button:hover,
-.player.yellow .hex_button.mint-button:hover,
-.player.violet .hex_button.mint-button:hover,
-.player.green .hex_button.mint-button:hover {
-  background-size: contain;
-  color: var(--clr-red);
-}
-
-
-
+/* Responsive styles */
 @media (max-width: 990px) {
   .logo_main {
     max-width: 300px;

@@ -45,7 +45,6 @@ export default function MintPage() {
           </header>
         </a>
 
-        
         <div className="container-fluid main-container">
           <div className="row align-items-center mobrow">
             <div className="col-12 col-lg-3">

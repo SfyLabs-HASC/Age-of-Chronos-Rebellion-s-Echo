@@ -1,3 +1,4 @@
+// readTransactions.js
 'use client'
 
 import React, { useState, useEffect } from 'react';
@@ -12,29 +13,28 @@ const myChain = defineChain({
     rpc: 'https://sepolia.base.org'
 });
 
-const contractAddress = '0x28a147ebE82a64D294D0b2a92c51A487015773B1'; // Indirizzo di Aria
+const contractParentAddresses = {
+    "Aria": "0x28a147ebE82a64D294D0b2a92c51A487015773B1",
+    "Luna": "0x5F0e041A5c039c2A83a00d85e487E6Cf066f4CEF",
+    "Ryker": "0xAe6Ab9Bb9704ec017cb28F990f6a76a54D3104ce",
+    "Thaddeus": "0x2472Ea2ddC078661b2f8b24A3468c65617d43530"
+};
 
-const contract = getContract({
+// Helper function to create contract
+const createContract = (address) => getContract({
     client,
     chain: myChain,
-    address: contractAddress,
+    address,
     abi: [
-        // ABI del contratto con il metodo totalSupply
         {
             "constant": true,
             "inputs": [],
             "name": "totalSupply",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
+            "outputs": [{ "name": "", "type": "uint256" }],
             "payable": false,
             "stateMutability": "view",
             "type": "function"
         },
-        // ABI del contratto con il metodo balanceOf
         {
             "constant": true,
             "inputs": [{ "name": "owner", "type": "address" }],
@@ -44,19 +44,21 @@ const contract = getContract({
             "stateMutability": "view",
             "type": "function"
         }
-    ]
+    ],
 });
 
-const GetTotalSupply = () => {
+// Component for Aria
+const GetTotalSupplyAria = () => {
     const [totalSupply, setTotalSupply] = useState<bigint | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const contract = createContract(contractParentAddresses.Aria);
 
     useEffect(() => {
         const fetchTotalSupply = async () => {
             try {
-                const data: bigint = await readContract({
+                const data = await readContract({
                     contract,
-                    method: "totalSupply",
+                    method: "function totalSupply() view returns (uint256)",
                     params: [],
                 });
                 setTotalSupply(data);
@@ -70,23 +72,20 @@ const GetTotalSupply = () => {
         fetchTotalSupply();
     }, []);
 
-    return (
-        <div>
-            <h3>Total Supply of Aria: {isLoading ? 'Loading...' : totalSupply?.toString()}</h3>
-        </div>
-    );
-}
+    return <div>Total Supply of Aria: {isLoading ? 'Loading...' : totalSupply?.toString()}</div>;
+};
 
-const GetBalanceOf = ({ address }) => {
+const GetBalanceOfAria = ({ address }) => {
     const [balance, setBalance] = useState<bigint | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const contract = createContract(contractParentAddresses.Aria);
 
     useEffect(() => {
         const fetchBalance = async () => {
             try {
-                const data: bigint = await readContract({
+                const data = await readContract({
                     contract,
-                    method: "balanceOf",
+                    method: "function balanceOf(address) view returns (uint256)",
                     params: [address],
                 });
                 setBalance(data);
@@ -100,11 +99,177 @@ const GetBalanceOf = ({ address }) => {
         fetchBalance();
     }, [address]);
 
-    return (
-        <div>
-            <h3>{isLoading ? 'Loading...' : balance?.toString()}</h3>
-        </div>
-    );
-}
+    return <div>Balance of Aria: {isLoading ? 'Loading...' : balance?.toString()}</div>;
+};
 
-export { GetTotalSupply, GetBalanceOf };
+// Component for Luna
+const GetTotalSupplyLuna = () => {
+    const [totalSupply, setTotalSupply] = useState<bigint | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const contract = createContract(contractParentAddresses.Luna);
+
+    useEffect(() => {
+        const fetchTotalSupply = async () => {
+            try {
+                const data = await readContract({
+                    contract,
+                    method: "function totalSupply() view returns (uint256)",
+                    params: [],
+                });
+                setTotalSupply(data);
+            } catch (error) {
+                console.error('Error fetching total supply:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchTotalSupply();
+    }, []);
+
+    return <div>Total Supply of Luna: {isLoading ? 'Loading...' : totalSupply?.toString()}</div>;
+};
+
+const GetBalanceOfLuna = ({ address }) => {
+    const [balance, setBalance] = useState<bigint | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const contract = createContract(contractParentAddresses.Luna);
+
+    useEffect(() => {
+        const fetchBalance = async () => {
+            try {
+                const data = await readContract({
+                    contract,
+                    method: "function balanceOf(address) view returns (uint256)",
+                    params: [address],
+                });
+                setBalance(data);
+            } catch (error) {
+                console.error('Error fetching balance:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchBalance();
+    }, [address]);
+
+    return <div>Balance of Luna: {isLoading ? 'Loading...' : balance?.toString()}</div>;
+};
+
+// Component for Ryker
+const GetTotalSupplyRyker = () => {
+    const [totalSupply, setTotalSupply] = useState<bigint | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const contract = createContract(contractParentAddresses.Ryker);
+
+    useEffect(() => {
+        const fetchTotalSupply = async () => {
+            try {
+                const data = await readContract({
+                    contract,
+                    method: "function totalSupply() view returns (uint256)",
+                    params: [],
+                });
+                setTotalSupply(data);
+            } catch (error) {
+                console.error('Error fetching total supply:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchTotalSupply();
+    }, []);
+
+    return <div>Total Supply of Ryker: {isLoading ? 'Loading...' : totalSupply?.toString()}</div>;
+};
+
+const GetBalanceOfRyker = ({ address }) => {
+    const [balance, setBalance] = useState<bigint | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const contract = createContract(contractParentAddresses.Ryker);
+
+    useEffect(() => {
+        const fetchBalance = async () => {
+            try {
+                const data = await readContract({
+                    contract,
+                    method: "function balanceOf(address) view returns (uint256)",
+                    params: [address],
+                });
+                setBalance(data);
+            } catch (error) {
+                console.error('Error fetching balance:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchBalance();
+    }, [address]);
+
+    return <div>Balance of Ryker: {isLoading ? 'Loading...' : balance?.toString()}</div>;
+};
+
+// Component for Thaddeus
+const GetTotalSupplyThaddeus = () => {
+    const [totalSupply, setTotalSupply] = useState<bigint | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const contract = createContract(contractParentAddresses.Thaddeus);
+
+    useEffect(() => {
+        const fetchTotalSupply = async () => {
+            try {
+                const data = await readContract({
+                    contract,
+                    method: "function totalSupply() view returns (uint256)",
+                    params: [],
+                });
+                setTotalSupply(data);
+            } catch (error) {
+                console.error('Error fetching total supply:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchTotalSupply();
+    }, []);
+
+    return <div>Total Supply of Thaddeus: {isLoading ? 'Loading...' : totalSupply?.toString()}</div>;
+};
+
+const GetBalanceOfThaddeus = ({ address }) => {
+    const [balance, setBalance] = useState<bigint | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const contract = createContract(contractParentAddresses.Thaddeus);
+
+    useEffect(() => {
+        const fetchBalance = async () => {
+            try {
+                const data = await readContract({
+                    contract,
+                    method: "function balanceOf(address) view returns (uint256)",
+                    params: [address],
+                });
+                setBalance(data);
+            } catch (error) {
+                console.error('Error fetching balance:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchBalance();
+    }, [address]);
+
+    return <div>Balance of Thaddeus: {isLoading ? 'Loading...' : balance?.toString()}</div>;
+};
+
+export {
+    GetTotalSupplyAria, GetBalanceOfAria,
+    GetTotalSupplyLuna, GetBalanceOfLuna,
+    GetTotalSupplyRyker, GetBalanceOfRyker,
+    GetTotalSupplyThaddeus, GetBalanceOfThaddeus
+};
