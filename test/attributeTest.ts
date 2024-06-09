@@ -3,6 +3,8 @@ import { expect } from 'chai';
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { TimeSquadAria, RMRKTokenAttributesRepository } from '../typechain-types';
 
+const TOKEN_ATTRIBUTES_REPOSITORY_ADDRESS_DRAFT = '0x4778B7e8088B258A447990e18AdB5fD14B1bD100'; // Replace with actual address if necessary
+
 async function fixtureAttributesRepository(): Promise<{ parent: TimeSquadAria, attributesRepo: RMRKTokenAttributesRepository, owner: any }> {
     const [owner] = await ethers.getSigners();
 
@@ -31,6 +33,9 @@ async function fixtureAttributesRepository(): Promise<{ parent: TimeSquadAria, a
     const attributesRepoFactory = await ethers.getContractFactory('RMRKTokenAttributesRepository');
     const attributesRepoContract = await attributesRepoFactory.deploy();
     await attributesRepoContract.waitForDeployment();
+
+    // Register the collection with the attributes repository
+    await attributesRepoContract.registerAccessControl(await parentContract.getAddress(), owner.address, false);
 
     return { parent: parentContract as TimeSquadAria, attributesRepo: attributesRepoContract as RMRKTokenAttributesRepository, owner };
 }
@@ -63,18 +68,21 @@ describe('RMRKTokenAttributesRepository Tests', async () => {
             const key = "Strength";
             const value = 100;
 
-            await attributesRepo.setIntAttribute(await parent.getAddress(), tokenId, key, value);
+            await attributesRepo.setUintAttribute(await parent.getAddress(), tokenId, key, value);
+            //await attributesRepo.setUintAttribute(await parent.getAddress(), tokenId, key, value);
+            //await attributesRepo.setUintAttribute(await parent.getAddress(), tokenId, key, value);
+            //await attributesRepo.setUintAttribute(await parent.getAddress(), tokenId, key, value);
             const attributeValue = await attributesRepo.getIntAttribute(await parent.getAddress(), tokenId, key);
             expect(attributeValue).to.equal(value);
         });
 
         it('should set and get multiple integer attributes', async function () {
             const tokenId = 1;
-            const keys = ["Strength", "Agility"];
+            const keys = ["Dungeon01", "Dungeon01"];
             const values = [100, 80];
 
             const attributes = keys.map((key, index) => ({ key, value: values[index] }));
-            await attributesRepo.setIntAttributes([await parent.getAddress()], [tokenId], attributes);
+            await attributesRepo.setUintAttributes([await parent.getAddress()], [tokenId], attributes);
 
             const retrievedAttributes = await attributesRepo.getIntAttributes([await parent.getAddress()], [tokenId], keys);
             expect(retrievedAttributes).to.deep.equal(values);

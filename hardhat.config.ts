@@ -123,6 +123,7 @@ const config: HardhatUserConfig = {
     currency: 'USD',
     gasPrice: 125, // gwei
     token: 'GLMR', // Token name per prendere il prezzo
+    //token: 'ETH', // Token name per prendere il prezzo
     showMethodSig: true,
     coinmarketcap: process.env.COIN_MARKET_CAP_KEY || '',
 
