@@ -3,6 +3,11 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import ThirdWeb from './thirdweb'
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './styles/custom_style.css';
+
+
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
