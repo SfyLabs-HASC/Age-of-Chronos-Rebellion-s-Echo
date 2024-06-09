@@ -16,23 +16,25 @@ export default function MintPage() {
     };
   }, []);
 
-  const handleMouseEnter = (e) => {
+  const handleMouseEnter = (e: React.MouseEvent) => {
     const player = e.currentTarget.closest('.player');
     if (player) {
-      const backImage = player.querySelector('.back');
+      const backImage = player.querySelector('.back') as HTMLElement;
       if (backImage) {
         backImage.style.opacity = '1';
       }
+
     }
   };
 
-  const handleMouseLeave = (e) => {
+  const handleMouseLeave = (e: React.MouseEvent) => {
     const player = e.currentTarget.closest('.player');
     if (player) {
-      const backImage = player.querySelector('.back');
+      const backImage = player.querySelector('.back') as HTMLElement;
       if (backImage) {
         backImage.style.opacity = '0';
       }
+
     }
   };
 

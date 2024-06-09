@@ -1,4 +1,4 @@
-// readTransactions.js
+// readTransactions.tsx
 'use client'
 
 import React, { useState, useEffect } from 'react';
@@ -21,7 +21,7 @@ const contractParentAddresses = {
 };
 
 // Helper function to create contract
-const createContract = (address) => getContract({
+const createContract = (address: string) => getContract({
     client,
     chain: myChain,
     address,
@@ -47,8 +47,13 @@ const createContract = (address) => getContract({
     ],
 });
 
+// Define the type for the address prop
+interface AddressProps {
+    address: string;
+}
+
 // Component for Aria
-const GetTotalSupplyAria = () => {
+const GetTotalSupplyAria: React.FC = () => {
     const [totalSupply, setTotalSupply] = useState<bigint | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const contract = createContract(contractParentAddresses.Aria);
@@ -58,7 +63,7 @@ const GetTotalSupplyAria = () => {
             try {
                 const data = await readContract({
                     contract,
-                    method: "function totalSupply() view returns (uint256)",
+                    method: "totalSupply",
                     params: [],
                 });
                 setTotalSupply(data);
@@ -75,7 +80,7 @@ const GetTotalSupplyAria = () => {
     return <div>Total Supply of Aria: {isLoading ? 'Loading...' : totalSupply?.toString()}</div>;
 };
 
-const GetBalanceOfAria = ({ address }) => {
+const GetBalanceOfAria: React.FC<AddressProps> = ({ address }) => {
     const [balance, setBalance] = useState<bigint | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const contract = createContract(contractParentAddresses.Aria);
@@ -85,7 +90,7 @@ const GetBalanceOfAria = ({ address }) => {
             try {
                 const data = await readContract({
                     contract,
-                    method: "function balanceOf(address) view returns (uint256)",
+                    method: "balanceOf",
                     params: [address],
                 });
                 setBalance(data);
@@ -103,7 +108,7 @@ const GetBalanceOfAria = ({ address }) => {
 };
 
 // Component for Luna
-const GetTotalSupplyLuna = () => {
+const GetTotalSupplyLuna: React.FC = () => {
     const [totalSupply, setTotalSupply] = useState<bigint | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const contract = createContract(contractParentAddresses.Luna);
@@ -113,7 +118,7 @@ const GetTotalSupplyLuna = () => {
             try {
                 const data = await readContract({
                     contract,
-                    method: "function totalSupply() view returns (uint256)",
+                    method: "totalSupply",
                     params: [],
                 });
                 setTotalSupply(data);
@@ -130,7 +135,7 @@ const GetTotalSupplyLuna = () => {
     return <div>Total Supply of Luna: {isLoading ? 'Loading...' : totalSupply?.toString()}</div>;
 };
 
-const GetBalanceOfLuna = ({ address }) => {
+const GetBalanceOfLuna: React.FC<AddressProps> = ({ address }) => {
     const [balance, setBalance] = useState<bigint | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const contract = createContract(contractParentAddresses.Luna);
@@ -140,7 +145,7 @@ const GetBalanceOfLuna = ({ address }) => {
             try {
                 const data = await readContract({
                     contract,
-                    method: "function balanceOf(address) view returns (uint256)",
+                    method: "balanceOf",
                     params: [address],
                 });
                 setBalance(data);
@@ -158,7 +163,7 @@ const GetBalanceOfLuna = ({ address }) => {
 };
 
 // Component for Ryker
-const GetTotalSupplyRyker = () => {
+const GetTotalSupplyRyker: React.FC = () => {
     const [totalSupply, setTotalSupply] = useState<bigint | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const contract = createContract(contractParentAddresses.Ryker);
@@ -168,7 +173,7 @@ const GetTotalSupplyRyker = () => {
             try {
                 const data = await readContract({
                     contract,
-                    method: "function totalSupply() view returns (uint256)",
+                    method: "totalSupply",
                     params: [],
                 });
                 setTotalSupply(data);
@@ -185,7 +190,7 @@ const GetTotalSupplyRyker = () => {
     return <div>Total Supply of Ryker: {isLoading ? 'Loading...' : totalSupply?.toString()}</div>;
 };
 
-const GetBalanceOfRyker = ({ address }) => {
+const GetBalanceOfRyker: React.FC<AddressProps> = ({ address }) => {
     const [balance, setBalance] = useState<bigint | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const contract = createContract(contractParentAddresses.Ryker);
@@ -195,7 +200,7 @@ const GetBalanceOfRyker = ({ address }) => {
             try {
                 const data = await readContract({
                     contract,
-                    method: "function balanceOf(address) view returns (uint256)",
+                    method: "balanceOf",
                     params: [address],
                 });
                 setBalance(data);
@@ -213,7 +218,7 @@ const GetBalanceOfRyker = ({ address }) => {
 };
 
 // Component for Thaddeus
-const GetTotalSupplyThaddeus = () => {
+const GetTotalSupplyThaddeus: React.FC = () => {
     const [totalSupply, setTotalSupply] = useState<bigint | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const contract = createContract(contractParentAddresses.Thaddeus);
@@ -223,7 +228,7 @@ const GetTotalSupplyThaddeus = () => {
             try {
                 const data = await readContract({
                     contract,
-                    method: "function totalSupply() view returns (uint256)",
+                    method: "totalSupply",
                     params: [],
                 });
                 setTotalSupply(data);
@@ -240,7 +245,7 @@ const GetTotalSupplyThaddeus = () => {
     return <div>Total Supply of Thaddeus: {isLoading ? 'Loading...' : totalSupply?.toString()}</div>;
 };
 
-const GetBalanceOfThaddeus = ({ address }) => {
+const GetBalanceOfThaddeus: React.FC<AddressProps> = ({ address }) => {
     const [balance, setBalance] = useState<bigint | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const contract = createContract(contractParentAddresses.Thaddeus);
@@ -250,7 +255,7 @@ const GetBalanceOfThaddeus = ({ address }) => {
             try {
                 const data = await readContract({
                     contract,
-                    method: "function balanceOf(address) view returns (uint256)",
+                    method: "balanceOf",
                     params: [address],
                 });
                 setBalance(data);

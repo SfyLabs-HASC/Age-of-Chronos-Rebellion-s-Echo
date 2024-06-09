@@ -1,3 +1,4 @@
+// src/app/writeTransactions.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -21,8 +22,14 @@ const contractParentAddresses = {
     "Thaddeus": "0x2472Ea2ddC078661b2f8b24A3468c65617d43530"
 };
 
-function MintButton({ player, contractAddress, GetBalanceOfComponent }) {
-    const [contract, setContract] = useState(null);
+interface MintButtonProps {
+    player: string;
+    contractAddress: string;
+    GetBalanceOfComponent: React.FC<{ address: string }>;
+}
+
+const MintButton: React.FC<MintButtonProps> = ({ player, contractAddress, GetBalanceOfComponent }) => {
+    const [contract, setContract] = useState<any>(null);
     const [minted, setMinted] = useState(false);
     const [loading, setLoading] = useState(true);
     const account = useActiveAccount();
@@ -75,17 +82,17 @@ function MintButton({ player, contractAddress, GetBalanceOfComponent }) {
         return tx;
     };
 
-    const handleTransactionSent = (result) => {
+    const handleTransactionSent = (result: any) => {
         console.log("Transaction submitted", result.transactionHash);
     };
 
-    const handleTransactionConfirmed = (receipt) => {
+    const handleTransactionConfirmed = (receipt: any) => {
         console.log("Transaction confirmed", receipt.transactionHash);
         setMinted(true); // Update state to minted once confirmed
         setLoading(false);
     };
 
-    const handleError = (error) => {
+    const handleError = (error: any) => {
         console.error("Transaction error", error);
         setLoading(false);
     };
@@ -108,22 +115,22 @@ function MintButton({ player, contractAddress, GetBalanceOfComponent }) {
             </TransactionButton>
         </ThirdwebProvider>
     );
-}
+};
 
-function MintAria() {
+const MintAria = () => {
     return <MintButton player="Aria" contractAddress={contractParentAddresses.Aria} GetBalanceOfComponent={GetBalanceOfAria} />;
-}
+};
 
-function MintLuna() {
+const MintLuna = () => {
     return <MintButton player="Luna" contractAddress={contractParentAddresses.Luna} GetBalanceOfComponent={GetBalanceOfLuna} />;
-}
+};
 
-function MintRyker() {
+const MintRyker = () => {
     return <MintButton player="Ryker" contractAddress={contractParentAddresses.Ryker} GetBalanceOfComponent={GetBalanceOfRyker} />;
-}
+};
 
-function MintThaddeus() {
+const MintThaddeus = () => {
     return <MintButton player="Thaddeus" contractAddress={contractParentAddresses.Thaddeus} GetBalanceOfComponent={GetBalanceOfThaddeus} />;
-}
+};
 
 export { MintAria, MintLuna, MintRyker, MintThaddeus };
