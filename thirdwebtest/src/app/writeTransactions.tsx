@@ -34,7 +34,6 @@ function MintButton({ player, contractAddress, GetBalanceOfComponent }) {
                 chain: myChain,
                 address: contractAddress,
                 abi: [
-                    // ABI with balanceOf method
                     {
                         "constant": true,
                         "inputs": [{ "name": "owner", "type": "address" }],
@@ -66,37 +65,47 @@ function MintButton({ player, contractAddress, GetBalanceOfComponent }) {
         checkMinted();
     }, [contract, account]);
 
+    const handleTransaction = async () => {
+        setLoading(true);
+        const tx = prepareContractCall({
+            contract,
+            method: "function mint(address to)",
+            params: [account ? account.address : '0x0'],
+        });
+        return tx;
+    };
+
+    const handleTransactionSent = (result) => {
+        console.log("Transaction submitted", result.transactionHash);
+    };
+
+    const handleTransactionConfirmed = (receipt) => {
+        console.log("Transaction confirmed", receipt.transactionHash);
+        setMinted(true); // Update state to minted once confirmed
+        setLoading(false);
+    };
+
+    const handleError = (error) => {
+        console.error("Transaction error", error);
+        setLoading(false);
+    };
+
+    const buttonClassName = `hex_button turret-road-bold mint-button ${player.toLowerCase()} ${minted ? 'claimed' : ''}`;
+
     return (
         <ThirdwebProvider>
-            <TransactionButton
-                transaction={async () => {
-                    const tx = prepareContractCall({
-                        contract,
-                        method: "function mint(address to)",
-                        params: [account ? account.address : '0x0'],
-                    });
-                    return tx;
-                }}
-                onTransactionSent={(result) => {
-                    console.log("Transaction submitted", result.transactionHash);
-                }}
-                onTransactionConfirmed={(receipt) => {
-                    console.log("Transaction confirmed", receipt.transactionHash);
-                    setMinted(true); // Update state to minted once confirmed
-                }}
-                onError={(error) => {
-                    console.error("Transaction error", error);
-                }}
-                className={`hex_button turret-road-bold mint-button ${player.toLowerCase()} ${minted ? 'claimed' : ''}`}
-                disabled={!account || minted}
-            >
-                {({ isLoading }) => (
-                    <span>
-                        {isLoading ? 'Processing...' : minted ? 'Claimed' : 'Mint'}
-                    </span>
-                )}
-            </TransactionButton>
             {account && <GetBalanceOfComponent address={account.address} />}
+            <TransactionButton
+                transaction={handleTransaction}
+                onTransactionSent={handleTransactionSent}
+                onTransactionConfirmed={handleTransactionConfirmed}
+                onError={handleError}
+                disabled={!account || minted || loading}
+                unstyled
+                className={buttonClassName}
+            >
+                <span>{loading ? 'Loading...' : (minted ? 'Claimed' : 'Mint')}</span>
+            </TransactionButton>
         </ThirdwebProvider>
     );
 }
