@@ -19,6 +19,26 @@ export default function MintPage() {
     };
   }, []);
 
+  const handleMouseEnter = (e) => {
+    const player = e.currentTarget.closest('.player');
+    if (player) {
+      const backImage = player.querySelector('.back');
+      if (backImage) {
+        backImage.style.opacity = '1';
+      }
+    }
+  };
+
+  const handleMouseLeave = (e) => {
+    const player = e.currentTarget.closest('.player');
+    if (player) {
+      const backImage = player.querySelector('.back');
+      if (backImage) {
+        backImage.style.opacity = '0';
+      }
+    }
+  };
+
   return (
     <main className="main">
       <section id="inside">
@@ -44,7 +64,9 @@ export default function MintPage() {
                 </div>
                 <div className="interactions">
                   <span className="prev_player" style={{ opacity: 0 }}></span>
-                  <MintRyker />
+                  <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                    <MintRyker />
+                  </div>
                   <span className="next_player"></span>
                 </div>
               </div>
@@ -58,7 +80,9 @@ export default function MintPage() {
                 </div>
                 <div className="interactions">
                   <span className="prev_player"></span>
-                  <MintLuna />
+                  <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                    <MintLuna />
+                  </div>
                   <span className="next_player"></span>
                 </div>
               </div>
@@ -72,7 +96,9 @@ export default function MintPage() {
                 </div>
                 <div className="interactions">
                   <span className="prev_player"></span>
-                  <MintAria />
+                  <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                    <MintAria />
+                  </div>
                   <span className="next_player"></span>
                 </div>
               </div>
@@ -86,7 +112,9 @@ export default function MintPage() {
                 </div>
                 <div className="interactions">
                   <span className="prev_player"></span>
-                  <MintThaddeus />
+                  <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                    <MintThaddeus />
+                  </div>
                   <span className="next_player" style={{ opacity: 0 }}></span>
                 </div>
               </div>

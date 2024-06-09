@@ -254,12 +254,14 @@ header{
   position: relative;
 }
 
-.player .wrap_images img.front{
+/* src/app/styles/custom_style.css */
+
+.player .wrap_images img.front {
   opacity: 1;
   z-index: 2;
 }
 
-.player .wrap_images img.back{
+.player .wrap_images img.back {
   opacity: 0;
   z-index: 1;
   position: absolute;
@@ -267,12 +269,13 @@ header{
   top: 0;
   left: 50%;
   transform: translate(-50%, 0);
-  transition: .8s;
+  transition: opacity .8s;
 }
 
-.player .wrap_images img.backvisible{
+.player .wrap_images img.backvisible {
   opacity: 1;
 }
+
 
 .absbutt{
   position: absolute;
