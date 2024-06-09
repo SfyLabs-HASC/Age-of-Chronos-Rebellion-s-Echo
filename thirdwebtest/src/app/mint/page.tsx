@@ -1,7 +1,6 @@
 'use client';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../styles/custom_style.css';
 import '../globals.css';
 import { useEffect } from 'react';
 import GetTotalSupply from '../readTransactions';
@@ -10,7 +9,6 @@ import { MintAria, MintLuna, MintRyker, MintThaddeus } from '../writeTransaction
 export default function MintPage() {
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = '/js/custom_scripts.js';
     script.async = true;
     document.body.appendChild(script);
 

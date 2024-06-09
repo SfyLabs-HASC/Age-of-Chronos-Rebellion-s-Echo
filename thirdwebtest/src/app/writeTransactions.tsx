@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ThirdwebProvider, TransactionButton, useActiveWallet, useActiveAccount } from "thirdweb/react";
-import { createThirdwebClient, defineChain, getContract, prepareContractCall } from 'thirdweb';
+import { createThirdwebClient, defineChain, getContract, prepareContractCall, readContract } from 'thirdweb';
 
 const client = createThirdwebClient({
     clientId: '258f6a7e272e3b6e74b8ad1d24ad1343'
@@ -22,6 +22,8 @@ const contractParentAddresses = {
 
 function MintButton({ player, contractAddress }) {
     const [contract, setContract] = useState(null);
+    const [minted, setMinted] = useState(false);
+    const [loading, setLoading] = useState(true);
     const account = useActiveAccount();
 
     useEffect(() => {
@@ -30,22 +32,48 @@ function MintButton({ player, contractAddress }) {
                 client,
                 chain: myChain,
                 address: contractAddress,
-                abi: [],
+                abi: [
+                    // ABI with balanceOf method
+                    {
+                        "constant": true,
+                        "inputs": [{ "name": "owner", "type": "address" }],
+                        "name": "balanceOf",
+                        "outputs": [{ "name": "", "type": "uint256" }],
+                        "payable": false,
+                        "stateMutability": "view",
+                        "type": "function"
+                    }
+                ],
             });
             setContract(contractInstance);
+            setLoading(false);
         }
         fetchContract();
     }, []);
 
+    useEffect(() => {
+        async function checkMinted() {
+            if (contract && account) {
+                const balance = await readContract({
+                    contract,
+                    method: "balanceOf",
+                    params: [account.address],
+                });
+                setMinted(balance > 0);
+            }
+        }
+        checkMinted();
+    }, [contract, account]);
+
     return (
         <ThirdwebProvider>
-            {contract && account && (
+            {contract ? (
                 <TransactionButton
                     transaction={async () => {
                         const tx = prepareContractCall({
                             contract,
                             method: "function mint(address to)",
-                            params: [account.address],
+                            params: [account ? account.address : '0x0'],
                         });
                         return tx;
                     }}
@@ -54,15 +82,23 @@ function MintButton({ player, contractAddress }) {
                     }}
                     onTransactionConfirmed={(receipt) => {
                         console.log("Transaction confirmed", receipt.transactionHash);
+                        setMinted(true); // Update state to minted once confirmed
                     }}
                     onError={(error) => {
                         console.error("Transaction error", error);
                     }}
                 >
-                    <button className={`hex_button turret-road-bold mint-button ${player.toLowerCase()}`}>
-                        Mint {player}
+                    <button
+                        className={`hex_button turret-road-bold mint-button ${player.toLowerCase()} ${minted ? 'claimed' : ''}`}
+                        disabled={!account || minted}
+                    >
+                        {minted ? 'Claimed' : 'Mint'}
                     </button>
                 </TransactionButton>
+                            ) : (
+                <button className={`hex_button turret-road-bold mint-button ${player.toLowerCase()} loading`} disabled>
+                    Loading...
+                </button>
             )}
         </ThirdwebProvider>
     );
@@ -85,3 +121,4 @@ function MintThaddeus() {
 }
 
 export { MintAria, MintLuna, MintRyker, MintThaddeus };
+

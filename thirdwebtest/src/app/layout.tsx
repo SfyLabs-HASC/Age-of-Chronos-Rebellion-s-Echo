@@ -4,9 +4,6 @@ import { Inter } from 'next/font/google'
 import ThirdWeb from './thirdweb'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles/custom_style.css';
-
-
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,8 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-      <div><ThirdWeb /></div>
-        {children}</body>
+        <div className="connect-wallet"><ThirdWeb /></div>
+        {children}
+      </body>
     </html>
   )
 }

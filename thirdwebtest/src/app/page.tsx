@@ -1,7 +1,6 @@
 "use client"; 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles/custom_style.css';
 import './globals.css'; 
 import Image from 'next/image';
 import Link from 'next/link';
