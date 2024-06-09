@@ -3,7 +3,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../globals.css';
 import { useEffect } from 'react';
-import GetTotalSupply from '../readTransactions';
 import { MintAria, MintLuna, MintRyker, MintThaddeus } from '../writeTransactions';
 
 export default function MintPage() {
@@ -46,12 +45,8 @@ export default function MintPage() {
           </header>
         </a>
 
-        <a href="#" className="hex_button turret-road-bold absbutt">PLAY</a>
+        
         <div className="container-fluid main-container">
-          <div className="total-supply text-center">
-            <h2 className="text-white">Total Supply</h2>
-            <GetTotalSupply />
-          </div>
           <div className="row align-items-center mobrow">
             <div className="col-12 col-lg-3">
               <div className="player red">
@@ -119,6 +114,7 @@ export default function MintPage() {
             </div>
           </div>
         </div>
+        <a href="#" className="hex_button turret-road-bold absbutt">PLAY</a>
       </section>
     </main>
   );

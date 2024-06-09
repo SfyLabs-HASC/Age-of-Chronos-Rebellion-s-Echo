@@ -33,6 +33,16 @@ const contract = getContract({
             "payable": false,
             "stateMutability": "view",
             "type": "function"
+        },
+        // ABI del contratto con il metodo balanceOf
+        {
+            "constant": true,
+            "inputs": [{ "name": "owner", "type": "address" }],
+            "name": "balanceOf",
+            "outputs": [{ "name": "", "type": "uint256" }],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
         }
     ]
 });
@@ -67,4 +77,34 @@ const GetTotalSupply = () => {
     );
 }
 
-export default GetTotalSupply;
+const GetBalanceOf = ({ address }) => {
+    const [balance, setBalance] = useState<bigint | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchBalance = async () => {
+            try {
+                const data: bigint = await readContract({
+                    contract,
+                    method: "balanceOf",
+                    params: [address],
+                });
+                setBalance(data);
+            } catch (error) {
+                console.error('Error fetching balance:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchBalance();
+    }, [address]);
+
+    return (
+        <div>
+            <h3>{isLoading ? 'Loading...' : balance?.toString()}</h3>
+        </div>
+    );
+}
+
+export { GetTotalSupply, GetBalanceOf };

@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { ThirdwebProvider, TransactionButton, useActiveWallet, useActiveAccount } from "thirdweb/react";
+import { ThirdwebProvider, TransactionButton, useActiveAccount } from "thirdweb/react";
 import { createThirdwebClient, defineChain, getContract, prepareContractCall, readContract } from 'thirdweb';
+import { GetBalanceOf } from './readTransactions';
 
 const client = createThirdwebClient({
     clientId: '258f6a7e272e3b6e74b8ad1d24ad1343'
@@ -54,9 +55,9 @@ function MintButton({ player, contractAddress }) {
     useEffect(() => {
         async function checkMinted() {
             if (contract && account) {
-                const balance = await readContract({
+                const balance: bigint = await readContract({
                     contract,
-                    method: "balanceOf",
+                    method: "function balanceOf(address) view returns (uint256)",
                     params: [account.address],
                 });
                 setMinted(balance > 0);
@@ -67,7 +68,6 @@ function MintButton({ player, contractAddress }) {
 
     return (
         <ThirdwebProvider>
-            {contract ? (
                 <TransactionButton
                     transaction={async () => {
                         const tx = prepareContractCall({
@@ -88,18 +88,9 @@ function MintButton({ player, contractAddress }) {
                         console.error("Transaction error", error);
                     }}
                 >
-                    <button
-                        className={`hex_button turret-road-bold mint-button ${player.toLowerCase()} ${minted ? 'claimed' : ''}`}
-                        disabled={!account || minted}
-                    >
-                        {minted ? 'Claimed' : 'Mint'}
-                    </button>
+                    
                 </TransactionButton>
-                            ) : (
-                <button className={`hex_button turret-road-bold mint-button ${player.toLowerCase()} loading`} disabled>
-                    Loading...
-                </button>
-            )}
+            {account && <GetBalanceOf address={account.address} />}
         </ThirdwebProvider>
     );
 }
@@ -121,4 +112,3 @@ function MintThaddeus() {
 }
 
 export { MintAria, MintLuna, MintRyker, MintThaddeus };
-
