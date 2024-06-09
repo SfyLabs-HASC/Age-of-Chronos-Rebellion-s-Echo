@@ -158,6 +158,56 @@ header{
   max-width: 210px;  
 }
 
+/* src/app/styles/custom_style.css */
+
+.hex_button.mint-button {
+  display: inline-block;
+  background: url('/img/button-normal.webp') no-repeat center;
+  background-size: contain;
+  padding: 15px 35px;
+  min-width: 250px;
+  text-align: center;
+  color: var(--clr-white);
+  text-decoration: none;
+  font-size: 1.8em;
+  transition: .4s;
+  z-index: 2;
+  cursor: pointer;
+  border: none;
+}
+
+.hex_button.mint-button:hover {
+  background: url('/img/normal-hover.webp') no-repeat center;
+  background-size: contain;
+  color: var(--clr-red);
+}
+
+/* Specific styles for each player's button */
+.player.red .hex_button.mint-button {
+  background: url('/img/raiker_blade.webp') no-repeat center;
+}
+
+.player.yellow .hex_button.mint-button {
+  background: url('/img/luna_stronghold.webp') no-repeat center;
+}
+
+.player.violet .hex_button.mint-button {
+  background: url('/img/aria_zephyrion.webp') no-repeat center;
+}
+
+.player.green .hex_button.mint-button {
+  background: url('/img/taddeus_luckstride.webp') no-repeat center;
+}
+
+.player.red .hex_button.mint-button:hover,
+.player.yellow .hex_button.mint-button:hover,
+.player.violet .hex_button.mint-button:hover,
+.player.green .hex_button.mint-button:hover {
+  background-size: contain;
+  color: var(--clr-red);
+}
+
+
 .player.green .hex_button:hover, .player.green .hex_button.claimed{
   background: url(../../../public/img/green.webp) no-repeat center;
   background-size: contain;

@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/custom_style.css';
-import '../globals.css'; // Assicurati che il percorso sia corretto
+import '../globals.css';
 import { useEffect } from 'react';
 import GetTotalSupply from '../readTransactions';
 import { MintAria, MintLuna, MintRyker, MintThaddeus } from '../writeTransactions';
@@ -10,7 +10,7 @@ import { MintAria, MintLuna, MintRyker, MintThaddeus } from '../writeTransaction
 export default function MintPage() {
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = '../js/custom_scripts.js'; // Assicurati che lo script sia nella directory pubblica
+    script.src = '/js/custom_scripts.js';
     script.async = true;
     document.body.appendChild(script);
 
@@ -30,6 +30,10 @@ export default function MintPage() {
 
         <a href="#" className="hex_button turret-road-bold absbutt">PLAY</a>
         <div className="container-fluid main-container">
+          <div className="total-supply text-center">
+            <h2 className="text-white">Total Supply</h2>
+            <GetTotalSupply />
+          </div>
           <div className="row align-items-center mobrow">
             <div className="col-12 col-lg-3">
               <div className="player red">
@@ -40,7 +44,7 @@ export default function MintPage() {
                 </div>
                 <div className="interactions">
                   <span className="prev_player" style={{ opacity: 0 }}></span>
-                  <a href="#" className="hex_button turret-road-bold">MINT</a>
+                  <MintRyker />
                   <span className="next_player"></span>
                 </div>
               </div>
@@ -54,7 +58,7 @@ export default function MintPage() {
                 </div>
                 <div className="interactions">
                   <span className="prev_player"></span>
-                  <a href="#" className="hex_button turret-road-bold claimed">CLAIMED</a>
+                  <MintLuna />
                   <span className="next_player"></span>
                 </div>
               </div>
@@ -68,7 +72,7 @@ export default function MintPage() {
                 </div>
                 <div className="interactions">
                   <span className="prev_player"></span>
-                  <a href="#" className="hex_button turret-road-bold">MINT</a>
+                  <MintAria />
                   <span className="next_player"></span>
                 </div>
               </div>
@@ -82,7 +86,7 @@ export default function MintPage() {
                 </div>
                 <div className="interactions">
                   <span className="prev_player"></span>
-                  <a href="#" className="hex_button turret-road-bold">MINT</a>
+                  <MintThaddeus />
                   <span className="next_player" style={{ opacity: 0 }}></span>
                 </div>
               </div>
