@@ -98,8 +98,7 @@ const MintButton: React.FC<MintButtonProps> = ({ player, contractAddress, GetBal
     };
 
     const buttonClassName = `hex_button ${player.toLowerCase()} ${minted ? 'claimed' : ''}`;
-    const buttonClassName = `hex_button ${player.toLowerCase()} ${minted ? 'claimed' : ''}`;
-    const buttonClassName = `hex_button turret-road-bold mint-button ${player.toLowerCase()} ${minted ? 'claimed' : ''}`;
+    //const buttonClassName = `hex_button turret-road-bold mint-button ${player.toLowerCase()} ${minted ? 'claimed' : ''}`;
 
 
     return (
