@@ -46,9 +46,8 @@ export default function MintPage() {
             <img src="/img/logo_aoc.png" className="img-responsive img-center logo_inside" alt="Logo" />
           </header>
         </a>
-
+        <br></br><br></br><br></br><br></br><br></br>
         <div className="container-fluid main-container">
-          
           <div className="row align-items-center mobrow">
             <div className="col-12 col-lg-3">
               <div className="player red">
