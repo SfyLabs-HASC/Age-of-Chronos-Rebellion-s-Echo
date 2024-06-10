@@ -48,6 +48,7 @@ export default function MintPage() {
         </a>
 
         <div className="container-fluid main-container">
+          
           <div className="row align-items-center mobrow">
             <div className="col-12 col-lg-3">
               <div className="player red">
@@ -56,7 +57,7 @@ export default function MintPage() {
                   <img src="/img/raiker_blade_off.webp" className="img-responsive front" alt="Ryker Blade Off" />
                   <img src="/img/raiker_blade.webp" className="img-responsive back" alt="Ryker Blade" />
                 </div>
-                <div className="interactions">
+                <div className="">
                   <span className="prev_player" style={{ opacity: 0 }}></span>
                   <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                     <MintRyker />
@@ -72,7 +73,7 @@ export default function MintPage() {
                   <img src="/img/luna_stronghold_off.webp" className="img-responsive front" alt="Luna Stronghold Off" />
                   <img src="/img/luna_stronghold.webp" className="img-responsive back backvisible" alt="Luna Stronghold" />
                 </div>
-                <div className="interactions">
+                <div className="">
                   <span className="prev_player"></span>
                   <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                     <MintLuna />
@@ -88,7 +89,7 @@ export default function MintPage() {
                   <img src="/img/aria_zephyrion_off.webp" className="img-responsive front" alt="Aria Zephyrion Off" />
                   <img src="/img/aria_zephyrion.webp" className="img-responsive back" alt="Aria Zephyrion" />
                 </div>
-                <div className="interactions">
+                <div className="">
                   <span className="prev_player"></span>
                   <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                     <MintAria />
@@ -104,7 +105,7 @@ export default function MintPage() {
                   <img src="/img/taddeus_luckstride_off.webp" className="img-responsive front" alt="Thaddeus Luckstraid Off" />
                   <img src="/img/taddeus_luckstride.webp" className="img-responsive back" alt="Thaddeus Luckstraid" />
                 </div>
-                <div className="interactions">
+                <div className="">
                   <span className="prev_player"></span>
                   <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                     <MintThaddeus />
