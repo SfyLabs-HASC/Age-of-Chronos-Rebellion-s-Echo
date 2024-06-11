@@ -104,7 +104,7 @@ const GetBalanceOfAria: React.FC<AddressProps> = ({ address }) => {
         fetchBalance();
     }, [address]);
 
-    return <div>Balance of Aria: {isLoading ? 'Loading...' : balance?.toString()}</div>;
+    return balance;
 };
 
 // Component for Luna
@@ -159,7 +159,7 @@ const GetBalanceOfLuna: React.FC<AddressProps> = ({ address }) => {
         fetchBalance();
     }, [address]);
 
-    return <div>Balance of Luna: {isLoading ? 'Loading...' : balance?.toString()}</div>;
+    return balance;
 };
 
 // Component for Ryker
@@ -214,7 +214,7 @@ const GetBalanceOfRyker: React.FC<AddressProps> = ({ address }) => {
         fetchBalance();
     }, [address]);
 
-    return <div>Balance of Ryker: {isLoading ? 'Loading...' : balance?.toString()}</div>;
+    return balance;
 };
 
 // Component for Thaddeus
@@ -269,7 +269,7 @@ const GetBalanceOfThaddeus: React.FC<AddressProps> = ({ address }) => {
         fetchBalance();
     }, [address]);
 
-    return <div>Balance of Thaddeus: {isLoading ? 'Loading...' : balance?.toString()}</div>;
+    return balance;
 };
 
 export {

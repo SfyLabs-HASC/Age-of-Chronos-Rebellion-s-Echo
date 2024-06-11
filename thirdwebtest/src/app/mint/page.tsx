@@ -93,7 +93,7 @@ export default function MintPage() {
               <span className="name turret-road-bold">LUNA STRONGHOLD</span>
               <div className="wrap_images">
                 <img src="/img/luna_stronghold_off.webp" className="img-responsive front" alt="Luna Stronghold Off" />
-                <img src="/img/luna_stronghold.webp" className="img-responsive back backvisible" alt="Luna Stronghold" />
+                <img src="/img/luna_stronghold.webp" className="img-responsive back" alt="Luna Stronghold" />
               </div>
               <div className="">
                 <span className="prev_player"></span>

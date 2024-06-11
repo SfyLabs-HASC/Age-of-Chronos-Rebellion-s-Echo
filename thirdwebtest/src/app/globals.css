@@ -243,6 +243,10 @@ header .logo_inside {
   transition: opacity .8s;
 }
 
+.player.hasMinted .wrap_images .back{
+  opacity: 1 !important;
+}
+
 .player .wrap_images img.backvisible {
   opacity: 1;
 }
