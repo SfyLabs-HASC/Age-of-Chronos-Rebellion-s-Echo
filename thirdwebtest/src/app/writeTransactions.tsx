@@ -135,4 +135,4 @@ const MintThaddeus = () => {
     return <MintButton player="Thaddeus" contractAddress={contractParentAddresses.Thaddeus} GetBalanceOfComponent={GetBalanceOfThaddeus} />;
 };
 
-export { MintAria, MintLuna, MintRyker, MintThaddeus };
+export { MintAria, MintLuna, MintRyker, MintThaddeus};

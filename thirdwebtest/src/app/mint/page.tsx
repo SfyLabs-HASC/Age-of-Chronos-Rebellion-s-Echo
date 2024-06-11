@@ -2,6 +2,7 @@
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../globals.css';
+import Image from 'next/image';
 import { useEffect } from 'react';
 import { MintAria, MintLuna, MintRyker, MintThaddeus } from '../writeTransactions';
 
@@ -42,11 +43,24 @@ export default function MintPage() {
     <main className="main">
       <section id="inside">
         <a href="/">
-          <header>
-            <img src="/img/logo_aoc.png" className="img-responsive img-center logo_inside" alt="Logo" />
+          <header className="pt-3 py-lg-5 ">            
+            <Image src="/img/logo-main-aoc.webp" alt="Logo" width={142} height={100} />
           </header>
-        </a>
-        <br></br><br></br><br></br><br></br><br></br>
+        </a>  
+        <div className="container-fluid main-container py-3 pb-lg-3">
+          <div className="row align-items-center">
+            <div className="col-12 col-lg-4">
+              <span className="leftbar"></span>
+            </div>
+            <div className="col-12 col-lg-4">
+              <h1 className="text-center turret-road-bold mainTitleSec">BUILD YOUR ECHO FORCE</h1>
+            </div>
+            <div className="col-12 col-lg-4">
+              <span className="rightbar"></span>
+            </div>
+          </div>
+        </div>      
+        
         <div className="container-fluid main-container">
           <div className="row align-items-center mobrow">
             <div className="col-12 col-lg-3">
@@ -114,8 +128,16 @@ export default function MintPage() {
               </div>
             </div>
           </div>
+          <div className="row">
+            <div className="col-12 text-center">
+              {/*<a href="#" className="hex_button turret-road-bold">PLAY</a>*/}
+              <div className="aoc_panel">
+                <p>AGE OF CHRONOS is a web-based dungeon crawler, find artifacts and unlock the potential of NFTs 2.0.<br /><span>the mint is FREe.</span><br />To play, you must have all 4 characters, you can claim 1 NFT for each character type.<br /><span>The game is coming soon.</span></p>
+              </div>
+            </div>
+          </div>
         </div>
-        <a href="#" className="hex_button turret-road-bold absbutt">PLAY</a>
+        
       </section>
     </main>
   );
