@@ -2,9 +2,7 @@ import { ethers } from 'hardhat';
 import { expect } from 'chai';
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { TimeSquadAria, RMRKTokenAttributesRepository } from '../typechain-types';
-
-const TOKEN_ATTRIBUTES_REPOSITORY_ADDRESS_DRAFT = '0x4778B7e8088B258A447990e18AdB5fD14B1bD100'; // Replace with actual address if necessary
-
+//TODO LE COSTANTI PRENDILE DA CONSTGATS.TS
 async function fixtureAttributesRepository(): Promise<{ parent: TimeSquadAria, attributesRepo: RMRKTokenAttributesRepository, owner: any }> {
     const [owner] = await ethers.getSigners();
 

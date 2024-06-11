@@ -129,38 +129,71 @@ contract TimeSquadAria is
         baseURI = _newBaseURI;
     }
 
+    /**
+     * @notice Set a new base extension for all tokens.
+     * @param _newBaseExtension The new base extension to set.
+     */
     function setBaseExtension(
         string memory _newBaseExtension
     ) public onlyOwner {
         baseExtension = _newBaseExtension;
     }
 
+    /**
+     * @notice Set the main asset ID for all tokens.
+     * @param _mainAsset The new main asset ID to set.
+     */
     function setMainAsset(uint64 _mainAsset) public onlyOwner {
         mainAsset = _mainAsset;
     }
 
+    /**
+     * @notice Pause or unpause minting.
+     * @param _state The new paused state to set.
+     */
     function setPause(bool _state) public onlyOwner {
         paused = _state;
     }
 
-    // Getter method to retrieve the current base URI
+    /**
+     * @notice Get the current base URI.
+     * @return The current base URI.
+     */
     function getBaseURI() public view returns (string memory) {
         return baseURI;
     }
 
-    // Getter method to retrieve the current base extension
+    /**
+     * @notice Get the current base extension.
+     * @return The current base extension.
+     */
     function getBaseExtension() public view returns (string memory) {
         return baseExtension;
     }
 
-    // Getter method to retrieve the current main asset ID
+    /**
+     * @notice Get the current main asset ID.
+     * @return The current main asset ID.
+     */
     function getMainAsset() public view returns (uint64) {
         return mainAsset;
     }
 
-    // Getter method to check if the minting is paused
+    /**
+     * @notice Check if minting is paused.
+     * @return True if minting is paused, false otherwise.
+     */
     function isPaused() public view returns (bool) {
         return paused;
+    }
+
+    /**
+     * @notice Check if an address has minted.
+     * @param account The address to check.
+     * @return True if the address has minted, false otherwise.
+     */
+    function hasMinted(address account) public view returns (bool) {
+        return _hasMinted[account];
     }
 
     /**
@@ -181,8 +214,7 @@ contract TimeSquadAria is
         uint64 assetId
     ) public view override returns (string memory) {
         string memory currentBaseURI = baseURI;
-        //uint64 currentMainAsset = mainAsset;
-        if (assetId == mainAsset)
+        if (assetId == mainAsset) {
             return
                 string(
                     abi.encodePacked(
@@ -191,7 +223,9 @@ contract TimeSquadAria is
                         baseExtension
                     )
                 );
-        else return super.getAssetMetadata(tokenId, assetId);
+        } else {
+            return super.getAssetMetadata(tokenId, assetId);
+        }
     }
 
     /**
@@ -351,6 +385,14 @@ contract TimeSquadAria is
         _allTokens.pop();
     }
 
+    /**
+     * @notice Transfers held ERC20 tokens from a token.
+     * @param erc20Contract The ERC20 contract address.
+     * @param tokenHolderId The ID of the token holding the ERC20 tokens.
+     * @param to The address to transfer the tokens to.
+     * @param amount The amount of tokens to transfer.
+     * @param data Additional data.
+     */
     function transferHeldERC20FromToken(
         address erc20Contract,
         uint256 tokenHolderId,
@@ -370,6 +412,11 @@ contract TimeSquadAria is
         );
     }
 
+    /**
+     * @notice Sets auto accept status for a collection.
+     * @param collection The address of the collection.
+     * @param autoAccept Boolean value indicating whether to auto accept the collection.
+     */
     function setAutoAcceptCollection(
         address collection,
         bool autoAccept
@@ -394,6 +441,9 @@ contract TimeSquadAria is
         }
     }
 
+    /**
+     * @notice Locks the supply of the tokens.
+     */
     function lockSupply() external onlyOwner {
         _maxSupply = _totalSupply;
     }

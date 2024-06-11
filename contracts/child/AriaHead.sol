@@ -77,6 +77,11 @@ contract AriaHead is RMRKAbstractEquippable {
         }
     }
 
+    /**
+     * @notice Mints a new token with the specified assets.
+     * @param to The address to mint the token to.
+     * @param assetIds The IDs of the assets to assign to the token.
+     */
     function mintWithAssets(
         address to,
         uint64[] memory assetIds
@@ -109,6 +114,15 @@ contract AriaHead is RMRKAbstractEquippable {
         bool permission
     ) public onlyOwnerOrContributor {
         _externalPermission[account] = permission;
+    }
+
+    /**
+     * @notice Verifies if an external account has permission.
+     * @param account The address of the account to check permission.
+     * @return Boolean value indicating if the account has permission.
+     */
+    function hasExternalPermission(address account) public view returns (bool) {
+        return _externalPermission[account];
     }
 
     /**
@@ -265,5 +279,4 @@ contract AriaHead is RMRKAbstractEquippable {
             );
         }
     }
-
 }

@@ -130,14 +130,18 @@ describe('AgeOfChronosManager Tests', async () => {
 
             const startTx = await manager.connect(owner).startMission(collectionAddresses, tokenIds);
             const startReceipt = await startTx.wait();
-            console.log(`Gas used for startMission: ${startReceipt.gasUsed.toString()}`);
+            if (startReceipt) {
+                console.log(`Gas used for startMission: ${startReceipt.gasUsed.toString()}`);
+            }
 
             expect(await parent.isTransferable(tokenId, addr1.address, addr2.address)).to.be.false;
             expect(await manager.isAddressInMission(await parent.getAddress())).to.be.true;
 
             const endTx = await manager.connect(owner).endMission(collectionAddresses, tokenIds);
             const endReceipt = await endTx.wait();
-            console.log(`Gas used for endMission: ${endReceipt.gasUsed.toString()}`);
+            if (endReceipt) {
+                console.log(`Gas used for endMission: ${endReceipt.gasUsed.toString()}`);
+            }
 
             expect(await parent.isTransferable(tokenId, addr1.address, addr2.address)).to.be.true;
             expect(await manager.isAddressInMission(await parent.getAddress())).to.be.false;
