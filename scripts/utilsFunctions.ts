@@ -112,6 +112,7 @@ export async function deployManager(): Promise<AgeOfChronosManager> {
     const contractAddress = await managerContract.getAddress();
     console.log(`AgeOfChronosManager deployed to ${contractAddress}`);
 
+    /* the managerContract is hidden
     if (!isHardhatNetwork()) {
         console.log('Waiting 20 seconds before verifying contract...');
         await delay(20000);
@@ -121,7 +122,7 @@ export async function deployManager(): Promise<AgeOfChronosManager> {
             contract: 'contracts/AgeOfChronosManager.sol:AgeOfChronosManager',
         });
     }
-
+    */
     return managerContract;
 }
 

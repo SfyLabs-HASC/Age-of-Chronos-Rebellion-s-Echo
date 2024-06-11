@@ -2,18 +2,19 @@ import { ethers } from 'hardhat';
 import { expect } from 'chai';
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { TimeSquadAria, RMRKTokenAttributesRepository } from '../typechain-types';
-//TODO LE COSTANTI PRENDILE DA CONSTGATS.TS
+import * as C from '../scripts/constants';
+
 async function fixtureAttributesRepository(): Promise<{ parent: TimeSquadAria, attributesRepo: RMRKTokenAttributesRepository, owner: any }> {
     const [owner] = await ethers.getSigners();
 
     // Deploy TimeSquadAria contract as a parent example
-    const collectionMeta = 'ipfs://QmNnn9M8rTbqPrk3rHTfN78sh4E1QLHaEKcSALrvhWfMkE';
-    const maxSupply = ethers.MaxUint256;
-    const royaltyRecipient = owner.address;
-    const royaltyPercentageBps = 1000; // 10%
-    const baseTokenURI = 'https://example.com/metadata/';
-
     const contractFactory = await ethers.getContractFactory('TimeSquadAria');
+    const collectionMeta = C.SQUAD_METADATA_ARIA;
+    const maxSupply = ethers.MaxUint256;
+    const royaltyRecipient = (await ethers.getSigners())[0].address;
+    const royaltyPercentageBps = 1000; // 10%
+    const baseTokenURI = C.MINT_ENUMERATE_ARIA;
+
     const args: [string, typeof maxSupply, string, number, string] = [
         collectionMeta,
         maxSupply,

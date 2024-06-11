@@ -2,34 +2,28 @@ import { ethers } from 'hardhat';
 import { expect } from 'chai';
 import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 
-async function fixtureAgeOfChronosManager() {
+async function deployManagerContract() {
     const [owner, addr1, addr2] = await ethers.getSigners();
 
-    // Deploy mock Parent contract
-    const Parent = await ethers.getContractFactory('MockParent');
-    const parent = await Parent.deploy();
-    await parent.waitForDeployment();
-
-    // Deploy AgeOfChronosManager contract
+    // Deploy Manager Contract
     const AgeOfChronosManager = await ethers.getContractFactory('AgeOfChronosManager');
     const manager = await AgeOfChronosManager.deploy();
     await manager.waitForDeployment();
 
-    // Add the mock Parent contract to the manager
-    await manager.addParentAddress(await parent.getAddress());
+    // Mock Parent Contract for testing
+    const MockParent = await ethers.getContractFactory('MockParent');
+    const mockParent = await MockParent.deploy();
+    await mockParent.waitForDeployment();
 
-    return { manager, parent, owner, addr1, addr2 };
+    return { owner, addr1, addr2, manager, mockParent };
 }
 
-describe('AgeOfChronosManager Tests', function () {
-    let manager: any;
-    let parent: any;
-    let owner: { address: any };
-    let addr1: { address: any };
-    let addr2: { address: any };
+describe('AgeOfChronosManager Contract Tests', function () {
+    let owner: { address: any; }, addr1: { address: any; }, addr2: { address: any; };
+    let manager: any, mockParent: any;
 
     beforeEach(async function () {
-        ({ manager, parent, owner, addr1, addr2 } = await loadFixture(fixtureAgeOfChronosManager));
+        ({ owner, addr1, addr2, manager, mockParent } = await loadFixture(deployManagerContract));
     });
 
     describe('Deployment', function () {
@@ -39,65 +33,103 @@ describe('AgeOfChronosManager Tests', function () {
     });
 
     describe('Fee Management', function () {
-        it('Should set the fee correctly', async function () {
-            const fee = ethers.parseEther('1');
-            await manager.setFee(fee);
-            expect(await manager.getFee()).to.equal(fee);
+        it('Should set and get the fee correctly', async function () {
+            await manager.setFee(ethers.parseEther('0.1'));
+            expect(await manager.getFee()).to.equal(ethers.parseEther('0.1'));
         });
 
-        it('Should allow users to pay the fee', async function () {
-            const fee = ethers.parseEther('1');
-            await manager.setFee(fee);
-            await parent.mint(addr1.address, 1);
-
-            await manager.connect(addr1).payFee([parent.address], [1], { value: fee });
-
-            expect(await manager.hasTokenPaidFee(1)).to.equal(true);
+        it('Should allow fee payment and update the status correctly', async function () {
+            await manager.setFee(ethers.parseEther('0.1'));
+            await manager.payFee([mockParent.address], [1], { value: ethers.parseEther('0.1') });
+            expect(await manager.hasTokenPaidFee(1)).to.be.true;
         });
 
-        it('Should revert if the fee amount is incorrect', async function () {
-            const fee = ethers.parseEther('1');
-            await manager.setFee(fee);
-            await parent.mint(addr1.address, 1);
+        it('Should revert fee payment if the amount is incorrect', async function () {
+            await manager.setFee(ethers.parseEther('0.1'));
+            await expect(manager.payFee([mockParent.address], [1], { value: ethers.parseEther('0.05') })).to.be.revertedWith("Incorrect fee amount");
+        });
 
-            await expect(
-                manager.connect(addr1).payFee([parent.address], [1], { value: ethers.parseEther('0.5') })
-            ).to.be.revertedWith('Incorrect fee amount');
+        it('Should revert fee payment if the caller is not the token owner', async function () {
+            await manager.setFee(ethers.parseEther('0.1'));
+            await expect(manager.connect(addr1).payFee([mockParent.address], [1], { value: ethers.parseEther('0.1') })).to.be.revertedWith("Caller does not own the token");
+        });
+
+        it('Should allow the owner to manually set fee payment status', async function () {
+            await manager.setFeePaymentStatus(1, true);
+            expect(await manager.hasTokenPaidFee(1)).to.be.true;
+        });
+    });
+
+    describe('Parent Address Management', function () {
+        it('Should allow the owner to add and remove parent addresses', async function () {
+            await manager.addParentAddress(mockParent.address);
+            let parents = await manager.getParentAddresses();
+            expect(parents).to.include(mockParent.address);
+
+            await manager.removeParentAddress(mockParent.address);
+            parents = await manager.getParentAddresses();
+            expect(parents).to.not.include(mockParent.address);
+        });
+    });
+
+    describe('Soulbound Management', function () {
+        beforeEach(async function () {
+            await manager.addParentAddress(mockParent.address);
+            await mockParent.mint(addr1.address, 1); // Mock mint a token
+        });
+
+        it('Should allow the owner to set soulbound state for a token', async function () {
+            await manager.setSoulbound(1, true, mockParent.address);
+            expect(await mockParent.isSoulbound(1)).to.be.true;
+
+            await manager.setSoulbound(1, false, mockParent.address);
+            expect(await mockParent.isSoulbound(1)).to.be.false;
+        });
+
+        it('Should allow the owner to bulk set soulbound state for tokens', async function () {
+            await mockParent.mint(addr1.address, 2); // Mint another token
+            await manager.bulkSoulbound(1, 2, true, mockParent.address);
+            expect(await mockParent.isSoulbound(1)).to.be.true;
+            expect(await mockParent.isSoulbound(2)).to.be.true;
+
+            await manager.bulkSoulbound(1, 2, false, mockParent.address);
+            expect(await mockParent.isSoulbound(1)).to.be.false;
+            expect(await mockParent.isSoulbound(2)).to.be.false;
         });
     });
 
     describe('Mission Management', function () {
         beforeEach(async function () {
-            const fee = ethers.parseEther('1');
-            await manager.setFee(fee);
-            await parent.mint(addr1.address, 1);
-            await parent.mint(addr1.address, 2);
-            await manager.connect(addr1).payFee([parent.address, parent.address], [1, 2], { value: fee });
+            await manager.addParentAddress(mockParent.address);
+            await mockParent.mint(addr1.address, 1); // Mock mint a token
+            await manager.setFee(ethers.parseEther('0.1'));
+            await manager.payFee([mockParent.address], [1], { value: ethers.parseEther('0.1') });
         });
 
-        it('Should start a mission correctly', async function () {
-            await manager.startMission([parent.address, parent.address], [1, 2]);
+        it('Should allow the owner to start and end missions correctly', async function () {
+            await manager.startMission([mockParent.address], [1]);
+            expect(await manager.isAddressInMission(mockParent.address)).to.be.true;
+            expect(await mockParent.isSoulbound(1)).to.be.true;
 
-            expect(await parent.isSoulbound(1)).to.equal(true);
-            expect(await parent.isSoulbound(2)).to.equal(true);
+            await manager.endMission([mockParent.address], [1]);
+            expect(await manager.isAddressInMission(mockParent.address)).to.be.false;
+            expect(await mockParent.isSoulbound(1)).to.be.false;
         });
 
-        it('Should revert if the mission is started too frequently', async function () {
-            await manager.startMission([parent.address, parent.address], [1, 2]);
-
-            await expect(
-                manager.startMission([parent.address, parent.address], [1, 2])
-            ).to.be.revertedWith('Mission cooldown in effect');
+        it('Should enforce mission cooldown', async function () {
+            await manager.startMission([mockParent.address], [1]);
+            await expect(manager.startMission([mockParent.address], [1])).to.be.revertedWith("Mission cooldown in effect");
         });
 
-        it('Should end a mission correctly', async function () {
-            await manager.startMission([parent.address, parent.address], [1, 2]);
-            await manager.endMission([parent.address, parent.address], [1, 2]);
+        it('Should revert starting a mission if the fee is not paid', async function () {
+            await mockParent.mint(addr1.address, 2); // Mint another token
+            await expect(manager.startMission([mockParent.address], [2])).to.be.revertedWith("Token has not paid the fee");
+        });
 
-            expect(await parent.isSoulbound(1)).to.equal(false);
-            expect(await parent.isSoulbound(2)).to.equal(false);
-            expect(await manager.hasTokenPaidFee(1)).to.equal(false);
-            expect(await manager.hasTokenPaidFee(2)).to.equal(false);
+        it('Should reset fee payment status after ending a mission', async function () {
+            await manager.startMission([mockParent.address], [1]);
+            await manager.endMission([mockParent.address], [1]);
+            expect(await manager.hasTokenPaidFee(1)).to.be.false;
         });
     });
 
@@ -107,8 +139,8 @@ describe('AgeOfChronosManager Tests', function () {
             expect(await manager.owner()).to.equal(addr1.address);
         });
 
-        it('Should revert if non-owner tries to transfer ownership', async function () {
-            await expect(manager.connect(addr1).transferOwnership(addr1.address)).to.be.revertedWith('Caller is not the owner');
+        it('Should revert ownership transfer if the new owner is zero address', async function () {
+            await expect(manager.transferOwnership(ethers.AddressZero)).to.be.revertedWith("Invalid new owner address");
         });
     });
 });
