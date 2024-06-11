@@ -72,7 +72,7 @@ describe('AgeOfChronosManager Tests', function () {
             await manager.setFee(fee);
             await parent.mint(addr1.address, 1);
             await parent.mint(addr1.address, 2);
-            await manager.connect(addr1).payFee([parent.address, parent.address], [1, 2], { value: fee.mul(2) });
+            await manager.connect(addr1).payFee([parent.address, parent.address], [1, 2], { value: fee });
         });
 
         it('Should start a mission correctly', async function () {

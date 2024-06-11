@@ -213,12 +213,11 @@ contract TimeSquadThaddeus is
         uint256 tokenId,
         uint64 assetId
     ) public view override returns (string memory) {
-        string memory currentBaseURI = baseURI;
         if (assetId == mainAsset) {
             return
                 string(
                     abi.encodePacked(
-                        currentBaseURI,
+                        baseURI,
                         tokenId.toString(),
                         baseExtension
                     )
