@@ -1,4 +1,3 @@
-// src/app/writeTransactions.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -26,9 +25,10 @@ interface MintButtonProps {
     player: string;
     contractAddress: string;
     GetBalanceOfComponent: React.FC<{ address: string }>;
+    onMinted: (status: boolean) => void; // Aggiunta prop onMinted
 }
 
-const MintButton: React.FC<MintButtonProps> = ({ player, contractAddress, GetBalanceOfComponent }) => {
+const MintButton: React.FC<MintButtonProps> = ({ player, contractAddress, GetBalanceOfComponent, onMinted }) => {
     const [contract, setContract] = useState<any>(null);
     const [minted, setMinted] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -66,7 +66,9 @@ const MintButton: React.FC<MintButtonProps> = ({ player, contractAddress, GetBal
                     method: "function balanceOf(address) view returns (uint256)",
                     params: [account.address],
                 });
-                setMinted(balance > 0);
+                const isMinted = balance > 0;
+                setMinted(isMinted);
+                onMinted(isMinted); // Chiamata alla prop onMinted
             }
         }
         checkMinted();
@@ -89,6 +91,7 @@ const MintButton: React.FC<MintButtonProps> = ({ player, contractAddress, GetBal
     const handleTransactionConfirmed = (receipt: any) => {
         console.log("Transaction confirmed", receipt.transactionHash);
         setMinted(true); // Update state to minted once confirmed
+        onMinted(true); // Chiamata alla prop onMinted
         setLoading(false);
     };
 
@@ -98,8 +101,6 @@ const MintButton: React.FC<MintButtonProps> = ({ player, contractAddress, GetBal
     };
 
     const buttonClassName = `hex_button ${player.toLowerCase()} ${minted ? 'claimed' : ''}`;
-    //const buttonClassName = `hex_button turret-road-bold mint-button ${player.toLowerCase()} ${minted ? 'claimed' : ''}`;
-
 
     return (
         <ThirdwebProvider>
@@ -119,20 +120,20 @@ const MintButton: React.FC<MintButtonProps> = ({ player, contractAddress, GetBal
     );
 };
 
-const MintAria = () => {
-    return <MintButton player="Aria" contractAddress={contractParentAddresses.Aria} GetBalanceOfComponent={GetBalanceOfAria} />;
+const MintAria = ({ onMinted }: { onMinted: (status: boolean) => void }) => {
+    return <MintButton player="Aria" contractAddress={contractParentAddresses.Aria} GetBalanceOfComponent={GetBalanceOfAria} onMinted={onMinted} />;
 };
 
-const MintLuna = () => {
-    return <MintButton player="Luna" contractAddress={contractParentAddresses.Luna} GetBalanceOfComponent={GetBalanceOfLuna} />;
+const MintLuna = ({ onMinted }: { onMinted: (status: boolean) => void }) => {
+    return <MintButton player="Luna" contractAddress={contractParentAddresses.Luna} GetBalanceOfComponent={GetBalanceOfLuna} onMinted={onMinted} />;
 };
 
-const MintRyker = () => {
-    return <MintButton player="Ryker" contractAddress={contractParentAddresses.Ryker} GetBalanceOfComponent={GetBalanceOfRyker} />;
+const MintRyker = ({ onMinted }: { onMinted: (status: boolean) => void }) => {
+    return <MintButton player="Ryker" contractAddress={contractParentAddresses.Ryker} GetBalanceOfComponent={GetBalanceOfRyker} onMinted={onMinted} />;
 };
 
-const MintThaddeus = () => {
-    return <MintButton player="Thaddeus" contractAddress={contractParentAddresses.Thaddeus} GetBalanceOfComponent={GetBalanceOfThaddeus} />;
+const MintThaddeus = ({ onMinted }: { onMinted: (status: boolean) => void }) => {
+    return <MintButton player="Thaddeus" contractAddress={contractParentAddresses.Thaddeus} GetBalanceOfComponent={GetBalanceOfThaddeus} onMinted={onMinted} />;
 };
 
-export { MintAria, MintLuna, MintRyker, MintThaddeus};
+export { MintAria, MintLuna, MintRyker, MintThaddeus };

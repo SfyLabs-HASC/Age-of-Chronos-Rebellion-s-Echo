@@ -3,10 +3,17 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../globals.css';
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { MintAria, MintLuna, MintRyker, MintThaddeus } from '../writeTransactions';
 
 export default function MintPage() {
+  const [isMinted, setIsMinted] = useState({
+    Ryker: false,
+    Luna: false,
+    Aria: false,
+    Thaddeus: false
+  });
+
   useEffect(() => {
     const script = document.createElement('script');
     script.async = true;
@@ -17,6 +24,13 @@ export default function MintPage() {
     };
   }, []);
 
+  const handleMintedStatus = (player: string, status: boolean) => {
+    setIsMinted(prevState => ({
+      ...prevState,
+      [player]: status
+    }));
+  };
+
   const handleMouseEnter = (e: React.MouseEvent) => {
     const player = e.currentTarget.closest('.player');
     if (player) {
@@ -24,7 +38,6 @@ export default function MintPage() {
       if (backImage) {
         backImage.style.opacity = '1';
       }
-
     }
   };
 
@@ -35,7 +48,6 @@ export default function MintPage() {
       if (backImage) {
         backImage.style.opacity = '0';
       }
-
     }
   };
 
@@ -43,10 +55,10 @@ export default function MintPage() {
     <main className="main">
       <section id="inside">
         <a href="/">
-          <header className="pt-3 py-lg-5 ">            
+          <header className="pt-3 py-lg-5 ">
             <Image src="/img/logo-main-aoc.webp" alt="Logo" width={142} height={100} />
           </header>
-        </a>  
+        </a>
         <div className="container-fluid main-container py-3 pb-lg-3">
           <div className="row align-items-center">
             <div className="col-12 col-lg-4">
@@ -59,72 +71,64 @@ export default function MintPage() {
               <span className="rightbar"></span>
             </div>
           </div>
-        </div>      
-        
+        </div>
+
         <div className="container-fluid main-container">
           <div className="row align-items-center mobrow">
-            <div className="col-12 col-lg-3">
-              <div className="player red">
-                <span className="name turret-road-bold">RYKER BLADE</span>
-                <div className="wrap_images">
-                  <img src="/img/raiker_blade_off.webp" className="img-responsive front" alt="Ryker Blade Off" />
-                  <img src="/img/raiker_blade.webp" className="img-responsive back" alt="Ryker Blade" />
+            <div className={`col-12 col-lg-3 player red ${isMinted.Ryker ? 'hasMinted' : 'noMint'}`}>
+              <span className="name turret-road-bold">RYKER BLADE</span>
+              <div className="wrap_images">
+                <img src="/img/raiker_blade_off.webp" className="img-responsive front" alt="Ryker Blade Off" />
+                <img src="/img/raiker_blade.webp" className="img-responsive back" alt="Ryker Blade" />
+              </div>
+              <div className="">
+                <span className="prev_player" style={{ opacity: 0 }}></span>
+                <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                  <MintRyker onMinted={(status: boolean) => handleMintedStatus('Ryker', status)} />
                 </div>
-                <div className="">
-                  <span className="prev_player" style={{ opacity: 0 }}></span>
-                  <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                    <MintRyker />
-                  </div>
-                  <span className="next_player"></span>
-                </div>
+                <span className="next_player"></span>
               </div>
             </div>
-            <div className="col-12 col-lg-3">
-              <div className="player yellow">
-                <span className="name turret-road-bold">LUNA STRONGHOLD</span>
-                <div className="wrap_images">
-                  <img src="/img/luna_stronghold_off.webp" className="img-responsive front" alt="Luna Stronghold Off" />
-                  <img src="/img/luna_stronghold.webp" className="img-responsive back backvisible" alt="Luna Stronghold" />
+            <div className={`col-12 col-lg-3 player yellow ${isMinted.Luna ? 'hasMinted' : 'noMint'}`}>
+              <span className="name turret-road-bold">LUNA STRONGHOLD</span>
+              <div className="wrap_images">
+                <img src="/img/luna_stronghold_off.webp" className="img-responsive front" alt="Luna Stronghold Off" />
+                <img src="/img/luna_stronghold.webp" className="img-responsive back backvisible" alt="Luna Stronghold" />
+              </div>
+              <div className="">
+                <span className="prev_player"></span>
+                <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                  <MintLuna onMinted={(status: boolean) => handleMintedStatus('Luna', status)} />
                 </div>
-                <div className="">
-                  <span className="prev_player"></span>
-                  <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                    <MintLuna />
-                  </div>
-                  <span className="next_player"></span>
-                </div>
+                <span className="next_player"></span>
               </div>
             </div>
-            <div className="col-12 col-lg-3">
-              <div className="player violet">
-                <span className="name turret-road-bold">ARIA ZEPHYRION</span>
-                <div className="wrap_images">
-                  <img src="/img/aria_zephyrion_off.webp" className="img-responsive front" alt="Aria Zephyrion Off" />
-                  <img src="/img/aria_zephyrion.webp" className="img-responsive back" alt="Aria Zephyrion" />
+            <div className={`col-12 col-lg-3 player violet ${isMinted.Aria ? 'hasMinted' : 'noMint'}`}>
+              <span className="name turret-road-bold">ARIA ZEPHYRION</span>
+              <div className="wrap_images">
+                <img src="/img/aria_zephyrion_off.webp" className="img-responsive front" alt="Aria Zephyrion Off" />
+                <img src="/img/aria_zephyrion.webp" className="img-responsive back" alt="Aria Zephyrion" />
+              </div>
+              <div className="">
+                <span className="prev_player"></span>
+                <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                  <MintAria onMinted={(status: boolean) => handleMintedStatus('Aria', status)} />
                 </div>
-                <div className="">
-                  <span className="prev_player"></span>
-                  <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                    <MintAria />
-                  </div>
-                  <span className="next_player"></span>
-                </div>
+                <span className="next_player"></span>
               </div>
             </div>
-            <div className="col-12 col-lg-3">
-              <div className="player green">
-                <span className="name turret-road-bold">THADDEUS LUCKSTRAID</span>
-                <div className="wrap_images">
-                  <img src="/img/taddeus_luckstride_off.webp" className="img-responsive front" alt="Thaddeus Luckstraid Off" />
-                  <img src="/img/taddeus_luckstride.webp" className="img-responsive back" alt="Thaddeus Luckstraid" />
+            <div className={`col-12 col-lg-3 player green ${isMinted.Thaddeus ? 'hasMinted' : 'noMint'}`}>
+              <span className="name turret-road-bold">THADDEUS LUCKSTRAID</span>
+              <div className="wrap_images">
+                <img src="/img/taddeus_luckstride_off.webp" className="img-responsive front" alt="Thaddeus Luckstraid Off" />
+                <img src="/img/taddeus_luckstride.webp" className="img-responsive back" alt="Thaddeus Luckstraid" />
+              </div>
+              <div className="">
+                <span className="prev_player"></span>
+                <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                  <MintThaddeus onMinted={(status: boolean) => handleMintedStatus('Thaddeus', status)} />
                 </div>
-                <div className="">
-                  <span className="prev_player"></span>
-                  <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                    <MintThaddeus />
-                  </div>
-                  <span className="next_player" style={{ opacity: 0 }}></span>
-                </div>
+                <span className="next_player" style={{ opacity: 0 }}></span>
               </div>
             </div>
           </div>
@@ -137,7 +141,6 @@ export default function MintPage() {
             </div>
           </div>
         </div>
-        
       </section>
     </main>
   );
