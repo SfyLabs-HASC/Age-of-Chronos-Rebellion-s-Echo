@@ -9,14 +9,14 @@ export default function Home() {
   return (
     <main>
       <section id="home">
-        <Image src="/img/logo_aoc.png" className="logo_main" alt="Logo" width={550} height={550} />
-        <div className="d-flex flex-row justify-content-center wrap_buttons">
+        <Image src="/img/logo_aoc.png" className="logo_main" alt="Logo" width={550} height={390} />
+        <div className="d-flex flex-column flex-lg-row justify-content-center wrap_buttons">
           <Link href="./mint" passHref className="hex_button turret-road-bold">
             MINT FREE
           </Link>
-          <Link href="#" className="hex_button special turret-road-bold">PLAY</Link>
+          <Link href="#" className="hex_button turret-road-bold">PLAY</Link>
         </div>
       </section>
     </main>
-  );
+  ); 
 }

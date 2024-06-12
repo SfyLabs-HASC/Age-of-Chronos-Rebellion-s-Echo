@@ -5,7 +5,10 @@
   --clr-yellow: #f3b029;
   --clr-violet: #7a28cb;
   --clr-green: #00a676;
+  --clr-green-electro: #39b54a;
   --clr-grey: #696a68;
+  --clr-cyan: #87b3c1;
+  --clr-cyan30: rgba(135, 179, 193, 0.3);
 }
 
 .turret-road-extralight {
@@ -55,11 +58,19 @@ html, body {
 }
 
 #home, #inside {
-  height: 100%;
-  background: url(/img/home.webp) center no-repeat;
-  background-size: cover;
+  height: 100%;  
   position: relative;
   min-height: 100vh;
+}
+
+#home{
+  background: url(/img/home.webp) center no-repeat;
+  background-size: cover;
+} 
+
+#inside{
+  background: url(/img/inside.webp) center no-repeat;
+  background-size: cover;
 }
 
 #home::before, #inside::before {
@@ -75,16 +86,11 @@ html, body {
   z-index: 1;
 }
 
-header {
-  position: fixed;
-  z-index: 10;
-  width: 120px;
-  left: 50%;
-  top: 0;
-  transform: translate(-50%, 0);
-  background: url(/img/header_bg.webp) center no-repeat;
-  background-size: contain;
-  padding: 6px 0;
+#inside header img{
+  margin: auto;
+  display: block;
+  z-index: 2;
+  position: relative;
 }
 
 header .logo_inside {
@@ -117,25 +123,28 @@ header .logo_inside {
 }
 
 .hex_button {
-  background: url(/img/button-normal.webp) no-repeat center;
+  background: url(/img/buttons/regular.webp) no-repeat center;
   background-size: contain;
-  padding: 15px 35px;
-  min-width: 150px;
+  padding: 30px;
+  min-width: 340px;
   text-align: center;
-  color: var(--clr-white);
+  color: var(--clr-cyan);
   text-decoration: none;
-  font-size: 1.8em;
+  font-size: 1.2em;
   transition: .4s;
   display: inline-block;
   z-index: 2;
   cursor: pointer;
   border: none;
+  line-height: 30px;
+  font-family: "Turret Road", sans-serif;
+  font-size: 700;
+  text-transform: uppercase;
 }
 
 .hex_button:hover {
-  background: url('/img/normal-hover.webp') no-repeat center;
-  background-size: contain;
-  color: var(--clr-red);
+  background: url('/img/buttons/hover.webp') no-repeat center;
+  background-size: contain;  
 }
 
 .hex_button.mint-button {
@@ -144,14 +153,6 @@ header .logo_inside {
 
 .hex_button.mint-button:hover {
   background: url('/img/normal-hover.webp') no-repeat center;
-}
-
-.hex_button.claimed {
-  background: url('/img/button-claimed.webp') no-repeat center;
-  background-size: contain;
-  color: var(--clr-grey);
-  cursor: not-allowed;
-  opacity: 0.5;
 }
 
 .hex_button span {
@@ -171,7 +172,7 @@ header .logo_inside {
 }
 
 .main-container {
-  max-width: 70%;
+  max-width: 80%;
   height: 100%;
   position: relative;
   z-index: 2;
@@ -197,13 +198,28 @@ header .logo_inside {
 
 .player {
   text-align: center;
+  position: relative;
 }
 
 .player .hex_button {
-  font-size: 1.5em;
+  font-size: 0.9em;
   min-width: initial;
   width: 100%;
   max-width: 210px;
+  background: url(/img/buttons/small-regular.webp) no-repeat center;
+  background-size: contain;
+}
+
+.player .hex_button:hover{
+  background: url(/img/buttons/small-hover.webp) no-repeat center;
+  background-size: contain;
+}
+
+.player .hex_button.claimed{
+  background: url(/img/buttons/claimed.webp) no-repeat center;
+  background-size: contain;
+  color: var(--clr-green-electro);
+  cursor: not-allowed;
 }
 
 .player .wrap_images {
@@ -213,6 +229,7 @@ header .logo_inside {
 .player .wrap_images img.front {
   opacity: 1;
   z-index: 2;
+  width: 100%;
 }
 
 .player .wrap_images img.back {
@@ -226,6 +243,10 @@ header .logo_inside {
   transition: opacity .8s;
 }
 
+.player.hasMinted .wrap_images .back{
+  opacity: 1 !important;
+}
+
 .player .wrap_images img.backvisible {
   opacity: 1;
 }
@@ -234,10 +255,25 @@ header .logo_inside {
   display: inline-block;
   font-family: "Turret Road", sans-serif;
   font-weight: 700;
-  color: var(--clr-white);
+  color: var(--clr-cyan);
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  top: 50px;
+  font-size: 0.85em;
+  z-index: 3;
 }
 
-.player.red span.name {
+.player > *:last-child{
+  position: absolute;
+  width: 80%;
+  bottom: 22px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  z-index: 4;
+}
+
+/*.player.red span.name {
   color: var(--clr-red);
   text-shadow: var(--clr-red) 1px 0 10px;
 }
@@ -255,7 +291,7 @@ header .logo_inside {
 .player.green span.name {
   color: var(--clr-green);
   text-shadow: var(--clr-green) 1px 0 10px;
-}
+}*/
 
 .absbutt {
   position: absolute;
@@ -290,27 +326,80 @@ header .logo_inside {
   background: contain;
 }
 
+.mainTitleSec{
+  color: var(--clr-cyan);
+  position: relative;
+  z-index: 2;
+  font-size: 1.2em;
+  margin: 0;
+}
+
+.leftbar{
+  background: url(/img/left-bar.webp) no-repeat right;
+  display: block;
+  width: 100%;
+  height: 30px;
+}
+
+.rightbar{
+  background: url(/img/right-bar.webp) no-repeat left;
+  display: block;
+  width: 100%;
+  height: 30px;
+}
+
+.aoc_panel{
+  border: 2px solid var(--clr-cyan);
+  background: var(--clr-cyan30);
+  border-radius: 10px;
+  padding: 15px;
+  font-family: "Turret Road", sans-serif; 
+  margin-bottom: 30px; 
+}
+
+.aoc_panel p{
+  color: var(--clr-cyan);
+  margin: 0;  
+}
+
+.aoc_panel p span{
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+@media (max-width: 1450px){
+  .main-container {
+    max-width: 85%;
+  }
+}
+
 /* Responsive styles */
 @media (max-width: 990px) {
   .logo_main {
     max-width: 300px;
+    height: auto;
   }
 
   .main-container {
-    max-width: 80%;
+    max-width: 95%;
   }
 
   .wrap_buttons {
-    bottom: 25%;
+    bottom: 10%;
   }
 
   .mobrow {
     flex-wrap: nowrap;
     overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+  }
+
+  .mobrow > div{
+    scroll-snap-align: start;
   }
 
   a.hex_button:not(.absbutt) {
-    zoom: 0.62;
+    zoom: 0.9;
   }
 
   .player .wrap_images img.back {
@@ -326,6 +415,6 @@ header .logo_inside {
   }
 
   .player .wrap_images img {
-    max-width: 70%;
+    max-width: 100%;
   }
 }
