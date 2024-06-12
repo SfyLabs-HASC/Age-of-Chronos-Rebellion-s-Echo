@@ -9,15 +9,15 @@ const client = createThirdwebClient({
 });
 
 const myChain = defineChain({
-    id: 84532,
-    rpc: 'https://sepolia.base.org'
+    id: 1287,
+    rpc: 'https://moonbase-alpha.public.blastapi.io'
 });
 
 const contractParentAddresses = {
-    "Aria": "0x28a147ebE82a64D294D0b2a92c51A487015773B1",
-    "Luna": "0x5F0e041A5c039c2A83a00d85e487E6Cf066f4CEF",
-    "Ryker": "0xAe6Ab9Bb9704ec017cb28F990f6a76a54D3104ce",
-    "Thaddeus": "0x2472Ea2ddC078661b2f8b24A3468c65617d43530"
+    "Aria": "0x28E6bB44976A8CbdF32a826bf2b0F3C83827fBB4",
+    "Luna": "0x713bDF77C02342c975ad16fcA41d923dea3D03B7",
+    "Ryker": "0xa9f2E818A524b51900bc517A6EC97b27C7167F79",
+    "Thaddeus": "0x44700E473182dC3ff512b98424fCd397634BE4EF"
 };
 
 // Helper function to create contract
