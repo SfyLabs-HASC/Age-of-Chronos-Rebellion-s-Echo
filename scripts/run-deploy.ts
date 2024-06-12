@@ -78,8 +78,7 @@ async function main() {
   const thaddeusRightHand = await deployChild('ThaddeusRightHand', C.SQUAD_ITEM_METADATA_THADDEUS_RIGHT_HAND);
   await delay(10000)
 
-  const manager = await deployManager();
-  await delay(5000)
+
   const catalogAria = await deployCatalog('CatalogAria', C.SQUAD_CATALOG_ARIA_METADATA, C.CATALOG_TYPE);
   await delay(1000)
   const catalogLuna = await deployCatalog('CatalogLuna', C.SQUAD_CATALOG_LUNA_METADATA, C.CATALOG_TYPE);
@@ -89,6 +88,9 @@ async function main() {
   const catalogThaddeus = await deployCatalog('CatalogThaddeus', C.SQUAD_CATALOG_THADDEUS_METADATA, C.CATALOG_TYPE);
   await delay(5000)
 
+/* SKIPPATO IL MANAGER, LO FACCIO SU THIRDWEB
+  const manager = await deployManager();
+  await delay(5000)
   await configureManager(TimeSquadAria, [ariaBody, ariaHead, ariaLeftHand, ariaRightHand], catalogAria, manager);
   await delay(5000)
   await configureManager(TimeSquadLuna, [lunaBody, lunaHead, lunaLeftHand, lunaRightHand], catalogLuna, manager);
@@ -97,7 +99,7 @@ async function main() {
   await delay(5000)
   await configureManager(TimeSquadThaddeus, [thaddeusBody, thaddeusHead, thaddeusLeftHand, thaddeusRightHand], catalogThaddeus, manager);
   await delay(5000)
-
+*/
 
   await configureCatalog(catalogAria,
     await ariaBody.getAddress(),
@@ -143,13 +145,13 @@ async function main() {
   console.log("Add Asset Aria complete")
   await delay(5000)
   await addAssetsLuna(TimeSquadLuna, lunaBody, lunaHead, lunaLeftHand, lunaRightHand, catalogLuna);
-  console.log("Add Asset Aria complete")
+  console.log("Add Asset Luna complete")
   await delay(5000)
   await addAssetsRyker(TimeSquadRyker, rykerBody, rykerHead, rykerLeftHand, rykerRightHand, catalogRyker);
-  console.log("Add Asset Aria complete")
+  console.log("Add Asset Ryker complete")
   await delay(5000)
   await addAssetsThaddeus(TimeSquadThaddeus, thaddeusBody, thaddeusHead, thaddeusLeftHand, thaddeusRightHand, catalogThaddeus);
-  console.log("Add Asset Aria complete")
+  console.log("Add Asset Thaddeus complete")
   await delay(20000)
 
   const tx01 = await TimeSquadAria.setAutoAcceptCollection(await ariaBody.getAddress(), true);
@@ -184,6 +186,8 @@ async function main() {
   await tx08.wait();
   await delay(2000);
 
+
+  //da qui
   const tx09 = await TimeSquadRyker.setAutoAcceptCollection(await rykerBody.getAddress(), true);
   await tx09.wait();
   await delay(2000);
@@ -313,6 +317,7 @@ async function main() {
   console.log(`Minted parents NFT by ${deployer.address} with id 2`);
   await delay(10000);
 
+  /*
   await mintParentNFT(TimeSquadAria, deployer.address);
   await delay(1000);
   await mintParentNFT(TimeSquadLuna, deployer.address);
@@ -342,9 +347,10 @@ async function main() {
   await mintParentNFT(TimeSquadThaddeus, deployer.address);
   console.log(`Minted parents NFT by ${deployer.address} with id 5`);
   await delay(10000);
+*/
+
 
   /*
-
 
   await mintParentNFT(TimeSquadAria, addr1.address);
   await delay(10000);

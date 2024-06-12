@@ -1,6 +1,4 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.21;
-
 
 /************************************************
 **        Manager Contract for AgeOfChronos    **
@@ -8,6 +6,7 @@ pragma solidity ^0.8.21;
 **            sfy.startup@gmail.com            **
 ************************************************/
  
+pragma solidity ^0.8.21;
 
 interface IParent {
     function setSoulbound(uint256 tokenId, bool state) external;
