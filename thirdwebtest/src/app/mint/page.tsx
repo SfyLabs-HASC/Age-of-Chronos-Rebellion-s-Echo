@@ -137,13 +137,11 @@ export default function MintPage() {
           </div>
           <div className="row">
             <div className="col-12 text-center">
-            <div>
-                  {account ? (
-                    <span className="">https://singular-rmrk2-git-3d-composer-rmrk-team.vercel.app/space/{account.address}/nfts/owned?tab=owned&isVerified=false&showPending=true&hideRelated=false&sortBy=minted_at:desc&page=1</span>
-                  ) : (
-                    <span className="">https://singular-rmrk2-git-3d-composer-rmrk-team.vercel.app</span>
-                  )}
-                </div>
+                {account ? (                                    
+                  <a className="hex_button" href="https://singular-rmrk2-git-3d-composer-rmrk-team.vercel.app/space/{account.address}/nfts/owned?tab=owned&isVerified=false&showPending=true&hideRelated=false&sortBy=minted_at:desc&page=1">VIEW YOUR NTFs</a>
+                ) : (
+                  <a></a>
+                )}
               <div className="aoc_panel">
                 <p>AGE OF CHRONOS is a web-based dungeon crawler, find artifacts and unlock the potential of NFTs 2.0.<br /><span>the mint is FREe.</span><br />To play, you must have all 4 characters, you can claim 1 NFT for each character type.<br /><span>The game is coming soon.</span></p>
               </div>

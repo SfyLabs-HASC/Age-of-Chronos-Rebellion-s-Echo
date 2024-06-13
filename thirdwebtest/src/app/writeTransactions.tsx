@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { ThirdwebProvider, TransactionButton, useActiveAccount } from "thirdweb/react";
 import { createThirdwebClient, defineChain, getContract, prepareContractCall, readContract } from 'thirdweb';
 import { GetBalanceOfAria, GetBalanceOfLuna, GetBalanceOfRyker, GetBalanceOfThaddeus } from './readTransactions';
-import 'dotenv/config';
 
 const client = createThirdwebClient({
     clientId: '258f6a7e272e3b6e74b8ad1d24ad1343'
