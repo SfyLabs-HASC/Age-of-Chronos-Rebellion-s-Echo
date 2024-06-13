@@ -13,8 +13,7 @@ export default function Home() {
         <div className="d-flex flex-column flex-lg-row justify-content-center wrap_buttons">
           <Link href="./mint" passHref className="hex_button turret-road-bold">
             MINT FREE
-          </Link>
-          <Link href="#" className="hex_button turret-road-bold">PLAY</Link>
+          </Link>          
         </div>
       </section>
     </main>

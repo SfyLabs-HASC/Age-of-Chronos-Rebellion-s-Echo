@@ -207,21 +207,27 @@ header .logo_inside {
   font-size: 0.9em;
   min-width: initial;
   width: 100%;
-  max-width: 210px;
+  max-width: 75%;
   background: url(/img/buttons/small-regular.webp) no-repeat center;
-  background-size: contain;
+  background-size: 100%;
 }
 
-.player .hex_button:hover{
+.player button.hex_button:not(.claimed):hover{
   background: url(/img/buttons/small-hover.webp) no-repeat center;
-  background-size: contain;
+  background-size: 100%;
 }
 
 .player .hex_button.claimed{
   background: url(/img/buttons/claimed.webp) no-repeat center;
-  background-size: contain;
+  background-size: 100%;
   color: var(--clr-green-electro);
   cursor: not-allowed;
+}
+
+.player span.hex_button{
+  cursor: default;
+  background: url(/img/buttons/small-disabled.webp) no-repeat center;
+  background-size: 100%;
 }
 
 .player .wrap_images {
@@ -275,26 +281,6 @@ header .logo_inside {
   transform: translate(-50%, 0);
   z-index: 4;
 }
-
-/*.player.red span.name {
-  color: var(--clr-red);
-  text-shadow: var(--clr-red) 1px 0 10px;
-}
-
-.player.yellow span.name {
-  color: var(--clr-yellow);
-  text-shadow: var(--clr-yellow) 1px 0 10px;
-}
-
-.player.violet span.name {
-  color: var(--clr-violet);
-  text-shadow: var(--clr-violet) 1px 0 10px;
-}
-
-.player.green span.name {
-  color: var(--clr-green);
-  text-shadow: var(--clr-green) 1px 0 10px;
-}*/
 
 .absbutt {
   position: absolute;
@@ -384,7 +370,7 @@ header .logo_inside {
   }
 
   .main-container {
-    max-width: 95%;
+    max-width: 100%;
   }
 
   .wrap_buttons {
@@ -392,9 +378,10 @@ header .logo_inside {
   }
 
   .mobrow {
-    flex-wrap: nowrap;
+    flex-wrap: nowrap !important;
     overflow-x: scroll;
     scroll-snap-type: x mandatory;
+    overflow-y: hidden;
   }
 
   .mobrow > div{
