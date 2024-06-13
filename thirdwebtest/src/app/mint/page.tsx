@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../globals.css';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { useActiveAccount } from "thirdweb/react";
 import { MintAria, MintLuna, MintRyker, MintThaddeus } from '../writeTransactions';
 
 export default function MintPage() {
@@ -13,6 +14,7 @@ export default function MintPage() {
     Aria: false,
     Thaddeus: false
   });
+  const account = useActiveAccount();
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -128,13 +130,20 @@ export default function MintPage() {
                 <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                   <MintThaddeus onMinted={(status: boolean) => handleMintedStatus('Thaddeus', status)} />
                 </div>
+
                 <span className="next_player" style={{ opacity: 0 }}></span>
               </div>
             </div>
           </div>
           <div className="row">
             <div className="col-12 text-center">
-              {/*<a href="#" className="hex_button turret-road-bold">PLAY</a>*/}
+            <div>
+                  {account ? (
+                    <span className="">https://singular-rmrk2-git-3d-composer-rmrk-team.vercel.app/space/{account.address}/nfts/owned?tab=owned&isVerified=false&showPending=true&hideRelated=false&sortBy=minted_at:desc&page=1</span>
+                  ) : (
+                    <span className="">https://singular-rmrk2-git-3d-composer-rmrk-team.vercel.app</span>
+                  )}
+                </div>
               <div className="aoc_panel">
                 <p>AGE OF CHRONOS is a web-based dungeon crawler, find artifacts and unlock the potential of NFTs 2.0.<br /><span>the mint is FREe.</span><br />To play, you must have all 4 characters, you can claim 1 NFT for each character type.<br /><span>The game is coming soon.</span></p>
               </div>
