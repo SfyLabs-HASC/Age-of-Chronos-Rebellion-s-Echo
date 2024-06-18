@@ -5,12 +5,25 @@ import React, { useState, useEffect } from 'react';
 import { createThirdwebClient, defineChain, getContract, readContract } from 'thirdweb';
 
 const client = createThirdwebClient({
-    clientId: '258f6a7e272e3b6e74b8ad1d24ad1343'
+    clientId: process.env.THIRDWEB_CLIENT_ID!
 });
 
 const myChain = defineChain({
     id: 1287,
-    rpc: 'https://moonbase-alpha.public.blastapi.io'
+    name: 'Moonbase Alpha',
+    rpc: 'https://moonbase-alpha.public.blastapi.io',
+    nativeCurrency: {
+        name: 'DEV',
+        symbol: 'DEV',
+        decimals: 18,
+    },
+    blockExplorers: [
+        {
+            name: 'Moonscan',
+            url: 'https://moonbase.moonscan.io'
+        }
+    ],
+    testnet: true
 });
 
 const contractParentAddresses = {

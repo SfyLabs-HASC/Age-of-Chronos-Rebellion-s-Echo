@@ -5,5 +5,5 @@ export async function delay(ms: number): Promise<void> {
 }
 
 export function isHardhatNetwork(): boolean {
-  return ['hardhat', 'localhost'].includes(network.name);
+  return ['hardhat', 'localhost', 'moonbaseAlpha'].includes(network.name);
 }
