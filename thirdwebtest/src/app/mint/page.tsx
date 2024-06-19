@@ -1,9 +1,5 @@
-'use client';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../globals.css';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { useActiveAccount } from "thirdweb/react";
 import { MintAria, MintLuna, MintRyker, MintThaddeus } from '../writeTransactions';
 import moment from 'moment';
@@ -15,6 +11,7 @@ export default function MintPage() {
     Aria: false,
     Thaddeus: false
   });
+  const [nftsUrl, setNftsUrl] = useState('');
   const account = useActiveAccount();
 
   useEffect(() => {
@@ -25,6 +22,13 @@ export default function MintPage() {
     return () => {
       document.body.removeChild(script);
     };
+  }, []);
+
+  useEffect(() => {
+    fetch('../config.json')
+      .then(response => response.json())
+      .then(data => setNftsUrl(data.nftsUrl))
+      .catch(error => console.error('Error fetching config:', error));
   }, []);
 
   const handleMintedStatus = (player: string, status: boolean) => {
@@ -159,7 +163,7 @@ export default function MintPage() {
           <div className="row">
             <div className="col-12 text-center">
               {account && ( isMinted.Ryker || isMinted.Aria || isMinted.Luna || isMinted.Thaddeus ) ? (
-                <a className="hex_button" target="_blank" href={`https://singular-rmrk2-git-3d-composer-rmrk-team.vercel.app/space/${account.address}/nfts/owned?tab=owned&isVerified=false&showPending=true&hideRelated=false&sortBy=minted_at:desc&page=1`}>VIEW YOUR NTFs</a>
+                <a className="hex_button" target="_blank" href={`${nftsUrl}${account.address}/nfts/owned?tab=owned&isVerified=false&showPending=true&hideRelated=false&sortBy=minted_at:desc&page=1`}>VIEW YOUR NTFs</a>
               ) : null}
               <div className="aoc_panel">
                 <p>AGE OF CHRONOS is a web-based dungeon crawler, find artifacts and unlock the potential of NFTs 2.0.<br /><span>the mint is FREe.</span><br />To play, you must have all 4 characters, you can claim 1 NFT for each character type.<br /><span>The game is coming soon.</span></p>

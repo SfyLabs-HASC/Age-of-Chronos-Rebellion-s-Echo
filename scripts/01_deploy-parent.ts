@@ -13,7 +13,7 @@ import {
   addAssetsRyker,
   addAssetsThaddeus,
   mintParentNFT
-} from './utils-parent';
+} from './03_utils-parent';
 import * as C from './constants';
 
 async function main() {
