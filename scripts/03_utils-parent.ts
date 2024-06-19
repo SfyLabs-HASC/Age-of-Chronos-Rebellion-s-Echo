@@ -26,6 +26,10 @@ export async function deployParent(name: string, parentCollectionMetadata: Strin
     const contractAddress = await parentContract.getAddress();
     console.log(`${name} deployed to ${contractAddress}`);
 
+    const registry = await getRegistry();
+    await registry.addExternalCollection(contractAddress, args[0]);
+    console.log('Collection added to Singular Registry');
+
 
     if (!isHardhatNetwork()) {
         console.log('Waiting 20 seconds before verifying contract...');

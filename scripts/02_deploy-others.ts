@@ -20,7 +20,7 @@ import {
   setExternalPermission,
   mintChildNFT,
   configureManager
-} from './utilsFunctions-others';
+} from './04_utilsFunctions-others';
 import * as C from './constants';
 
 async function main() {
