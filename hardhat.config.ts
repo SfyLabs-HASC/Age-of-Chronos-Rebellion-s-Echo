@@ -8,11 +8,10 @@ import './tasks/attributes';
 import './tasks/metadata';
 import 'hardhat-gas-reporter'; // Import the gas reporter
 
-const accounts = process.env.PRIVATE_KEY && process.env.ADDR1_PRIVATE_KEY && process.env.ADDR2_PRIVATE_KEY
+const accounts = process.env.PRIVATE_KEY && process.env.ADDR1_PRIVATE_KEY
   ? [
       process.env.PRIVATE_KEY,
-      process.env.ADDR1_PRIVATE_KEY,
-      process.env.ADDR2_PRIVATE_KEY
+      process.env.ADDR1_PRIVATE_KEY
     ]
   : [];
 
@@ -83,7 +82,12 @@ const config: HardhatUserConfig = {
     moonbeam: {
       url: process.env.MOONBEAM_URL || 'https://rpc.api.moonbeam.network',
       chainId: 1284,
-      accounts: accounts,
+      accounts: process.env.PRIVATE_KEY && process.env.ADDR1_PRIVATE_KEY
+      ? [
+          process.env.PRIVATE_KEY,
+          process.env.ADDR1_PRIVATE_KEY
+        ]
+      : [],
     },
     mainnet: {
       url: process.env.ETHEREUM_URL || 'https://eth.drpc.org',

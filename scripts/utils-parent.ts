@@ -26,10 +26,6 @@ export async function deployParent(name: string, parentCollectionMetadata: Strin
     const contractAddress = await parentContract.getAddress();
     console.log(`${name} deployed to ${contractAddress}`);
 
-    const registry = await getRegistry();
-    await registry.addExternalCollection(contractAddress, args[0]);
-    console.log('Collection added to Singular Registry');
-
 
     if (!isHardhatNetwork()) {
         console.log('Waiting 20 seconds before verifying contract...');
@@ -52,16 +48,6 @@ export async function deployCatalog(name: string, catalogMetadata: string, catal
     await catalog.waitForDeployment();
     const catalogAddress = await catalog.getAddress();
     console.log(`Catalog ${name} deployed to:`, catalogAddress);
-
-    if (!isHardhatNetwork()) {
-        console.log('Waiting 20 seconds before verifying contract...');
-        await delay(20000);
-        await run('verify:verify', {
-            address: catalogAddress,
-            constructorArguments: [catalogMetadataUri, catalogType],
-            contract: 'contracts/catalog/RMRKCatalogImpl.sol:RMRKCatalogImpl',
-        });
-    }
 
     return catalog;
 }
