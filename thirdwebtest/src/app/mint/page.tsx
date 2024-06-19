@@ -6,6 +6,14 @@ import { useActiveAccount, useActiveWalletChain } from "thirdweb/react";
 import { MintAria, MintLuna, MintRyker, MintThaddeus } from '../writeTransactions';
 import moment from 'moment';
 
+interface Config {
+  du_ryker: string;
+  du_luna: string;
+  du_aria: string;
+  du_thaddeus: string;
+  nftsUrl: string;
+}
+
 export default function MintPage() {
   const [isMinted, setIsMinted] = useState({
     Ryker: false,
@@ -13,7 +21,7 @@ export default function MintPage() {
     Aria: false,
     Thaddeus: false
   });
-  const [config, setConfig] = useState(null);
+  const [config, setConfig] = useState<Config | null>(null);
   const account = useActiveAccount();
   const activeChain = useActiveWalletChain();
 

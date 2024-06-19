@@ -9,21 +9,20 @@ const client = createThirdwebClient({
 });
 
 const myChain = defineChain({
-    id: 1287,
-    name: 'Moonbase Alpha',
-    rpc: 'https://moonbase-alpha.public.blastapi.io',
+    id: 1284,
+    name: 'Moonbeam',
+    rpc: 'https://rpc.api.moonbeam.network',
     nativeCurrency: {
-        name: 'DEV',
-        symbol: 'DEV',
+        name: 'GLMR',
+        symbol: 'GLMR',
         decimals: 18,
     },
     blockExplorers: [
         {
             name: 'Moonscan',
-            url: 'https://moonbase.moonscan.io'
+            url: 'https://moonbeam.moonscan.io'
         }
-    ],
-    testnet: true
+    ]
 });
 
 const contractParentAddresses = {

@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Create Next App',
+  title: 'Play and craft NFTs 2.0!',
   description: 'Web-based dungeon crawler that utilizes NFT 2.0 technology to provide an immersive gaming experience.',
 }
 
