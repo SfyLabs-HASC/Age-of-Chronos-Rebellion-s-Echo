@@ -34,13 +34,13 @@ async function main() {
     //add external registry
     const registry = await getRegistry();
     await registry.addExternalCollection(contractParentAddresses.Aria,  C.SQUAD_METADATA_ARIA);
-    delay(1000)
+    delay(3000)
     await registry.addExternalCollection(contractParentAddresses.Luna,  C.SQUAD_METADATA_LUNA);
-    delay(1000)
+    delay(3000)
     await registry.addExternalCollection(contractParentAddresses.Ryker,  C.SQUAD_METADATA_RYKER);
-    delay(1000)
+    delay(3000)
     await registry.addExternalCollection(contractParentAddresses.Thaddeus,  C.SQUAD_METADATA_THADDEUS);
-    delay(1000)
+    delay(3000)
     console.log('Collection added to Singular Registry');
 
   } catch (error) {
