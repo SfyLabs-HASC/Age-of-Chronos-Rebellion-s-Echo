@@ -11,7 +11,7 @@ export default function MintPage() {
     Aria: false,
     Thaddeus: false
   });
-  const [nftsUrl, setNftsUrl] = useState('');
+  const [config, setConfig] = useState(null);
   const account = useActiveAccount();
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function MintPage() {
   useEffect(() => {
     fetch('../config.json')
       .then(response => response.json())
-      .then(data => setNftsUrl(data.nftsUrl))
+      .then(data => setConfig(data))
       .catch(error => console.error('Error fetching config:', error));
   }, []);
 
@@ -58,10 +58,9 @@ export default function MintPage() {
     }
   };
 
-  const du_ryker = '2024-06-02';
-  const du_luna = '2024-06-23';
-  const du_aria = '2024-06-26';
-  const du_thaddeus = '2024-06-30';
+  if (!config) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <main className="main">
@@ -95,12 +94,12 @@ export default function MintPage() {
               </div>
               <div className="">
                 <span className="prev_player" style={{ opacity: 0 }}></span>
-                {moment().isAfter(du_ryker) ? (
+                {moment().isAfter(config.du_ryker) ? (
                   <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                    <MintRyker onMinted={(status: boolean) => handleMintedStatus('Ryker', status)} />
+                    <MintRyker onMinted={(status) => handleMintedStatus('Ryker', status)} />
                   </div>
                 ) : (
-                  <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="hex_button">AVAILABLE { moment().to(du_ryker) }</span>
+                  <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="hex_button">AVAILABLE { moment().to(config.du_ryker) }</span>
                 )}                
                 <span className="next_player"></span>
               </div>
@@ -113,12 +112,12 @@ export default function MintPage() {
               </div>
               <div className="">
                 <span className="prev_player"></span>
-                {moment().isAfter(du_luna) ? (
+                {moment().isAfter(config.du_luna) ? (
                   <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                    <MintLuna onMinted={(status: boolean) => handleMintedStatus('Luna', status)} />
+                    <MintLuna onMinted={(status) => handleMintedStatus('Luna', status)} />
                   </div>
                 ) : (
-                  <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="hex_button">AVAILABLE { moment().to(du_luna) }</span>
+                  <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="hex_button">AVAILABLE { moment().to(config.du_luna) }</span>
                 )}                
                 <span className="next_player"></span>
               </div>
@@ -131,12 +130,12 @@ export default function MintPage() {
               </div>
               <div className="">
                 <span className="prev_player"></span>
-                {moment().isAfter(du_aria) ? (
+                {moment().isAfter(config.du_aria) ? (
                   <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                    <MintAria onMinted={(status: boolean) => handleMintedStatus('Aria', status)} />
+                    <MintAria onMinted={(status) => handleMintedStatus('Aria', status)} />
                   </div>
                 ) : (
-                  <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="hex_button">AVAILABLE { moment().to(du_aria) }</span>
+                  <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="hex_button">AVAILABLE { moment().to(config.du_aria) }</span>
                 )}                  
                 <span className="next_player"></span>
               </div>
@@ -149,12 +148,12 @@ export default function MintPage() {
               </div>
               <div className="">
                 <span className="prev_player"></span>
-                {moment().isAfter(du_thaddeus) ? (
+                {moment().isAfter(config.du_thaddeus) ? (
                   <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                    <MintThaddeus onMinted={(status: boolean) => handleMintedStatus('Thaddeus', status)} />
+                    <MintThaddeus onMinted={(status) => handleMintedStatus('Thaddeus', status)} />
                   </div>
                 ) : (
-                  <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="hex_button">AVAILABLE { moment().to(du_thaddeus) }</span>
+                  <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="hex_button">AVAILABLE { moment().to(config.du_thaddeus) }</span>
                 )} 
                 <span className="next_player" style={{ opacity: 0 }}></span>
               </div>
@@ -163,7 +162,7 @@ export default function MintPage() {
           <div className="row">
             <div className="col-12 text-center">
               {account && ( isMinted.Ryker || isMinted.Aria || isMinted.Luna || isMinted.Thaddeus ) ? (
-                <a className="hex_button" target="_blank" href={`${nftsUrl}${account.address}/nfts/owned?tab=owned&isVerified=false&showPending=true&hideRelated=false&sortBy=minted_at:desc&page=1`}>VIEW YOUR NTFs</a>
+                <a className="hex_button" target="_blank" href={`${config.nftsUrl}${account.address}/nfts/owned?tab=owned&isVerified=false&showPending=true&hideRelated=false&sortBy=minted_at:desc&page=1`}>VIEW YOUR NTFs</a>
               ) : null}
               <div className="aoc_panel">
                 <p>AGE OF CHRONOS is a web-based dungeon crawler, find artifacts and unlock the potential of NFTs 2.0.<br /><span>the mint is FREe.</span><br />To play, you must have all 4 characters, you can claim 1 NFT for each character type.<br /><span>The game is coming soon.</span></p>

@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { createThirdwebClient, defineChain, getContract, readContract } from 'thirdweb';
 
 const client = createThirdwebClient({
-    clientId: process.env.THIRDWEB_CLIENT_ID!
+    clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID!
 });
 
 const myChain = defineChain({

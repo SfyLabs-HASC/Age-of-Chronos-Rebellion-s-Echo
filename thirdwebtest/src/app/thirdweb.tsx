@@ -1,6 +1,6 @@
 'use client'
 import { useEffect } from 'react';
-import process from 'node:process';
+
 import { createThirdwebClient, defineChain } from "thirdweb";
 import {
     ThirdwebProvider,
@@ -15,7 +15,7 @@ import {
   } from "thirdweb/wallets";
 
 const client = createThirdwebClient({
-    clientId: process.env.THIRDWEB_CLIENT_ID!
+    clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID!
 });
 
 const myChain = defineChain({

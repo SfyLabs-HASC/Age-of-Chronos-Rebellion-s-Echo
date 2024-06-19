@@ -6,7 +6,7 @@ import { createThirdwebClient, defineChain, getContract, prepareContractCall, re
 import { GetBalanceOfAria, GetBalanceOfLuna, GetBalanceOfRyker, GetBalanceOfThaddeus } from './readTransactions';
 
 const client = createThirdwebClient({
-    clientId: process.env.THIRDWEB_CLIENT_ID!
+    clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID!
 });
 
 const myChain = defineChain({
