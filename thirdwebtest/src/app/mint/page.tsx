@@ -73,7 +73,7 @@ export default function MintPage() {
     return <div>Loading...</div>;
   }
 
-  const isMoonbeamNetwork = activeChain?.id === 1287; // ID di Moonbeam
+  const isMoonbeamNetwork = activeChain?.id === 1284; // ID di Moonbeam
 
   return (
     <main className="main">
@@ -109,11 +109,7 @@ export default function MintPage() {
                 <span className="prev_player" style={{ opacity: 0 }}></span>
                 {moment().isAfter(config.du_ryker) ? (
                   <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                    {isMoonbeamNetwork ? (
-                      <MintRyker onMinted={(status) => handleMintedStatus('Ryker', status)} />
-                    ) : (
-                      <span className="hex_button disabled">SWITCH TO MOONBEAM</span>
-                    )}
+                    <MintRyker onMinted={(status) => handleMintedStatus('Ryker', status)} />
                   </div>
                 ) : (
                   <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="hex_button">AVAILABLE { moment().to(config.du_ryker) }</span>
@@ -131,11 +127,7 @@ export default function MintPage() {
                 <span className="prev_player"></span>
                 {moment().isAfter(config.du_luna) ? (
                   <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                    {isMoonbeamNetwork ? (
-                      <MintLuna onMinted={(status) => handleMintedStatus('Luna', status)} />
-                    ) : (
-                      <span className="hex_button disabled">SWITCH TO MOONBEAM</span>
-                    )}
+                    <MintLuna onMinted={(status) => handleMintedStatus('Luna', status)} />
                   </div>
                 ) : (
                   <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="hex_button">AVAILABLE { moment().to(config.du_luna) }</span>
@@ -153,11 +145,7 @@ export default function MintPage() {
                 <span className="prev_player"></span>
                 {moment().isAfter(config.du_aria) ? (
                   <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                    {isMoonbeamNetwork ? (
-                      <MintAria onMinted={(status) => handleMintedStatus('Aria', status)} />
-                    ) : (
-                      <span className="hex_button disabled">SWITCH TO MOONBEAM</span>
-                    )}
+                    <MintAria onMinted={(status) => handleMintedStatus('Aria', status)} />
                   </div>
                 ) : (
                   <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="hex_button">AVAILABLE { moment().to(config.du_aria) }</span>
@@ -175,11 +163,7 @@ export default function MintPage() {
                 <span className="prev_player"></span>
                 {moment().isAfter(config.du_thaddeus) ? (
                   <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                    {isMoonbeamNetwork ? (
-                      <MintThaddeus onMinted={(status) => handleMintedStatus('Thaddeus', status)} />
-                    ) : (
-                      <span className="hex_button disabled">SWITCH TO MOONBEAM</span>
-                    )}
+                    <MintThaddeus onMinted={(status) => handleMintedStatus('Thaddeus', status)} />
                   </div>
                 ) : (
                   <span onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="hex_button">AVAILABLE { moment().to(config.du_thaddeus) }</span>
