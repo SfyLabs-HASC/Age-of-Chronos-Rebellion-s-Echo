@@ -27,10 +27,10 @@ const myChain = defineChain({
 });
 
 const contractParentAddresses = {
-    "Aria": "0x28E6bB44976A8CbdF32a826bf2b0F3C83827fBB4",
-    "Luna": "0x713bDF77C02342c975ad16fcA41d923dea3D03B7",
-    "Ryker": "0xa9f2E818A524b51900bc517A6EC97b27C7167F79",
-    "Thaddeus": "0x44700E473182dC3ff512b98424fCd397634BE4EF"
+    "Aria": "0xf6F0130799de29cf1A402290766a1C9c95B6d017",
+    "Luna": "0xe429fb9fD5dcFe9B148f0E6FF922C8A6d12B4f53",
+    "Ryker": "0x972009B42a51CaCd43e059a2C56e92541EF2Bc2f",
+    "Thaddeus": "0xE7AeB43Ed1dE5D357F190847830b2a9f31E0C032"
 };
 
 // Helper function to create contract
