@@ -30,18 +30,18 @@ async function main() {
   console.log('Addr2:', addr2 ? addr2.address : 'undefined');
 
 
-  const contractParentAddresses = {
-      "Aria": "0x948226e7211cFaD1886bddf84412B07808ECD3De",
-      "Luna": "0x0Ec7217228d8d03D375511916125DCd199d46485",
-      "Ryker": "0xb32924d2D6604996D26633b61DDC567e9393dc44",
-      "Thaddeus": "0x2b35c1c16455AB6cC203de84F7b0B297444Ee4fC"
-  };
+  const contractParentAddresses: { [key: string]: string } = {
+    "Aria": "0xf6F0130799de29cf1A402290766a1C9c95B6d017",
+    "Luna": "0xe429fb9fD5dcFe9B148f0E6FF922C8A6d12B4f53",
+    "Ryker": "0x972009B42a51CaCd43e059a2C56e92541EF2Bc2f",
+    "Thaddeus": "0xE7AeB43Ed1dE5D357F190847830b2a9f31E0C032"
+};
 
-  const contractCatalogAddresses = {
-    "Aria": "0xEe7B455E803371C2Eb20Ed0a5a73B23a29013DD7",
-    "Luna": "0x9CFba343c2eC9c36d601ac54FB80967627353557",
-    "Ryker": "0xf525c4A7ADC471F2ebA36a62858ca4B50F60A4F9",
-    "Thaddeus": "0x1da0Db15691ad2e64a1FbB10699A2019315e6Db3"
+const contractCatalogAddresses: { [key: string]: string } = {
+    "Aria": "0xA9390e1009aBC0B3fA9cDfcCaC379CF15DecA3F6",
+    "Luna": "0xCb7aE692aa7C042715FCA463789F1aC91924a2CA",
+    "Ryker": "0x6ad1c0226f5ecc90e109b57c75af3Db7b5ad74aC",
+    "Thaddeus": "0xDDc1Da0373fd9494a6d599E7520543953BA94672"
 };
 
 const TimeSquadAria: TimeSquadAria = await ethers.getContractAt('TimeSquadAria', contractParentAddresses.Aria, deployer);

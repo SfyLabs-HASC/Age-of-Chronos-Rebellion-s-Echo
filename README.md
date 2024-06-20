@@ -25,6 +25,11 @@ npx hardhat run scripts/deploy-parent.ts --network moonbaseAlpha
 npx hardhat run scripts/deploy-parent.ts --network moonbeam
 npx hardhat run scripts/snippet.ts --network baseSepolia
 
+
+npx hardhat run scripts/01_deploy-parent.ts --network moonbaseAlpha
+npx hardhat run scripts/02_deploy-others.ts --network moonbaseAlpha
+
+
 ## Deploying on a real blockchain
 
 1. Deploy on testnet: `pnpm hardhat run scripts/deploy.ts --network NETWORK`
