@@ -204,10 +204,10 @@ header .logo_inside {
 }
 
 .player .hex_button {
-  font-size: 0.9em;
+  font-size: 0.8em;
   min-width: initial;
   width: 100%;
-  max-width: 75%;
+  max-width: 90%;
   background: url(/img/buttons/small-regular.webp) no-repeat center;
   background-size: 100%;
 }
@@ -280,6 +280,12 @@ header .logo_inside {
   left: 50%;
   transform: translate(-50%, 0);
   z-index: 4;
+}
+
+.player > *:last-child button div{
+  left: 50%;
+  transform: translate(-70px, 0);
+  zoom: 0.8;
 }
 
 .absbutt {

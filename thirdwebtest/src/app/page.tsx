@@ -9,11 +9,12 @@ export default function Home() {
   return (
     <main>
       <section id="home">
-        <Image src="/img/logo_aoc.png" className="logo_main" alt="Logo" width={550} height={390} />
+        <Image src="/img/logo_aoc.png" className="logo_main" alt="Logo" width={550} height={453} />
         <div className="d-flex flex-column flex-lg-row justify-content-center wrap_buttons">
           <Link href="./mint" passHref className="hex_button turret-road-bold">
             MINT FREE
           </Link>          
+          
         </div>
       </section>
     </main>
