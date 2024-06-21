@@ -4,7 +4,11 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useActiveAccount, useActiveWalletChain } from "thirdweb/react";
 import { MintAria, MintLuna, MintRyker, MintThaddeus } from '../writeTransactions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLink } from '@fortawesome/free-solid-svg-icons';
+import { faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import moment from 'moment';
+import Link from 'next/link';
 
 interface Config {
   du_ryker: string;
@@ -180,6 +184,33 @@ export default function MintPage() {
               <div className="aoc_panel">
                 <p>AGE OF CHRONOS is a web-based dungeon crawler, find artifacts and unlock the potential of NFTs 2.0.<br /><span>the mint is FREe.</span><br />To play, you must have all 4 characters, you can claim 1 NFT for each character type.<br /><span>The game is coming soon.</span></p>
               </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-12">
+              <ul className="socialLink d-flex flex-row justify-content-center m-0 p-0">
+              <li>
+                <Link href="https://hub.xyz/sfy-labs">
+                  <FontAwesomeIcon icon={faLink} />
+                </Link>
+              </li>
+              <li>
+                <Link href="https://hub.xyz/sfy-labs">
+                  <FontAwesomeIcon icon={faXTwitter} />
+                </Link>
+              </li>
+            </ul>
+            <ul className="brandList  d-flex flex-row justify-content-center m-0 mt-2 mb-3 p-0">
+              <li>
+                <Image src="/img/svg/moonbeam.svg" alt="Moonbeam" width={80} height={30} />
+              </li>
+              <li>
+                <Image src="/img/svg/polkadot.svg" alt="Moonbeam" width={80} height={30} />
+              </li>
+              <li>
+                <Image src="/img/svg/rmrk.svg" alt="Moonbeam" width={80} height={30} />
+              </li>
+            </ul>
             </div>
           </div>
         </div>

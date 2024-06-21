@@ -111,15 +111,6 @@ header .logo_inside {
   max-width: 90%;
 }
 
-.logo_main {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  max-width: 550px;
-}
-
 .img-responsive {
   max-width: 100%;
   height: auto;
@@ -395,6 +386,17 @@ header .logo_inside {
   }
 }
 
+@media (max-width: 1300px){
+  .player .hex_button{
+    font-size: 0.7em;
+    padding: 15px;
+  }
+
+  .player span.name{
+    font-size: 0.6em;
+  }
+}
+
 /* Responsive styles */
 @media (max-width: 990px) {
   .logo_main {
@@ -439,5 +441,14 @@ header .logo_inside {
 
   .player .wrap_images img {
     max-width: 100%;
+  }
+
+  .player .hex_button{
+    font-size: 0.8em;
+    padding: 30px;
+  }
+
+  .player span.name{
+    font-size: 0.8em;
   }
 }

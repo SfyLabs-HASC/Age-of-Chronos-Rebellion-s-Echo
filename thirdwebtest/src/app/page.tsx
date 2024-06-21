@@ -17,7 +17,7 @@ export default function Home() {
         <div className="d-flex flex-column align-items-center homecnt">
           <Image src="/img/logo_aoc.png" alt="Logo" className="img_responsive" width={550} height={453} />      
           <Link href="./mint" passHref className="hex_button turret-road-bold">
-            MINT FREE
+            JOIN THE REBELLION
           </Link>                    
           <ul className="socialLink d-flex flex-row justify-content-center m-0 p-0">
             <li>
