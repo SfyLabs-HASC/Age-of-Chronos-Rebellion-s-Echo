@@ -70,6 +70,18 @@ html, body {
   background-size: cover;
 } 
 
+#home > div > *{
+  z-index: 2;
+}
+
+#home .homecnt{
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translate(0, -50%);
+  z-index: 2;
+}
+
 #inside{
   background: url(/img/inside.webp) center no-repeat;
   background-size: cover;
@@ -360,6 +372,21 @@ header .logo_inside {
 .aoc_panel p span{
   text-transform: uppercase;
   font-weight: 800;
+}
+
+.socialLink, .brandList{
+  list-style-type: none;
+  gap: 12px
+}
+
+.socialLink li a{
+  font-size: 1.3em;
+  color: var(--clr-cyan);
+  transition: .4s;
+}
+
+.socialLink li a:hover{
+  color: var(--clr-white);
 }
 
 @media (max-width: 1450px){

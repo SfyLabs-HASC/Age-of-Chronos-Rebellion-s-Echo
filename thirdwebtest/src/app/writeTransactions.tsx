@@ -126,7 +126,7 @@ const MintButton: React.FC<MintButtonProps> = ({ player, contractAddress, GetBal
                 unstyled
                 className={buttonClassName}
             >
-                <span>{loading ? 'Loading...' : (minted ? 'Claimed' : 'Mint')}</span>
+                <span>{loading ? 'Loading' : (minted ? 'Claimed' : 'Mint')}</span>
             </TransactionButton>
         </ThirdwebProvider>
     );
