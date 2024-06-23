@@ -26,7 +26,7 @@ export default function Home() {
               </Link>
             </li>
             <li>
-              <Link href="https://hub.xyz/sfy-labs">
+              <Link href="https://x.com/SFY_Labs">
                 <FontAwesomeIcon icon={faXTwitter} />
               </Link>
             </li>
