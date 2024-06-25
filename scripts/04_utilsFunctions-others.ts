@@ -675,3 +675,9 @@ export async function mintChildNFT(child: AriaBody, recipient: string) {
     await txchild.wait();
     console.log('Minted Child NFT with asset ID 1 to:', recipient);
 }
+export async function mintChildNFTWithNewAssets(child: AriaBody, recipient: string, assetIds: number[]) {
+    console.log('Minting Child NFT...');
+    const txchild = await child.mintWithAssets(recipient, assetIds);
+    await txchild.wait();
+    console.log('Minted Child NFT with asset ID 1 to:', recipient);
+}

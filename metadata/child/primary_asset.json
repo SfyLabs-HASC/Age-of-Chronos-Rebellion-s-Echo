@@ -1,19 +1,35 @@
 {
-    "name": "Samurai Swords",
-    "description": "Increase your attack +10",
+    "name": "Staff Of Blessing",
+    "description": "Increase your fortune +5. Increase your attack +5. The Staff of Blessing is a magical staff wielded by Thaddeus Luckstride, a skilled manipulator of luck. This staff is both a symbol of power and a tool of benefit. Every spell cast with the staff seems to bring a touch of good fortune, helping the team navigate adversities with grace and wisdom.",
    
-    "image": "ipfs://QmTSv2Aoaq9KmD7EQxM1S3MYe3dpNLTze3fu1DFmFHouYu",
-    "mediaUri": "ipfs://QmTSv2Aoaq9KmD7EQxM1S3MYe3dpNLTze3fu1DFmFHouYu",
-    "animation_url": "ipfs://QmTSv2Aoaq9KmD7EQxM1S3MYe3dpNLTze3fu1DFmFHouYu",
-    "thumbnailUri": "ipfs://QmfYeZoyiUZrn583UJEMUayhXSFbruibdyRvE544kdBE1g",
+    "image": "ipfs://QmPTjWLtCDonc4Q1z3LQLXseCtXHU9JVqvATta3F35Fjmj",
+    "mediaUri": "ipfs://QmPTjWLtCDonc4Q1z3LQLXseCtXHU9JVqvATta3F35Fjmj",
+    "animation_url": "ipfs://QmPTjWLtCDonc4Q1z3LQLXseCtXHU9JVqvATta3F35Fjmj",
+    "thumbnailUri": "ipfs://QmXk4n8BecynWWyEUPbgW2TR1uBnAFtg5cwK3h8bFAdDRY",
     "preferThumb": false,
     "attributes": [
         {
             "label": "Attack",
             "type": "number",
-            "value": 10,
+            "value": 5,
             "trait_type": "Generation",
             "display_type": "number"
+        },
+		
+		{
+            "label": "Fortune",
+            "type": "number",
+            "value": 5,
+            "trait_type": "Generation",
+            "display_type": "number"
+        },
+		
+		{
+            "label": "Rarity",
+            "type": "string",
+            "value": "Common",
+            "trait_type": "Generation",
+            "display_type": "string"
         }
     ]
 }

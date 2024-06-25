@@ -31,18 +31,18 @@ async function main() {
 
 
   const contractParentAddresses: { [key: string]: string } = {
-    "Aria": "0xf6F0130799de29cf1A402290766a1C9c95B6d017",
-    "Luna": "0xe429fb9fD5dcFe9B148f0E6FF922C8A6d12B4f53",
-    "Ryker": "0x972009B42a51CaCd43e059a2C56e92541EF2Bc2f",
-    "Thaddeus": "0xE7AeB43Ed1dE5D357F190847830b2a9f31E0C032"
-};
+    "Aria": "0x870D7B70d763FbD4CFBd980CEE92BeD8ea681859",
+    "Luna": "0x09C774cbD3b784C5f93F053ba56C11c1c036A3Af",
+    "Ryker": "0x456Ad22F5F40B183cc5a8E1AD6377d6A317CDB87",
+    "Thaddeus": "0x959cDAfeeE9ecbd5ea7Ea6C2D3fcB1595F10e8bd"
+  };
 
-const contractCatalogAddresses: { [key: string]: string } = {
-    "Aria": "0xA9390e1009aBC0B3fA9cDfcCaC379CF15DecA3F6",
-    "Luna": "0xCb7aE692aa7C042715FCA463789F1aC91924a2CA",
-    "Ryker": "0x6ad1c0226f5ecc90e109b57c75af3Db7b5ad74aC",
-    "Thaddeus": "0xDDc1Da0373fd9494a6d599E7520543953BA94672"
-};
+  const contractCatalogAddresses: { [key: string]: string } = {
+    "Aria": "0x0a3fdc64FD9799c07f5E13644580914326d54AB3",
+    "Luna": "0x3c48fa60bE6C45704ddcCffA7FbFC36dEe52b045",
+    "Ryker": "0x631934D67177bA789E3e5f1f49d046456624fA6B",
+    "Thaddeus": "0x93b87941640d7f7Bf28cab5AD1B77f40C7570cC7"
+  };
 
 const TimeSquadAria: TimeSquadAria = await ethers.getContractAt('TimeSquadAria', contractParentAddresses.Aria, deployer);
 const TimeSquadLuna: TimeSquadLuna = await ethers.getContractAt('TimeSquadLuna', contractParentAddresses.Luna, deployer);
