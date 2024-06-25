@@ -111,7 +111,7 @@ export async function configureManager(
         console.log(`Manager added as a contributor in ${childName} contract`);
         await delay(1000)
     }
-    console.log('Manager configuration complete.');
+    console.log('Manager configuration complete.', parentName);
 }
 
 export async function configureCatalog(

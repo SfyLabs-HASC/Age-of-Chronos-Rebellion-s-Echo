@@ -5,6 +5,26 @@ import {
   TimeSquadRyker,
   TimeSquadThaddeus,
   AriaBody,
+  AriaHead,
+  AriaLeftHand,
+  AriaRightHand,
+
+  LunaBody,
+  LunaHead,
+  LunaLeftHand,
+  LunaRightHand,
+
+  RykerBody,
+  RykerHead,
+  RykerLeftHand,
+  RykerRightHand,
+
+  ThaddeusBody,
+  ThaddeusHead,
+  ThaddeusLeftHand,
+  ThaddeusRightHand,
+
+  AgeOfChronosManager,
   RMRKCatalogImpl
 } from '../typechain-types';
 import { delay, isHardhatNetwork } from './utils';
@@ -43,6 +63,30 @@ const contractCatalogAddresses: { [key: string]: string } = {
     "Ryker": "0x6ad1c0226f5ecc90e109b57c75af3Db7b5ad74aC",
     "Thaddeus": "0xDDc1Da0373fd9494a6d599E7520543953BA94672"
 };
+
+const contractItemAddresses = {
+    "AriaBody": "0x225f647344418AD2FaBf4282649bd045656870Dc",
+    "AriaHead": "0xFd2694a26127A34DeF6Eddb04760102821ca2dd9",
+    "AriaLeftHand": "0x9Ea72623340C7420f5cAb670e7a77Cca879ED9bD",
+    "AriaRightHand": "0xfF1923f1Ae0601bD962FD2eE4Ad6B285dF668e0d",
+    
+    "LunaBody": "0xBA88F7834D9D3f350222b78b4046c0f12B00d980",
+    "LunaHead": "0xC24f2A9263b9F86680C4F56F2B83E9fFA1ccdc9b",
+    "LunaLeftHand": "0x1F88d1694372BE1cAe8037888A2A2c22E949bb7d",
+    "LunaRightHand": "0x1d67c78882e2dba65659958d1Db09566E5aaf2aC",
+    
+    "RykerBody": "0xc6d66e35DF2f3150056DcC7D2c5d2BA4e719c054",
+    "RykerHead": "0x903eEaC60a50f5f459E5Fa5bF87C5BB0552cF8F0",
+    "RykerLeftHand": "0xbCfc42003bC3eFC7813A355DD514532525dc6b0f",
+    "RykerRightHand": "0x9dB9312A55550B0F6a5fcaAb31F5fBb9Abfbb3Cb",
+    
+    "ThaddeusBody": "0xbbE40d2dC88e21B5FF7600239867ea033725b02a",
+    "ThaddeusHead": "0xC352128862fDE7b6C02edc40D0d8b2F92D472392",
+    "ThaddeusLeftHand": "0xa7A13411b55daFd9c0Cc69f5bfa21B3d71ca6bb7",
+    "ThaddeusRightHand": "0x7ea2542c69B768747583D90a41cF35916571c15C"
+};
+
+const managerAddress: string = "0xC3f10f626A480122D955C220f1090FBfa4Af1770";
 
 const TimeSquadAria: TimeSquadAria = await ethers.getContractAt('TimeSquadAria', contractParentAddresses.Aria, deployer);
 const TimeSquadLuna: TimeSquadLuna = await ethers.getContractAt('TimeSquadLuna', contractParentAddresses.Luna, deployer);
