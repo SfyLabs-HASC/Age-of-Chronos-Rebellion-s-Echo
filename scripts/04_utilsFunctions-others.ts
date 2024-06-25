@@ -102,14 +102,14 @@ export async function configureManager(
     const tx1 = await parent.manageContributor(managerAddress, true);
     await tx1.wait();
     console.log(`Manager added as a contributor in ${parentName} contract`);
-
+    await delay(2000)
     // Adding manager as a contributor in the child contract
     for (const child of childs) {
         let childName = await child.name()
         let tx2 = await child.manageContributor(managerAddress, true);
         await tx2.wait();
         console.log(`Manager added as a contributor in ${childName} contract`);
-        await delay(1000)
+        await delay(2000)
     }
     console.log('Manager configuration complete.', parentName);
 }
