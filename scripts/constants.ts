@@ -82,8 +82,8 @@ export const ARIA_ASSET_METADATA_BODY_URI_1 = `${BASE_IPFS_URI}QmXxsbKs9XwP3G9ef
 export const ARIA_ASSET_METADATA_BODY_URI_2 = `${BASE_IPFS_URI}QmdbVdm5LhJdiPaUwpXL7cvRHjkN9nfYNm5prKgkvbnU4r`;  //secondary asset
 export const ARIA_ASSET_METADATA_HEAD_URI_1 = `${BASE_IPFS_URI}QmXxsbKs9XwP3G9efGMbaRWwAvbXdjJKMBhKB6nh61XBLQ`;  //primary asset
 export const ARIA_ASSET_METADATA_HEAD_URI_2 = `${BASE_IPFS_URI}QmdbVdm5LhJdiPaUwpXL7cvRHjkN9nfYNm5prKgkvbnU4r`;  //secondary asset
-export const ARIA_ASSET_METADATA_LEFT_HAND_URI_1 = `${BASE_IPFS_URI}QmXxsbKs9XwP3G9efGMbaRWwAvbXdjJKMBhKB6nh61XBLQ`;  //primary asset
-export const ARIA_ASSET_METADATA_LEFT_HAND_URI_2 = `${BASE_IPFS_URI}QmdbVdm5LhJdiPaUwpXL7cvRHjkN9nfYNm5prKgkvbnU4r`;  //secondary asset
+export const ARIA_ASSET_METADATA_LEFT_HAND_URI_1 = `${BASE_IPFS_URI}QmeCML3QXx7JQrGs8RxhTiguPrjmSH7Kgyp9rJPR7dBY7n`;  //primary asset
+export const ARIA_ASSET_METADATA_LEFT_HAND_URI_2 = `${BASE_IPFS_URI}QmPNydkynhWURYMVqfy5XsDTDZe2kgCKCQ4YNoGsURqZ9d`;  //secondary asset
 export const ARIA_ASSET_METADATA_RIGHT_HAND_URI_1 = `${BASE_IPFS_URI}QmXxsbKs9XwP3G9efGMbaRWwAvbXdjJKMBhKB6nh61XBLQ`;  //primary asset
 export const ARIA_ASSET_METADATA_RIGHT_HAND_URI_2 = `${BASE_IPFS_URI}QmdbVdm5LhJdiPaUwpXL7cvRHjkN9nfYNm5prKgkvbnU4r`;  //secondary asset
 
@@ -91,8 +91,8 @@ export const LUNA_ASSET_METADATA_BODY_URI_1 = `${BASE_IPFS_URI}Qmcxvk1v9BC99Aqty
 export const LUNA_ASSET_METADATA_BODY_URI_2 = `${BASE_IPFS_URI}QmcZRoCMEYEE3rthU1Fcn1Eg66qTqdtYZPv1zs7FUEqHyD`;  //secondary asset
 export const LUNA_ASSET_METADATA_HEAD_URI_1 = `${BASE_IPFS_URI}Qmcxvk1v9BC99AqtyrHxUdUabUW4e5sWKhdZeGsgkXNdaW`;  //primary asset
 export const LUNA_ASSET_METADATA_HEAD_URI_2 = `${BASE_IPFS_URI}QmcZRoCMEYEE3rthU1Fcn1Eg66qTqdtYZPv1zs7FUEqHyD`;  //secondary asset
-export const LUNA_ASSET_METADATA_LEFT_HAND_URI_1 = `${BASE_IPFS_URI}Qmcxvk1v9BC99AqtyrHxUdUabUW4e5sWKhdZeGsgkXNdaW`;  //primary asset
-export const LUNA_ASSET_METADATA_LEFT_HAND_URI_2 = `${BASE_IPFS_URI}QmcZRoCMEYEE3rthU1Fcn1Eg66qTqdtYZPv1zs7FUEqHyD`;  //secondary asset
+export const LUNA_ASSET_METADATA_LEFT_HAND_URI_1 = `${BASE_IPFS_URI}QmULHMVLfr4EhHHQQU5tLQU6YTHSH7JpXWAaeCvZeGPVR6`;  //primary asset
+export const LUNA_ASSET_METADATA_LEFT_HAND_URI_2 = `${BASE_IPFS_URI}QmcVoXYag51FgwZQL1mu9i9e2b1hRR5nUq3ezmsy1NhH8L`;  //secondary asset
 export const LUNA_ASSET_METADATA_RIGHT_HAND_URI_1 = `${BASE_IPFS_URI}Qmcxvk1v9BC99AqtyrHxUdUabUW4e5sWKhdZeGsgkXNdaW`;  //primary asset
 export const LUNA_ASSET_METADATA_RIGHT_HAND_URI_2 = `${BASE_IPFS_URI}QmcZRoCMEYEE3rthU1Fcn1Eg66qTqdtYZPv1zs7FUEqHyD`;  //secondary asset
 
@@ -102,8 +102,8 @@ export const RYKER_ASSET_METADATA_HEAD_URI_1 = `${BASE_IPFS_URI}QmUfSu5RUku8BU5D
 export const RYKER_ASSET_METADATA_HEAD_URI_2 = `${BASE_IPFS_URI}QmcvH2PKiCAEah4Y2e2A9SwanLHiJKCW6a2yhYyme52iYh`;  //secondary asset
 export const RYKER_ASSET_METADATA_LEFT_HAND_URI_1 = `${BASE_IPFS_URI}QmUfSu5RUku8BU5DQRsPZKLabBCNQ6hzKsHJmMPrYiQHWP`;  //primary asset
 export const RYKER_ASSET_METADATA_LEFT_HAND_URI_2 = `${BASE_IPFS_URI}QmcvH2PKiCAEah4Y2e2A9SwanLHiJKCW6a2yhYyme52iYh`;  //secondary asset
-export const RYKER_ASSET_METADATA_RIGHT_HAND_URI_1 = `${BASE_IPFS_URI}QmUfSu5RUku8BU5DQRsPZKLabBCNQ6hzKsHJmMPrYiQHWP`;  //primary asset
-export const RYKER_ASSET_METADATA_RIGHT_HAND_URI_2 = `${BASE_IPFS_URI}QmcvH2PKiCAEah4Y2e2A9SwanLHiJKCW6a2yhYyme52iYh`;  //secondary asset
+export const RYKER_ASSET_METADATA_RIGHT_HAND_URI_1 = `${BASE_IPFS_URI}QmWxzdHSgMCMSHpDNNtvqKJ9pCp8a46KC7rzv97vAsnc9s`;  //primary asset
+export const RYKER_ASSET_METADATA_RIGHT_HAND_URI_2 = `${BASE_IPFS_URI}Qmdo9vj8wFpZ4FxZfC9xK1ZR3rvcTumr5znqibCSLoY1nL`;  //secondary asset
 
 
 export const THADDEUS_ASSET_METADATA_BODY_URI_1 = `${BASE_IPFS_URI}QmQkcyVohhCP4QcNGGcaZz6tty8SQjkewpith2hazZALsb`;  //primary asset
@@ -112,8 +112,8 @@ export const THADDEUS_ASSET_METADATA_HEAD_URI_1 = `${BASE_IPFS_URI}QmQkcyVohhCP4
 export const THADDEUS_ASSET_METADATA_HEAD_URI_2 = `${BASE_IPFS_URI}QmVKyJTGiwGG36xoNTXGxPpL44z3PUdexrmodWQrgfy3bT`;  //secondary asset
 export const THADDEUS_ASSET_METADATA_LEFT_HAND_URI_1 = `${BASE_IPFS_URI}QmQkcyVohhCP4QcNGGcaZz6tty8SQjkewpith2hazZALsb`;  //primary asset
 export const THADDEUS_ASSET_METADATA_LEFT_HAND_URI_2 = `${BASE_IPFS_URI}QmVKyJTGiwGG36xoNTXGxPpL44z3PUdexrmodWQrgfy3bT`;  //secondary asset
-export const THADDEUS_ASSET_METADATA_RIGHT_HAND_URI_1 = `${BASE_IPFS_URI}QmQkcyVohhCP4QcNGGcaZz6tty8SQjkewpith2hazZALsb`;  //primary asset
-export const THADDEUS_ASSET_METADATA_RIGHT_HAND_URI_2 = `${BASE_IPFS_URI}QmVKyJTGiwGG36xoNTXGxPpL44z3PUdexrmodWQrgfy3bT`;  //secondary asset
+export const THADDEUS_ASSET_METADATA_RIGHT_HAND_URI_1 = `${BASE_IPFS_URI}QmYWJJudFzCX432kTVYLgRaQWRMcVkisXPoFwt9DYbS7cs`;  //primary asset
+export const THADDEUS_ASSET_METADATA_RIGHT_HAND_URI_2 = `${BASE_IPFS_URI}QmedKyBVSbQnFkmdi4QFJpCSmGTJufggvzwZs1UtKeVjzR`;  //secondary asset
 
 
 // Equippable groups  todo forse qui il doppio bug?

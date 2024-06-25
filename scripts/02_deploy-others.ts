@@ -276,22 +276,16 @@ const TimeSquadThaddeus: TimeSquadThaddeus = await ethers.getContractAt('TimeSqu
   await delay(1000);
   //await mintChildNFT(rykerBody, deployer.address);
   //await mintChildNFT(rykerHead, deployer.address);
-  await mintChildNFT(rykerLeftHand, deployer.address);
-  //await mintChildNFT(rykerRightHand, deployer.address);
+  //await mintChildNFT(rykerLeftHand, deployer.address);
+  await mintChildNFT(rykerRightHand, deployer.address);
   await delay(1000);
   //await mintChildNFT(thaddeusBody, deployer.address);
   //await mintChildNFT(thaddeusHead, deployer.address);
-  await mintChildNFT(thaddeusLeftHand, deployer.address);
-  //await mintChildNFT(thaddeusRightHand, deployer.address);
+  //await mintChildNFT(thaddeusLeftHand, deployer.address);
+  await mintChildNFT(thaddeusRightHand, deployer.address);
   await delay(1000);
 
   console.log('Minted child with id 1');
-
-  //mintro altri parenti
-  await TimeSquadAria.manageContributor(deployer,true);
-  await TimeSquadLuna.manageContributor(deployer,true);
-  await TimeSquadRyker.manageContributor(deployer,true);
-  await TimeSquadThaddeus.manageContributor(deployer,true);
   console.log(" fine")
 
 }

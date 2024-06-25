@@ -181,7 +181,7 @@ export async function addAssetsAria(
     console.log('Adding assets to parent...');
 
     
-
+/*
     //BODY
     //set primary asset
     const txChild01_body = await childBody.addAssetEntry(
@@ -229,7 +229,7 @@ export async function addAssetsAria(
     );
     await txChild03_head.wait();
     await delay(1000)
-
+*/
 
     //LEFT HAND
     //set primary asset
@@ -255,7 +255,7 @@ export async function addAssetsAria(
     await txChild03_left_hand.wait();
     await delay(1000)
 
-
+/*
     //RIGHT HAND
     //set primary asset
     const txChild01_right_hand = await childRightHand.addAssetEntry(
@@ -279,7 +279,7 @@ export async function addAssetsAria(
     );
     await txChild03_right_hand.wait();
     await delay(1000)
-
+*/
 }
 
 export async function addAssetsLuna(
@@ -292,7 +292,7 @@ export async function addAssetsLuna(
     console.log('Adding assets to parent...');
 
     
-
+/*
     //BODY
     //set primary asset
     const txChild01_body = await childBody.addAssetEntry(
@@ -340,7 +340,7 @@ export async function addAssetsLuna(
     );
     await txChild03_head.wait();
     await delay(1000)
-
+*/
 
     //LEFT HAND
     //set primary asset
@@ -366,7 +366,7 @@ export async function addAssetsLuna(
     await txChild03_left_hand.wait();
     await delay(1000)
 
-
+/*
     //RIGHT HAND
     //set primary asset
     const txChild01_right_hand = await childRightHand.addAssetEntry(
@@ -390,7 +390,7 @@ export async function addAssetsLuna(
     );
     await txChild03_right_hand.wait();
     await delay(1000)
-
+*/
 }
 
 export async function addAssetsRyker(
@@ -404,7 +404,7 @@ export async function addAssetsRyker(
 
 
 
-
+/*
     //BODY
     //set primary asset
     const txChild01_body = await childBody.addAssetEntry(
@@ -453,7 +453,9 @@ export async function addAssetsRyker(
     await txChild03_head.wait();
     await delay(1000)
 
+*/
 
+/*
     //LEFT HAND
     //set primary asset
     const txChild01_left_hand = await childLeftHand.addAssetEntry(
@@ -477,7 +479,7 @@ export async function addAssetsRyker(
     );
     await txChild03_left_hand.wait();
     await delay(1000)
-
+*/
 
     //RIGHT HAND
     //set primary asset
@@ -514,7 +516,7 @@ export async function addAssetsThaddeus(
 ): Promise<void> {
     console.log('Adding assets to parent...');
 
-
+/*
     //BODY
     //set primary asset
     const txChild01_body = await childBody.addAssetEntry(
@@ -563,7 +565,9 @@ export async function addAssetsThaddeus(
     await txChild03_head.wait();
     await delay(1000)
 
+*/
 
+/*
     //LEFT HAND
     //set primary asset
     const txChild01_left_hand = await childLeftHand.addAssetEntry(
@@ -587,7 +591,7 @@ export async function addAssetsThaddeus(
     );
     await txChild03_left_hand.wait();
     await delay(1000)
-
+*/
 
     //RIGHT HAND
     //set primary asset
