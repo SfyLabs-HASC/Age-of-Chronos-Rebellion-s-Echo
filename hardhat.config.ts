@@ -124,7 +124,7 @@ const config: HardhatUserConfig = {
     },
   },
   gasReporter: {
-    enabled: process.env.REPORT_GAS !== undefined,
+    enabled: false,
     currency: 'USD',
     gasPrice: 125, // gwei
     token: 'GLMR', // Token name per prendere il prezzo
