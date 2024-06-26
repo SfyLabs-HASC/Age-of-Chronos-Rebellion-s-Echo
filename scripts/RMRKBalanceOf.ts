@@ -72,7 +72,7 @@ async function main() {
         "ThaddeusRightHand": "0x2455E46D0b0AD9EbB4612E0b39b8D4421379C59e"
     };
 
-    const CalculateBalanceContractAddress = "0x5Aa4FF6dae3818EF161B7320e9Bca392feDe60ba";
+    const CalculateBalanceContractAddress = "0x65Ba5B0E51cE5569b59DB769b7B1A8D6E7C224B9";
 
     const TimeSquadAria: TimeSquadAria = await ethers.getContractAt('TimeSquadAria', contractParentAddresses.Aria, deployer);
     const TimeSquadLuna: TimeSquadLuna = await ethers.getContractAt('TimeSquadLuna', contractParentAddresses.Luna, deployer);
@@ -117,8 +117,9 @@ async function main() {
 
     // Calcolo del balance
     const [totalBalance, tokenIds] = await calculateBalance.calculateBalance(directOwnerAddress, collectionParentAddresses, childAddress);
+    const totalSupply = await rykerRightHand.totalSupply();
     console.log('Total Balance:', totalBalance.toString());
-    console.log('Token IDs:', tokenIds.map(id => id.toString()).join(', '));
+    console.log('totalSupply:', totalSupply);
 
     // Utilizzo della funzione tokenOfOwnerByIndex in un ciclo for
     for (let i = 0; i < tokenIds.length; i++) {
@@ -127,6 +128,7 @@ async function main() {
     }
 
     console.log("fine");
+
 
 }
 

@@ -46,67 +46,48 @@ contract RMRKCalculateBalance {
         address[] memory collectionParentAddresses,
         address childAddress
     ) external view returns (uint256, uint256[] memory) {
-        (uint256 totalBalance, uint256[] memory tokenIds) = getTotalBalanceAndTokenIds(directOwnerAddress, collectionParentAddresses, childAddress);
-        return (totalBalance, tokenIds);
-    }
-
-    function getTotalBalanceAndTokenIds(
-        address directOwnerAddress,
-        address[] memory collectionParentAddresses,
-        address childAddress
-    ) internal view returns (uint256, uint256[] memory) {
         uint256 nestedChildBalance = 0;
         uint256 unNestedChildBalance = 0;
         uint256 totalBalance = 0;
-        uint256 tokenCount = 0;
+        uint256[] memory tokenIds;
 
-        // First pass: calculate the total number of tokens to determine the size of the array
         for (uint256 i = 0; i < collectionParentAddresses.length; i++) {
             uint256 parentBalance = IParent(collectionParentAddresses[i])
                 .balanceOf(directOwnerAddress);
 
             if (parentBalance > 0) {
                 for (uint256 j = 0; j < parentBalance; j++) {
-                    nestedChildBalance += IChild(childAddress).balanceOf(
+                    uint256 parentTokenId = IParent(collectionParentAddresses[i])
+                        .tokenOfOwnerByIndex(directOwnerAddress, j);
+                    uint256 childBalance = IChild(childAddress).balanceOf(
                         collectionParentAddresses[i]
                     );
-                    tokenCount += nestedChildBalance;
+
+                    nestedChildBalance += childBalance;
+
+                    for (uint256 k = 0; k < childBalance; k++) {
+                        uint256 childTokenId = IChild(childAddress)
+                            .tokenOfOwnerByIndex(collectionParentAddresses[i], k);
+                        
+                        // Aggiungere il tokenId all'array
+                        tokenIds = _append(tokenIds, childTokenId);
+                    }
                 }
             }
         }
 
-        unNestedChildBalance = IChild(childAddress).balanceOf(directOwnerAddress);
-        tokenCount += unNestedChildBalance;
-
-        // Allocate the array with the correct size
-        uint256[] memory tokenIds = new uint256[](tokenCount);
-        uint256 index = 0;
-
-        // Second pass: populate the array with token IDs
-        for (uint256 i = 0; i < collectionParentAddresses.length; i++) {
-            uint256 parentBalance = IParent(collectionParentAddresses[i])
-                .balanceOf(directOwnerAddress);
-
-            if (parentBalance > 0) {
-                for (uint256 j = 0; j < parentBalance; j++) {
-                    index = addChildTokensToTokenIds(
-                        IParent(collectionParentAddresses[i]),
-                        IChild(childAddress),
-                        collectionParentAddresses[i],
-                        tokenIds,
-                        index
-                    );
-                }
-            }
-        }
+        unNestedChildBalance = IChild(childAddress).balanceOf(
+            directOwnerAddress
+        );
 
         for (uint256 j = 0; j < unNestedChildBalance; j++) {
             uint256 childTokenId = IChild(childAddress).tokenOfOwnerByIndex(
                 directOwnerAddress,
                 j
             );
-            tokenIds[index] = childTokenId;
-            index++;
+
+            // Aggiungere il tokenId all'array
+            tokenIds = _append(tokenIds, childTokenId);
         }
 
         totalBalance = nestedChildBalance + unNestedChildBalance;
@@ -114,24 +95,13 @@ contract RMRKCalculateBalance {
         return (totalBalance, tokenIds);
     }
 
-    function addChildTokensToTokenIds(
-        IParent parent,
-        IChild child,
-        address parentAddress,
-        uint256[] memory tokenIds,
-        uint256 index
-    ) internal view returns (uint256) {
-        uint256 childBalance = child.balanceOf(parentAddress);
-
-        for (uint256 k = 0; k < childBalance; k++) {
-            uint256 childTokenId = child.tokenOfOwnerByIndex(
-                parentAddress,
-                k
-            );
-            tokenIds[index] = childTokenId;
-            index++;
+    function _append(uint256[] memory array, uint256 item) internal pure returns (uint256[] memory) {
+        uint256 length = array.length;
+        uint256[] memory newArray = new uint256[](length + 1);
+        for (uint256 i = 0; i < length; i++) {
+            newArray[i] = array[i];
         }
-
-        return index;
+        newArray[length] = item;
+        return newArray;
     }
 }
