@@ -49,19 +49,38 @@ contract RMRKCalculateBalance {
         uint256 nestedChildBalance = 0;
         uint256 unNestedChildBalance = 0;
         uint256 totalBalance = 0;
-        uint256[] memory tokenIds = new uint256[](0);
+        uint256[] memory tokenIds = new uint256[](0); // Array per conservare i tokenId
 
         for (uint256 i = 0; i < collectionParentAddresses.length; i++) {
-            nestedChildBalance = _calculateNestedBalance(
-                directOwnerAddress,
-                collectionParentAddresses[i],
-                childAddress,
-                tokenIds,
-                nestedChildBalance
-            );
+            uint256 parentBalance = IParent(collectionParentAddresses[i])
+                .balanceOf(directOwnerAddress);
+
+            if (parentBalance > 0) {
+                for (uint256 j = 0; j < parentBalance; j++) {
+                    nestedChildBalance += IChild(childAddress).balanceOf(
+                        collectionParentAddresses[i]
+                    );
+
+                    for (uint256 k = 0; k < nestedChildBalance; k++) {
+                        uint256 childTokenId = IChild(childAddress)
+                        .tokenOfOwnerByIndex(collectionParentAddresses[i], k);
+                        
+                        // Aggiungere il tokenId all'array
+                        uint256 length = tokenIds.length;
+                        uint256[] memory newTokenIds = new uint256[](length + 1);
+                        for (uint256 l = 0; l < length; l++) {
+                            newTokenIds[l] = tokenIds[l];
+                        }
+                        newTokenIds[length] = childTokenId;
+                        tokenIds = newTokenIds;
+                    }
+                }
+            }
         }
 
-        unNestedChildBalance = IChild(childAddress).balanceOf(directOwnerAddress);
+        unNestedChildBalance = IChild(childAddress).balanceOf(
+            directOwnerAddress
+        );
 
         for (uint256 j = 0; j < unNestedChildBalance; j++) {
             uint256 childTokenId = IChild(childAddress).tokenOfOwnerByIndex(
@@ -69,47 +88,18 @@ contract RMRKCalculateBalance {
                 j
             );
 
-            tokenIds = _append(tokenIds, childTokenId);
+            // Aggiungere il tokenId all'array
+            uint256 length = tokenIds.length;
+            uint256[] memory newTokenIds = new uint256[](length + 1);
+            for (uint256 k = 0; k < length; k++) {
+                newTokenIds[k] = tokenIds[k];
+            }
+            newTokenIds[length] = childTokenId;
+            tokenIds = newTokenIds;
         }
 
         totalBalance = nestedChildBalance + unNestedChildBalance;
 
         return (totalBalance, tokenIds);
-    }
-
-    function _calculateNestedBalance(
-        address directOwnerAddress,
-        address collectionParentAddress,
-        address childAddress,
-        uint256[] memory tokenIds,
-        uint256 nestedChildBalance
-    ) internal view returns (uint256) {
-        uint256 parentBalance = IParent(collectionParentAddress).balanceOf(directOwnerAddress);
-
-        if (parentBalance > 0) {
-            for (uint256 j = 0; j < parentBalance; j++) {
-                uint256 parentTokenId = IParent(collectionParentAddress).tokenOfOwnerByIndex(directOwnerAddress, j);
-                uint256 childBalance = IChild(childAddress).balanceOf(collectionParentAddress);
-
-                nestedChildBalance += childBalance;
-
-                for (uint256 k = 0; k < childBalance; k++) {
-                    uint256 childTokenId = IChild(childAddress).tokenOfOwnerByIndex(collectionParentAddress, k);
-                    tokenIds = _append(tokenIds, childTokenId);
-                }
-            }
-        }
-
-        return nestedChildBalance;
-    }
-
-    function _append(uint256[] memory array, uint256 item) internal pure returns (uint256[] memory) {
-        uint256 length = array.length;
-        uint256[] memory newArray = new uint256[](length + 1);
-        for (uint256 i = 0; i < length; i++) {
-            newArray[i] = array[i];
-        }
-        newArray[length] = item;
-        return newArray;
     }
 }

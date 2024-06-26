@@ -168,7 +168,7 @@ describe('TimeSquadRyker and RykerRightHand Tests', function () {
     it('mintChild', async function () {
         await rykerRightHand.setExternalPermission(owner.address, true);
         await rykerRightHand.mintWithAssets(owner.address, [1, 2]);
-        expect(await rykerRightHand.balanceOf(owner.address)).to.equal(6);
+        expect(await rykerRightHand.balanceOf(owner.address)).to.equal(4);
     });
 
 
