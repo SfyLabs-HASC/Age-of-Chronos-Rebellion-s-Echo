@@ -5,7 +5,7 @@ import {
   TimeSquadRyker,
   TimeSquadAria,
   RykerRightHand,
-  RMRKCalculateBalance,
+  CalculateRecursivelyBalance,
   RMRKCatalogImpl,
 } from '../typechain-types';
 import * as C from '../scripts/constants';
@@ -103,8 +103,8 @@ async function deployContracts() {
   await rykerRightHand.waitForDeployment();
 
   // Deploy Calculate Balance Contract
-  const RMRKCalculateBalance = await ethers.getContractFactory('RMRKCalculateBalance');
-  const calculateBalance = await RMRKCalculateBalance.deploy();
+  const CalculateRecursivelyBalance = await ethers.getContractFactory('CalculateRecursivelyBalance');
+  const calculateBalance = await CalculateRecursivelyBalance.deploy();
   await calculateBalance.waitForDeployment();
 
   const childBody = await rykerRightHand.getAddress();
@@ -161,7 +161,7 @@ describe('TimeSquadRyker and RykerRightHand Tests', function () {
   let timeSquadRyker: TimeSquadRyker;
   let timeSquadAria: TimeSquadAria;
   let rykerRightHand: RykerRightHand;
-  let calculateBalance: RMRKCalculateBalance;
+  let calculateBalance: CalculateRecursivelyBalance;
 
   beforeEach(async function () {
     ({ owner, addr1, timeSquadRyker,timeSquadAria, rykerRightHand, calculateBalance } =

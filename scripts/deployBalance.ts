@@ -1,4 +1,5 @@
 import { ethers, run, network } from 'hardhat';
+import { delay, isHardhatNetwork } from './utils';
 
 async function main() {
     const [deployer] = await ethers.getSigners();
@@ -6,13 +7,23 @@ async function main() {
 
 
     // Deploying RMRKCalculateBalance contract
-    const RMRKCalculateBalance = await ethers.getContractFactory('RMRKCalculateBalance');
-    const rmrkCalculateBalance = await RMRKCalculateBalance.deploy();
+    const CalculateRecursivelyBalance = await ethers.getContractFactory('CalculateRecursivelyBalance');
+    const calculateRecursivelyBalance = await CalculateRecursivelyBalance.deploy();
 
-    await rmrkCalculateBalance.waitForDeployment();
-    console.log('RMRKCalculateBalance deployed to:', await rmrkCalculateBalance.getAddress());
+    await calculateRecursivelyBalance.waitForDeployment();
+    const contractAddress = await calculateRecursivelyBalance.getAddress();
+    console.log('CalculateBalance deployed to:', contractAddress);
 
 
+    if (!isHardhatNetwork()) {
+        console.log('Waiting 20 seconds before verifying contract...');
+        await delay(20000);
+        await run('verify:verify', {
+            address: contractAddress,
+            constructorArguments: [],
+            contract: `contracts/manager/CalculateRecursivelyBalance.sol:CalculateRecursivelyBalance`,
+        });
+    }
     console.log('Deployment complete!');
 }
 

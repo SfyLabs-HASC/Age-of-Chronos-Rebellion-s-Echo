@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /************************************************
- **        Manager Contract for AgeOfChronos    **
+ **        Calculate Recursively Balance        **
  **        Made by @ercole89 for SFY Labs       **
  **            sfy.startup@gmail.com            **
  ************************************************/
@@ -38,7 +38,7 @@ interface IChild {
     ) external view returns (uint256);
 }
 
-contract RMRKCalculateBalance {
+contract CalculateRecursivelyBalance {
     constructor() {}
 
     function calculateBalance(

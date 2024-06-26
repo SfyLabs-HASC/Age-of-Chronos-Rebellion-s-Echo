@@ -24,7 +24,7 @@ import {
     ThaddeusLeftHand,
     ThaddeusRightHand,
 
-    RMRKCalculateBalance,
+    CalculateRecursivelyBalance,
     RMRKCatalogImpl
 } from '../typechain-types';
 import { delay, isHardhatNetwork } from './utils';
@@ -72,7 +72,7 @@ async function main() {
         "ThaddeusRightHand": "0x2455E46D0b0AD9EbB4612E0b39b8D4421379C59e"
     };
 
-    const CalculateBalanceContractAddress = "0x65Ba5B0E51cE5569b59DB769b7B1A8D6E7C224B9";
+    const CalculateBalanceContractAddress = "0x79506fD8b53c557D498cEdB1761Ed4A1D0593616";
 
     const TimeSquadAria: TimeSquadAria = await ethers.getContractAt('TimeSquadAria', contractParentAddresses.Aria, deployer);
     const TimeSquadLuna: TimeSquadLuna = await ethers.getContractAt('TimeSquadLuna', contractParentAddresses.Luna, deployer);
@@ -106,7 +106,7 @@ async function main() {
     const thaddeusLeftHand: ThaddeusLeftHand = await ethers.getContractAt('ThaddeusLeftHand', contractItemAddresses.ThaddeusLeftHand, deployer);
     const thaddeusRightHand: ThaddeusRightHand = await ethers.getContractAt('ThaddeusRightHand', contractItemAddresses.ThaddeusRightHand, deployer);
 
-    const calculateBalance: RMRKCalculateBalance = await ethers.getContractAt('RMRKCalculateBalance', CalculateBalanceContractAddress, deployer);
+    const calculateBalance: CalculateRecursivelyBalance = await ethers.getContractAt('CalculateRecursivelyBalance', CalculateBalanceContractAddress, deployer);
 
     console.log('start');
 
@@ -116,9 +116,8 @@ async function main() {
     const childAddress = contractItemAddresses.RykerRightHand;
 
     // Calcolo del balance
-    const [totalBalance, tokenIds] = await calculateBalance.calculateBalance(directOwnerAddress, collectionParentAddresses, childAddress);
+    const tokenIds = await calculateBalance.calculateBalance(directOwnerAddress, collectionParentAddresses, childAddress);
     const totalSupply = await rykerRightHand.totalSupply();
-    console.log('Total Balance:', totalBalance.toString());
     console.log('totalSupply:', totalSupply);
 
     // Utilizzo della funzione tokenOfOwnerByIndex in un ciclo for
