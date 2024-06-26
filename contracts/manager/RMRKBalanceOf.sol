@@ -86,7 +86,7 @@ contract RMRKCalculateBalance {
                 tokenIds = _append(tokenIds, childTokenId);
             }
         }
-        
+
         return tokenIds;
     }
 
@@ -113,11 +113,10 @@ contract RMRKCalculateBalance {
                 address childOnwer = IChild(childAddress).ownerOf(childTokenId);
                 if (childOnwer == directOwnerAddress) {
                     if (!_contains(tokenIds, childTokenId)) {
-                        tokenIds = _append(tokenIds, childTokenId);  
+                        tokenIds = _append(tokenIds, childTokenId);
                     }
                 }
             }
-           
         }
         return tokenIds;
     }
