@@ -51,10 +51,12 @@ contract RMRKCalculateBalance {
         address childAddress
     ) external view returns (uint256, uint256[] memory) {
         uint256 totalChildBalance = 0;
+        uint256 totalChildBalance1 = 0;
+        uint256 totalChildBalance2 = 0;
         uint256[] memory tokenIds = new uint256[](0);
 
         // Calcola il bilancio dei child NFT non annidati
-        (totalChildBalance, tokenIds) = _calculateUnnestedBalance(
+        (totalChildBalance1, tokenIds) = _calculateUnnestedBalance(
             directOwnerAddress,
             childAddress,
             tokenIds
@@ -62,15 +64,14 @@ contract RMRKCalculateBalance {
 
         // Calcola il bilancio dei child NFT annidati
         for (uint256 i = 0; i < collectionParentAddresses.length; i++) {
-            (totalChildBalance, tokenIds) = _calculateNestedBalance(
+            (totalChildBalance2, tokenIds) = _calculateNestedBalance(
                 directOwnerAddress,
                 collectionParentAddresses[i],
                 childAddress,
-                totalChildBalance,
                 tokenIds
             );
         }
-
+        totalChildBalance = totalChildBalance1 + totalChildBalance2;
         return (totalChildBalance, tokenIds);
     }
 
@@ -79,6 +80,8 @@ contract RMRKCalculateBalance {
         address childAddress,
         uint256[] memory tokenIds
     ) internal view returns (uint256, uint256[] memory) {
+        uint256 nestedChildCount = 0;
+        uint256 totalBalance = 0;
         uint256 childBalance = IChild(childAddress).balanceOf(
             directOwnerAddress
         );
@@ -91,19 +94,23 @@ contract RMRKCalculateBalance {
 
             if (!_contains(tokenIds, childTokenId)) {
                 tokenIds = _append(tokenIds, childTokenId);
+                
+            }else{
+                nestedChildCount++;
             }
         }
-
-        return (childBalance, tokenIds);
+        totalBalance = childBalance - nestedChildCount;
+        return (totalBalance, tokenIds);
     }
 
     function _calculateNestedBalance(
         address directOwnerAddress,
         address collectionParentAddress,
         address childAddress,
-        uint256 nestedChildBalance,
         uint256[] memory tokenIds
     ) internal view returns (uint256, uint256[] memory) {
+        uint256 nestedChildCount = 0;
+        uint256 totalBalance = 0;
         uint256 parentBalance = IParent(collectionParentAddress).balanceOf(
             directOwnerAddress
         );
@@ -122,15 +129,18 @@ contract RMRKCalculateBalance {
                 if (childOnwer == directOwnerAddress) {
                     if (!_contains(tokenIds, childTokenId)) {
                         tokenIds = _append(tokenIds, childTokenId);
-                        //TODO count -1 al balance se si verifica ciò
+                        
+                    }else{
+                        nestedChildCount++;
                     }
                 }
             }
-
-            nestedChildBalance += childBalance;
+            childBalance-=nestedChildCount;
+            totalBalance+=childBalance;
+            
         }
-
-        return (nestedChildBalance, tokenIds);
+        totalBalance -= nestedChildCount;
+        return (totalBalance, tokenIds);
     }
 
     function _contains(

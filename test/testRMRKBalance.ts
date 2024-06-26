@@ -208,6 +208,16 @@ describe('TimeSquadRyker and RykerRightHand Tests', function () {
             );
         }
 
+        // NestTransferFrom 1 child token into the first parent token for owner   
+        
+        await rykerRightHand.connect(addr1).nestTransferFrom(
+                addr1.address,
+                collectionParentAddress,
+                22,
+                1, // first parent token ID for addr1
+                "0x"
+            );
+
         
 
 
@@ -226,7 +236,7 @@ describe('TimeSquadRyker and RykerRightHand Tests', function () {
 
     it('balance', async function () {
         // Calculate balance
-        console.log("addr1 could be 19 tokens!")
+        console.log("addr1 could be 18 tokens!")
         const directOwnerAddress = addr1.address;
         const collectionParentAddresses = [await timeSquadRyker.getAddress()];
         const childAddress = await rykerRightHand.getAddress();
