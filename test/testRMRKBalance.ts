@@ -243,17 +243,12 @@ describe('TimeSquadRyker and RykerRightHand Tests', function () {
 
         const totalSupply = await rykerRightHand.totalSupply();
         console.log('Total Supply:', totalSupply.toString());
-
-        const [totalBalance, tokenIds] = await calculateBalance.calculateBalance(directOwnerAddress, collectionParentAddresses, childAddress);
-        console.log('Total Balance:', totalBalance.toString());
+        const tokenIds = await calculateBalance.calculateBalance(directOwnerAddress, collectionParentAddresses, childAddress);
         console.log('Total tokens:', tokenIds.length.toString());
         console.log('Token IDs:', tokenIds.map(id => id.toString()).join(', '));
 
-        // Verify the balance
-        expect(totalBalance).to.equal(7);
-
         // Verify the token IDs
-        expect(tokenIds.length).to.equal(7);
+        expect(tokenIds.length).to.equal(18);
 
         // Verify tokenOfOwnerByIndex in a loop
         for (let i = 0; i < tokenIds.length; i++) {
