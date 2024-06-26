@@ -10,7 +10,7 @@ async function main() {
     const rmrkCalculateBalance = await RMRKCalculateBalance.deploy();
 
     await rmrkCalculateBalance.waitForDeployment();
-    console.log('RMRKCalculateBalance deployed to:', rmrkCalculateBalance.getAddress());
+    console.log('RMRKCalculateBalance deployed to:', await rmrkCalculateBalance.getAddress());
 
 
     console.log('Deployment complete!');
