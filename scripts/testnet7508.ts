@@ -51,10 +51,10 @@ async function main() {
 
 
   const contractParentAddresses: { [key: string]: string } = {
-    "Aria": "0xa911E59719EA3356273F0Ae2164E61eE8686873C",
-    "Luna": "0x88007b95A8C63289f2282C2396C03779428c525E",
-    "Ryker": "0xb69440dcE199C234a19B3E3216ca522ffa1D8b11",
-    "Thaddeus": "0xf01b387d6530FF4CA06200e9573b52808C5e7a64"
+    "Aria": "0x870d7b70d763fbd4cfbd980cee92bed8ea681859",
+    "Luna": "0x09c774cbd3b784c5f93f053ba56c11c1c036a3af",
+    "Ryker": "0x456Ad22F5F40B183cc5a8E1AD6377d6A317CDB87",
+    "Thaddeus": "0x959cdafeee9ecbd5ea7ea6c2d3fcb1595f10e8bd"
   };
   
   const contractCatalogAddresses: { [key: string]: string } = {
