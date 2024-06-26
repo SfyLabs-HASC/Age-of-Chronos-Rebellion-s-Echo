@@ -150,6 +150,18 @@ describe('TimeSquadRyker and RykerRightHand Tests', function () {
             console.log(`Minted RykerRightHand token ID: ${tokenId.toString()}`);
         }
 
+        // Mint 10 RykerRightHand (child) NFTs for addr1
+        for (let i = 0; i < 10; i++) {
+            await rykerRightHand.setExternalPermission(addr1.address, true);
+            await rykerRightHand.connect(addr1).mintWithAssets(addr1.address, [1, 2]);
+        }
+
+        // Verify the tokens were minted correctly
+        for (let i = 0; i < 10; i++) {
+            const tokenId = await rykerRightHand.tokenOfOwnerByIndex(addr1.address, i);
+            console.log(`Minted RykerRightHand token ID: ${tokenId.toString()}`);
+        }
+
         // NestTransferFrom three child tokens into the first parent token for owner
         const collectionParentAddress = await timeSquadRyker.getAddress();
         for (let i = 1; i <= 3; i++) {
@@ -196,11 +208,7 @@ describe('TimeSquadRyker and RykerRightHand Tests', function () {
             );
         }
 
-        // Mint 10 RykerRightHand (child) NFTs for addr1
-        for (let i = 0; i < 10; i++) {
-            await rykerRightHand.setExternalPermission(addr1.address, true);
-            await rykerRightHand.connect(addr1).mintWithAssets(addr1.address, [1, 2]);
-        }
+        
 
 
     });
@@ -225,7 +233,7 @@ describe('TimeSquadRyker and RykerRightHand Tests', function () {
 
         const totalSupply = await rykerRightHand.totalSupply();
         console.log('Total Supply:', totalSupply.toString());
-        
+
         const [totalBalance, tokenIds] = await calculateBalance.calculateBalance(directOwnerAddress, collectionParentAddresses, childAddress);
         console.log('Total Balance:', totalBalance.toString());
         console.log('Total tokens:', tokenIds.length.toString());
