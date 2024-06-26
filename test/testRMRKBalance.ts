@@ -128,70 +128,114 @@ describe('TimeSquadRyker and RykerRightHand Tests', function () {
     beforeEach(async function () {
         ({ owner, addr1, timeSquadRyker, rykerRightHand, calculateBalance } = await loadFixture(deployContracts));
 
-        // Mint a TimeSquadRyker (parent) NFT
+        // Mint two TimeSquadRyker (parent) NFTs for owner
+        await timeSquadRyker.manageContributor(owner.address, true) //to mint multiple times
+        await timeSquadRyker.mint(owner.address);
         await timeSquadRyker.mint(owner.address);
 
-        // Mint 5 RykerRightHand (child) NFTs
-        for (let i = 0; i < 5; i++) {
+        // Mint two TimeSquadRyker (parent) NFTs for addr1
+        await timeSquadRyker.manageContributor(addr1.address, true) //to mint multiple times
+        await timeSquadRyker.connect(addr1).mint(addr1.address);
+        await timeSquadRyker.connect(addr1).mint(addr1.address);
+
+        // Mint 17 RykerRightHand (child) NFTs for owner
+        for (let i = 0; i < 17; i++) {
             await rykerRightHand.setExternalPermission(owner.address, true);
             await rykerRightHand.mintWithAssets(owner.address, [1, 2]);
         }
 
         // Verify the tokens were minted correctly
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 17; i++) {
             const tokenId = await rykerRightHand.tokenOfOwnerByIndex(owner.address, i);
             console.log(`Minted RykerRightHand token ID: ${tokenId.toString()}`);
         }
 
-        
-        // NestTransferFrom two child tokens into the parent token
+        // NestTransferFrom three child tokens into the first parent token for owner
         const collectionParentAddress = await timeSquadRyker.getAddress();
-        const childAddress = await rykerRightHand.getAddress();
-        await rykerRightHand.nestTransferFrom(
-            owner.address,
-            collectionParentAddress,
-            1,
-            1,
-            "0x"
-        );
+        for (let i = 1; i <= 3; i++) {
+            await rykerRightHand.nestTransferFrom(
+                owner.address,
+                collectionParentAddress,
+                i,
+                1,
+                "0x"
+            );
+        }
 
-        await rykerRightHand.nestTransferFrom(
-            owner.address,
-            collectionParentAddress,
-            2,
-            1,
-            "0x"
-        );
-        
+        // NestTransferFrom five child tokens into the second parent token for owner
+        for (let i = 4; i <= 8; i++) {
+            await rykerRightHand.nestTransferFrom(
+                owner.address,
+                collectionParentAddress,
+                i,
+                2,
+                "0x"
+            );
+        }
+
+
+        // NestTransferFrom seven child token into the first parent token for addr1
+        for (let i = 9; i <= 15; i++) {
+            await rykerRightHand.nestTransferFrom(
+                owner.address,
+                collectionParentAddress,
+                i,
+                3, // First parent token ID for addr1
+                "0x"
+            );
+        }
+
+        // NestTransferFrom two child tokens into the second parent token for addr1
+        for (let i = 16; i <= 17; i++) {
+            await rykerRightHand.nestTransferFrom(
+                owner.address,
+                collectionParentAddress,
+                i,
+                4, // Second parent token ID for addr1
+                "0x"
+            );
+        }
+
+        // Mint 10 RykerRightHand (child) NFTs for addr1
+        for (let i = 0; i < 10; i++) {
+            await rykerRightHand.setExternalPermission(addr1.address, true);
+            await rykerRightHand.connect(addr1).mintWithAssets(addr1.address, [1, 2]);
+        }
+
+
     });
 
     it('mintChild', async function () {
         await rykerRightHand.setExternalPermission(owner.address, true);
         await rykerRightHand.mintWithAssets(owner.address, [1, 2]);
-        expect(await rykerRightHand.balanceOf(owner.address)).to.equal(4);
+        expect(await rykerRightHand.balanceOf(owner.address)).to.equal(11);
     });
-
 
     it('mintParent', async function () {
         await timeSquadRyker.connect(addr1).mint(addr1.address);
-        expect(await timeSquadRyker.balanceOf(addr1.address)).to.equal(1);
+        expect(await timeSquadRyker.balanceOf(addr1.address)).to.equal(3);
     });
 
     it('balance', async function () {
         // Calculate balance
-        const directOwnerAddress = owner.address;
+        console.log("addr1 could be 19 tokens!")
+        const directOwnerAddress = addr1.address;
         const collectionParentAddresses = [await timeSquadRyker.getAddress()];
         const childAddress = await rykerRightHand.getAddress();
 
+        const totalSupply = await rykerRightHand.totalSupply();
+        console.log('Total Supply:', totalSupply.toString());
+        
         const [totalBalance, tokenIds] = await calculateBalance.calculateBalance(directOwnerAddress, collectionParentAddresses, childAddress);
         console.log('Total Balance:', totalBalance.toString());
+        console.log('Total tokens:', tokenIds.length.toString());
         console.log('Token IDs:', tokenIds.map(id => id.toString()).join(', '));
 
         // Verify the balance
-        expect(totalBalance).to.equal(5);
+        expect(totalBalance).to.equal(7);
 
         // Verify the token IDs
-        expect(tokenIds.length).to.equal(5);
+        expect(tokenIds.length).to.equal(7);
 
         // Verify tokenOfOwnerByIndex in a loop
         for (let i = 0; i < tokenIds.length; i++) {
