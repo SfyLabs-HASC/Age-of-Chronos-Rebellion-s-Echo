@@ -10,23 +10,48 @@ pragma solidity ^0.8.21;
 
 interface IParent {
     function setSoulbound(uint256 tokenId, bool state) external;
+
     function ownerOf(uint256 tokenId) external view returns (address);
+
+    function totalSupply() external view returns (uint256);
 }
 
 interface IChild {
     function setSoulbound(uint256 tokenId, bool state) external;
+
     function ownerOf(uint256 tokenId) external view returns (address);
+
     function setExternalPermission(address account, bool permission) external;
 }
 
 contract AgeOfChronosManager {
     address public owner;
-    address public contributor;
+    mapping(address => bool) public contributors;
 
     address public rykerCollection;
     address public lunaCollection;
     address public ariaCollection;
     address public thaddeusCollection;
+
+    address public ariaBodyCollection;
+    address public ariaHeadCollection;
+    address public ariaLeftHandCollection;
+    address public ariaRightHandCollection;
+
+    address public lunaBodyCollection;
+    address public lunaHeadCollection;
+    address public lunaLeftHandCollection;
+    address public lunaRightHandCollection;
+
+    address public rykerBodyCollection;
+    address public rykerHeadCollection;
+    address public rykerLeftHandCollection;
+    address public rykerRightHandCollection;
+
+    address public thaddeusBodyCollection;
+    address public thaddeusHeadCollection;
+    address public thaddeusLeftHandCollection;
+    address public thaddeusRightHandCollection;
 
     uint256 public fee; // Variable to store the fee amount in wei
 
@@ -40,9 +65,10 @@ contract AgeOfChronosManager {
 
     modifier onlyOwnerOrContributor() {
         require(
-            msg.sender == owner || msg.sender == contributor,
+            msg.sender == owner || contributors[msg.sender],
             "Caller is not the owner or contributor"
         );
+
         _;
     }
 
@@ -114,6 +140,13 @@ contract AgeOfChronosManager {
         uint256 thaddeusTokenId
     ) external payable {
         require(msg.value == fee, "Incorrect fee amount");
+        require(
+            tokenExists(rykerCollection, rykerTokenId) &&
+                tokenExists(lunaCollection, lunaTokenId) &&
+                tokenExists(ariaCollection, ariaTokenId) &&
+                tokenExists(thaddeusCollection, thaddeusTokenId),
+            "One or more tokens do not exist"
+        );
         require(
             IParent(rykerCollection).ownerOf(rykerTokenId) == msg.sender,
             "Caller does not own the Ryker token"
@@ -210,11 +243,58 @@ contract AgeOfChronosManager {
     }
 
     /**
-     * @notice Sets the contributor address. Only callable by the owner.
+     * @notice Sets the addresses for all child collections. Only callable by the owner.
+     * @param _childCollections An array containing the new addresses for the child collections.
+     * The array must contain addresses in the following order:
+     * [ariaBody, ariaHead, ariaLeftHand, ariaRightHand, lunaBody, lunaHead, lunaLeftHand, lunaRightHand,
+     * rykerBody, rykerHead, rykerLeftHand, rykerRightHand, thaddeusBody, thaddeusHead, thaddeusLeftHand, thaddeusRightHand]
+     */
+    function setChildCollections(
+        address[] calldata _childCollections
+    ) external onlyOwner {
+        require(_childCollections.length == 16, "Invalid number of addresses");
+
+        ariaBodyCollection = _childCollections[0];
+        ariaHeadCollection = _childCollections[1];
+        ariaLeftHandCollection = _childCollections[2];
+        ariaRightHandCollection = _childCollections[3];
+        lunaBodyCollection = _childCollections[4];
+        lunaHeadCollection = _childCollections[5];
+        lunaLeftHandCollection = _childCollections[6];
+        lunaRightHandCollection = _childCollections[7];
+        rykerBodyCollection = _childCollections[8];
+        rykerHeadCollection = _childCollections[9];
+        rykerLeftHandCollection = _childCollections[10];
+        rykerRightHandCollection = _childCollections[11];
+        thaddeusBodyCollection = _childCollections[12];
+        thaddeusHeadCollection = _childCollections[13];
+        thaddeusLeftHandCollection = _childCollections[14];
+        thaddeusRightHandCollection = _childCollections[15];
+    }
+
+    /**
+     * @notice Adds a contributor. Only callable by the owner.
      * @param _contributor The address of the new contributor.
      */
-    function setContributor(address _contributor) external onlyOwner {
-        contributor = _contributor;
+    function addContributor(address _contributor) external onlyOwner {
+        contributors[_contributor] = true;
+    }
+
+    /**
+     * @notice Removes a contributor. Only callable by the owner.
+     * @param _contributor The address of the contributor to remove.
+     */
+    function removeContributor(address _contributor) external onlyOwner {
+        contributors[_contributor] = false;
+    }
+
+    /**
+     * @notice Checks if an address is a contributor.
+     * @param account The address to check.
+     * @return True if the address is a contributor, false otherwise.
+     */
+    function isContributor(address account) public view returns (bool) {
+        return contributors[account];
     }
 
     /**
@@ -244,18 +324,18 @@ contract AgeOfChronosManager {
                 hasPaidFee[thaddeusTokenId],
             "One or more tokens have not paid the fee"
         );
-/*
-        IParent(rykerCollection).setSoulbound(rykerTokenId, true);
-        IParent(lunaCollection).setSoulbound(lunaTokenId, true);
-        IParent(ariaCollection).setSoulbound(ariaTokenId, true);
-        IParent(thaddeusCollection).setSoulbound(thaddeusTokenId, true);
-*/
+
         inMission[rykerTokenId] = true;
         inMission[lunaTokenId] = true;
         inMission[ariaTokenId] = true;
         inMission[thaddeusTokenId] = true;
 
-        emit MissionStarted(rykerTokenId, lunaTokenId, ariaTokenId, thaddeusTokenId);
+        emit MissionStarted(
+            rykerTokenId,
+            lunaTokenId,
+            ariaTokenId,
+            thaddeusTokenId
+        );
     }
 
     /**
@@ -264,7 +344,7 @@ contract AgeOfChronosManager {
      * @param lunaTokenId The token ID for Luna.
      * @param ariaTokenId The token ID for Aria.
      * @param thaddeusTokenId The token ID for Thaddeus.
-     * @param whichChild Specifies which child's permission to set (1: Ryker, 2: Luna, 3: Aria, 4: Thaddeus).
+     * @param whichChild Specifies which child's permission to set (1-16).
      */
     function endMission(
         uint256 rykerTokenId,
@@ -275,30 +355,44 @@ contract AgeOfChronosManager {
     ) external onlyOwnerOrContributor {
         require(
             inMission[rykerTokenId] &&
-            inMission[lunaTokenId] &&
-            inMission[ariaTokenId] &&
-            inMission[thaddeusTokenId],
+                inMission[lunaTokenId] &&
+                inMission[ariaTokenId] &&
+                inMission[thaddeusTokenId],
             "One or more tokens are not currently in a mission"
         );
 
-/*
         IParent(rykerCollection).setSoulbound(rykerTokenId, false);
         IParent(lunaCollection).setSoulbound(lunaTokenId, false);
         IParent(ariaCollection).setSoulbound(ariaTokenId, false);
         IParent(thaddeusCollection).setSoulbound(thaddeusTokenId, false);
-*/
-        // Grant external permission for the owner of the specified child token
-        if (whichChild == 1) {
-            IChild(rykerCollection).setExternalPermission(IParent(rykerCollection).ownerOf(rykerTokenId), true);
-        } else if (whichChild == 2) {
-            IChild(lunaCollection).setExternalPermission(IParent(lunaCollection).ownerOf(lunaTokenId), true);
-        } else if (whichChild == 3) {
-            IChild(ariaCollection).setExternalPermission(IParent(ariaCollection).ownerOf(ariaTokenId), true);
-        } else if (whichChild == 4) {
-            IChild(thaddeusCollection).setExternalPermission(IParent(thaddeusCollection).ownerOf(thaddeusTokenId), true);
-        } else {
-            revert("Invalid whichChild value");
-        }
+
+        // Array of child collections
+        address[16] memory childCollections = [
+            ariaBodyCollection,
+            ariaHeadCollection,
+            ariaLeftHandCollection,
+            ariaRightHandCollection,
+            lunaBodyCollection,
+            lunaHeadCollection,
+            lunaLeftHandCollection,
+            lunaRightHandCollection,
+            rykerBodyCollection,
+            rykerHeadCollection,
+            rykerLeftHandCollection,
+            rykerRightHandCollection,
+            thaddeusBodyCollection,
+            thaddeusHeadCollection,
+            thaddeusLeftHandCollection,
+            thaddeusRightHandCollection
+        ];
+
+        require(whichChild > 0 && whichChild <= 16, "Invalid whichChild value");
+
+        address childCollection = childCollections[whichChild - 1];
+        IChild(childCollection).setExternalPermission(
+            IParent(rykerCollection).ownerOf(rykerTokenId),
+            true
+        );
 
         inMission[rykerTokenId] = false;
         inMission[lunaTokenId] = false;
@@ -310,7 +404,12 @@ contract AgeOfChronosManager {
         hasPaidFee[ariaTokenId] = false;
         hasPaidFee[thaddeusTokenId] = false;
 
-        emit MissionEnded(rykerTokenId, lunaTokenId, ariaTokenId, thaddeusTokenId);
+        emit MissionEnded(
+            rykerTokenId,
+            lunaTokenId,
+            ariaTokenId,
+            thaddeusTokenId
+        );
     }
 
     /**
@@ -333,5 +432,31 @@ contract AgeOfChronosManager {
         collections[2] = ariaCollection;
         collections[3] = thaddeusCollection;
         return collections;
+    }
+
+    /**
+     * @dev Internal function to check if a token exists in the collection.
+     * @param collection The address of the collection contract.
+     * @param tokenId The token ID to check.
+     * @return True if the token exists, false otherwise.
+     */
+    function tokenExists(
+        address collection,
+        uint256 tokenId
+    ) internal view returns (bool) {
+        return tokenId <= IParent(collection).totalSupply();
+    }
+
+    /**
+     * @dev Internal function to check if a token exists in the collection.
+     * @param collection The address of the collection contract.
+     * @param tokenId The token ID to check.
+     * @return True if the token exists, false otherwise.
+     */
+    function isTokenExists(
+        address collection,
+        uint256 tokenId
+    ) external view returns (bool) {
+        return tokenExists(collection, tokenId);
     }
 }

@@ -8,10 +8,12 @@ import './tasks/attributes';
 import './tasks/metadata';
 import 'hardhat-gas-reporter'; // Import the gas reporter
 
-const accounts = process.env.PRIVATE_KEY && process.env.ADDR1_PRIVATE_KEY
+const accounts = process.env.PRIVATE_KEY && process.env.ADDR2_PRIVATE_KEY && process.env.ADDR1_PRIVATE_KEY && process.env.ADDR3_PRIVATE_KEY
   ? [
       process.env.PRIVATE_KEY,
-      process.env.ADDR1_PRIVATE_KEY
+      process.env.ADDR1_PRIVATE_KEY,
+      process.env.ADDR2_PRIVATE_KEY,
+      process.env.ADDR3_PRIVATE_KEY
     ]
   : [];
 
