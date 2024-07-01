@@ -878,26 +878,62 @@ describe('AgeOfChronosManagerContract', function () {
 });
 
 
-  describe('MissionManagement', function () {
-    beforeEach(async function () {
+describe('MissionManagement', function () {
+  beforeEach(async function () {
       await manager.setFee(ethers.parseEther('0.1'));
-    });
 
-    it('Should start and end a mission', async function () {
+      await timeSquadRyker.mint(addr1.address);
+      await timeSquadLuna.mint(addr1.address);
+      await timeSquadAria.mint(addr1.address);
+      await timeSquadThaddeus.mint(addr1.address);
+
       await timeSquadRyker.mint(addr2.address);
       await timeSquadLuna.mint(addr2.address);
       await timeSquadAria.mint(addr2.address);
       await timeSquadThaddeus.mint(addr2.address);
 
-      await manager.connect(addr2).payFee(1, 1, 1, 1, { value: ethers.parseEther('0.1') });
-
-      await manager.startMission(1, 1, 1, 1);
-      expect(await manager.isTokenInMission(1)).to.equal(true);
-
-      await manager.endMission(1, 1, 1, 1, 1);
-      expect(await manager.isTokenInMission(1)).to.equal(false);
-    });
+      await timeSquadRyker.mint(owner.address);
+      await timeSquadLuna.mint(owner.address);
+      await timeSquadAria.mint(owner.address);
+      await timeSquadThaddeus.mint(owner.address);
   });
+
+  it('Should not allow starting the same mission twice for the same account', async function () {
+      await manager.connect(addr2).payFee(2, 2, 2, 2, { value: ethers.parseEther('0.1') });
+      await manager.startMission(2, 2, 2, 2);
+      await expect(manager.startMission(2, 2, 2, 2)).to.be.revertedWith('One or more tokens are already in a mission');
+  });
+
+  it('Should not allow ending a mission without starting it first', async function () {
+      await manager.connect(addr2).payFee(2, 2, 2, 2, { value: ethers.parseEther('0.1') });
+      await expect(manager.endMission(2, 2, 2, 2, 1)).to.be.revertedWith('One or more tokens are not currently in a mission');
+  });
+
+  it('Should not allow ending a mission twice after starting it', async function () {
+      await manager.connect(addr2).payFee(2, 2, 2, 2, { value: ethers.parseEther('0.1') });
+      await manager.startMission(2, 2, 2, 2);
+      await manager.endMission(2, 2, 2, 2, 1);
+
+      await expect(manager.endMission(2, 2, 2, 2, 1)).to.be.revertedWith('One or more tokens are not currently in a mission');
+  });
+
+  it('Should allow ending missions for two different accounts', async function () {
+      // Account 1
+      await manager.connect(addr2).payFee(2, 2, 2, 2, { value: ethers.parseEther('0.1') });
+      await manager.startMission(2, 2, 2, 2);
+
+      // Account 2
+      await manager.connect(addr1).payFee(1,1,1,1, { value: ethers.parseEther('0.1') });
+      await manager.startMission(1,1,1,1);
+
+      // End missions
+      await manager.endMission(1, 1, 1, 1, 1);
+      await manager.endMission(2, 2, 2, 2, 1);
+
+      expect(await manager.isTokenInMission(1)).to.equal(false);
+      expect(await manager.isTokenInMission(2)).to.equal(false);
+  });
+});
 
   describe('PermissionManagement', function () {
     it('Should set and check external permission', async function () {
