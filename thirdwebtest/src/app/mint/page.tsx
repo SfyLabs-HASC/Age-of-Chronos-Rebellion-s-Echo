@@ -158,7 +158,7 @@ export default function MintPage() {
               </div>
             </div>
             <div className={`col-12 col-lg-3 player green ${isMinted.Thaddeus ? 'hasMinted' : 'noMint'}`}>
-              <span className="name turret-road-bold">THADDEUS LUCKSTRAID</span>
+              <span className="name turret-road-bold">THADDEUS LUCKSTRIDE</span>
               <div className="wrap_images">
                 <img src="/img/taddeus_luckstride_off.webp" className="img-responsive front" alt="Thaddeus Luckstraid Off" />
                 <img src="/img/taddeus_luckstride.webp" className="img-responsive back" alt="Thaddeus Luckstraid" />
