@@ -140,7 +140,7 @@ async function main() {
   const attributesKey = "multiCorp";
   const accessType = 0;  //0 is owner
 
-  /*
+  
   let tx = await tokenAttributesContract.manageAccessControl(
     collection,
     attributesKey,
@@ -148,7 +148,7 @@ async function main() {
     deployer.address,
   );
   await tx.wait(); 
-*/
+
 
   
   /*

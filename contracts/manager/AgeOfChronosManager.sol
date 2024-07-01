@@ -1,37 +1,68 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /************************************************
-**        Manager Contract for AgeOfChronos    **
-**        Made by @ercole89 for SFY Labs       **
-**            sfy.startup@gmail.com            **
-************************************************/
- 
+ **        Manager Contract for AgeOfChronos    **
+ **        Made by @ercole89 for SFY Labs       **
+ **            sfy.startup@gmail.com            **
+ ************************************************/
+
 pragma solidity ^0.8.21;
 
 interface IParent {
     function setSoulbound(uint256 tokenId, bool state) external;
+
     function ownerOf(uint256 tokenId) external view returns (address);
 }
 
 contract AgeOfChronosManager {
     address public owner;
-    address[] public parentAddresses;
+    address public contributor;
+
+    address public rykerCollection;
+    address public lunaCollection;
+    address public ariaCollection;
+    address public thaddeusCollection;
+
     uint256 public fee; // Variable to store the fee amount in wei
 
     mapping(address => bool) private inMission;
     mapping(uint256 => bool) private hasPaidFee; // Mapping to track who has paid the fee
     mapping(address => uint256) private lastMissionStart; // Mapping to track the last mission start time
 
-    uint256 private constant MISSION_COOLDOWN = 24 hours; // Cooldown period for starting a mission
-
     modifier onlyOwner() {
         require(msg.sender == owner, "Caller is not the owner");
         _;
     }
 
-    event MissionStarted(address[] collectionAddresses, uint256[] tokenIds);
-    event MissionEnded(address[] collectionAddresses, uint256[] tokenIds);
-    event FeePaid(address payer, uint256[] tokenIds);
+    modifier onlyOwnerOrContributor() {
+        require(
+            msg.sender == owner || msg.sender == contributor,
+            "Caller is not the owner or contributor"
+        );
+        _;
+    }
+
+    event MissionStarted(
+        uint256 rykerTokenId,
+        uint256 lunaTokenId,
+        uint256 ariaTokenId,
+        uint256 thaddeusTokenId
+    );
+
+    event MissionEnded(
+        uint256 rykerTokenId,
+        uint256 lunaTokenId,
+        uint256 ariaTokenId,
+        uint256 thaddeusTokenId
+    );
+
+    event FeePaid(
+        address payer,
+        uint256 rykerTokenId,
+        uint256 lunaTokenId,
+        uint256 ariaTokenId,
+        uint256 thaddeusTokenId
+    );
 
     /**
      * @notice Sets the deployer as the owner upon contract creation.
@@ -49,6 +80,15 @@ contract AgeOfChronosManager {
     }
 
     /**
+     * @notice Allows the owner to withdraw all collected fees from the contract.
+     */
+    function drainFees() external onlyOwner {
+        uint256 contractBalance = address(this).balance;
+        require(contractBalance > 0, "No fees to drain");
+        payable(owner).transfer(contractBalance);
+    }
+
+    /**
      * @notice Returns the current fee amount.
      * @return The current fee amount.
      */
@@ -57,20 +97,48 @@ contract AgeOfChronosManager {
     }
 
     /**
-     * @notice Allows a user to pay the fee. The fee must match the preset amount.
-     * @param collectionAddresses Array of collection addresses associated with the token IDs.
-     * @param tokenIds Array of token IDs for which the fee is being paid.
+     * @notice Allows a user to pay the fee for multiple tokens. The fee must match the preset amount.
+     * @param rykerTokenId The token ID for Ryker.
+     * @param lunaTokenId The token ID for Luna.
+     * @param ariaTokenId The token ID for Aria.
+     * @param thaddeusTokenId The token ID for Thaddeus.
      */
-    function payFee(address[] calldata collectionAddresses, uint256[] calldata tokenIds) external payable {
+    function payFee(
+        uint256 rykerTokenId,
+        uint256 lunaTokenId,
+        uint256 ariaTokenId,
+        uint256 thaddeusTokenId
+    ) external payable {
         require(msg.value == fee, "Incorrect fee amount");
-        require(collectionAddresses.length == tokenIds.length, "Mismatched input lengths");
-        
-        for (uint256 i = 0; i < tokenIds.length; i++) {
-            require(IParent(collectionAddresses[i]).ownerOf(tokenIds[i]) == msg.sender, "Caller does not own the token");
-            hasPaidFee[tokenIds[i]] = true;
-        }
+        require(
+            IParent(rykerCollection).ownerOf(rykerTokenId) == msg.sender,
+            "Caller does not own the Ryker token"
+        );
+        require(
+            IParent(lunaCollection).ownerOf(lunaTokenId) == msg.sender,
+            "Caller does not own the Luna token"
+        );
+        require(
+            IParent(ariaCollection).ownerOf(ariaTokenId) == msg.sender,
+            "Caller does not own the Aria token"
+        );
+        require(
+            IParent(thaddeusCollection).ownerOf(thaddeusTokenId) == msg.sender,
+            "Caller does not own the Thaddeus token"
+        );
 
-        emit FeePaid(msg.sender, tokenIds);
+        hasPaidFee[rykerTokenId] = true;
+        hasPaidFee[lunaTokenId] = true;
+        hasPaidFee[ariaTokenId] = true;
+        hasPaidFee[thaddeusTokenId] = true;
+
+        emit FeePaid(
+            msg.sender,
+            rykerTokenId,
+            lunaTokenId,
+            ariaTokenId,
+            thaddeusTokenId
+        );
     }
 
     /**
@@ -84,101 +152,127 @@ contract AgeOfChronosManager {
 
     /**
      * @notice Sets the fee payment status of a token. Only callable by the owner.
-     * @param tokenId The ID of the token.
+     * @param rykerTokenId The token ID for Ryker.
+     * @param lunaTokenId The token ID for Luna.
+     * @param ariaTokenId The token ID for Aria.
+     * @param thaddeusTokenId The token ID for Thaddeus.
      * @param status The new fee payment status (true for paid, false for not paid).
      */
-    function setFeePaymentStatus(uint256 tokenId, bool status) external onlyOwner {
-        hasPaidFee[tokenId] = status;
+    function setFeePaymentStatus(
+        uint256 rykerTokenId,
+        uint256 lunaTokenId,
+        uint256 ariaTokenId,
+        uint256 thaddeusTokenId,
+        bool status
+    ) external onlyOwnerOrContributor {
+        hasPaidFee[rykerTokenId] = status;
+        hasPaidFee[lunaTokenId] = status;
+        hasPaidFee[ariaTokenId] = status;
+        hasPaidFee[thaddeusTokenId] = status;
     }
 
     /**
-     * @notice Adds a new parent address. Only callable by the owner.
-     * @param _newParent The new parent address to add.
+     * @notice Sets the Ryker collection address. Only callable by the owner.
+     * @param _rykerCollection The new Ryker collection address.
      */
-    function addParentAddress(address _newParent) external onlyOwner {
-        parentAddresses.push(_newParent);
+    function setRykerCollection(address _rykerCollection) external onlyOwner {
+        rykerCollection = _rykerCollection;
     }
 
     /**
-     * @notice Removes a parent address. Only callable by the owner.
-     * @param _parentAddress The parent address to remove.
+     * @notice Sets the Luna collection address. Only callable by the owner.
+     * @param _lunaCollection The new Luna collection address.
      */
-    function removeParentAddress(address _parentAddress) external onlyOwner {
-        uint256 length = parentAddresses.length;
-        for (uint256 i = 0; i < length; i++) {
-            if (parentAddresses[i] == _parentAddress) {
-                parentAddresses[i] = parentAddresses[length - 1];
-                parentAddresses.pop();
-                break;
-            }
-        }
+    function setLunaCollection(address _lunaCollection) external onlyOwner {
+        lunaCollection = _lunaCollection;
     }
 
     /**
-     * @notice Sets the soulbound state of a token. Only callable by the owner.
-     * @param tokenId The ID of the token.
-     * @param state The new state of the token (true for soulbound, false for transferable).
-     * @param parentAddress The address of the parent contract.
+     * @notice Sets the Aria collection address. Only callable by the owner.
+     * @param _ariaCollection The new Aria collection address.
      */
-    function setSoulbound(uint256 tokenId, bool state, address parentAddress) external onlyOwner {
-        IParent(parentAddress).setSoulbound(tokenId, state);
+    function setAriaCollection(address _ariaCollection) external onlyOwner {
+        ariaCollection = _ariaCollection;
     }
 
     /**
-     * @notice Sets the soulbound state for a range of tokens. Only callable by the owner.
-     * @param startTokenId The ID of the first token in the range.
-     * @param endTokenId The ID of the last token in the range.
-     * @param state The new state of the tokens (true for soulbound, false for transferable).
-     * @param parentAddress The address of the parent contract.
+     * @notice Sets the Thaddeus collection address. Only callable by the owner.
+     * @param _thaddeusCollection The new Thaddeus collection address.
      */
-    function bulkSoulbound(uint256 startTokenId, uint256 endTokenId, bool state, address parentAddress) external onlyOwner {
-        require(startTokenId <= endTokenId, "Invalid token ID range");
-        for (uint256 tokenId = startTokenId; tokenId <= endTokenId; tokenId++) {
-            IParent(parentAddress).setSoulbound(tokenId, state);
-        }
+    function setThaddeusCollection(
+        address _thaddeusCollection
+    ) external onlyOwner {
+        thaddeusCollection = _thaddeusCollection;
     }
 
     /**
-     * @notice Transfers ownership of the contract to a new owner. Only callable by the current owner.
-     * @param newOwner The address of the new owner.
+     * @notice Sets the contributor address. Only callable by the owner.
+     * @param _contributor The address of the new contributor.
      */
-    function transferOwnership(address newOwner) external onlyOwner {
-        require(newOwner != address(0), "Invalid new owner address");
-        owner = newOwner;
+    function setContributor(address _contributor) external onlyOwner {
+        contributor = _contributor;
     }
 
     /**
-     * @notice Starts a mission by setting the soulbound state for a list of tokens. Only callable by the owner.
-     * @param collectionAddresses Array of collection addresses associated with the token IDs.
-     * @param tokenIds Array of token IDs to start the mission for.
+     * @notice Starts a mission by setting the soulbound state for a list of tokens. Only callable by the owner or contributor.
+     * @param ryker The token ID for Ryker.
+     * @param luna The token ID for Luna.
+     * @param aria The token ID for Aria.
+     * @param thaddeus The token ID for Thaddeus.
      */
-    function startMission(address[] calldata collectionAddresses, uint256[] calldata tokenIds) external onlyOwner {
-        require(collectionAddresses.length == tokenIds.length, "Mismatched input lengths");
-        require(block.timestamp >= lastMissionStart[msg.sender] + MISSION_COOLDOWN, "Mission cooldown in effect");
-        for (uint256 i = 0; i < collectionAddresses.length; i++) {
-            require(hasPaidFee[tokenIds[i]], "Token has not paid the fee");
-        }
-        for (uint256 i = 0; i < collectionAddresses.length; i++) {
-            inMission[collectionAddresses[i]] = true;
-            IParent(collectionAddresses[i]).setSoulbound(tokenIds[i], true);
-        }
-        lastMissionStart[msg.sender] = block.timestamp;
-        emit MissionStarted(collectionAddresses, tokenIds);
+    function startMission(
+        uint256 ryker,
+        uint256 luna,
+        uint256 aria,
+        uint256 thaddeus
+    ) external onlyOwnerOrContributor {
+        require(!inMission[msg.sender], "Already in a mission");
+        require(
+            hasPaidFee[ryker] &&
+                hasPaidFee[luna] &&
+                hasPaidFee[aria] &&
+                hasPaidFee[thaddeus],
+            "One or more tokens have not paid the fee"
+        );
+
+/*
+        IParent(rykerCollection).setSoulbound(ryker, true);
+        IParent(lunaCollection).setSoulbound(luna, true);
+        IParent(ariaCollection).setSoulbound(aria, true);
+        IParent(thaddeusCollection).setSoulbound(thaddeus, true);
+*/
+        inMission[msg.sender] = true;
+
+        emit MissionStarted(ryker, luna, aria, thaddeus);
     }
 
     /**
-     * @notice Ends a mission by resetting the soulbound state for a list of tokens. Only callable by the owner.
-     * @param collectionAddresses Array of collection addresses associated with the token IDs.
-     * @param tokenIds Array of token IDs to end the mission for.
+     * @notice Ends a mission by resetting the soulbound state for a list of tokens. Only callable by the owner or contributor.
+     * @param ryker The token ID for Ryker.
+     * @param luna The token ID for Luna.
+     * @param aria The token ID for Aria.
+     * @param thaddeus The token ID for Thaddeus.
      */
-    function endMission(address[] calldata collectionAddresses, uint256[] calldata tokenIds) external onlyOwner {
-        require(collectionAddresses.length == tokenIds.length, "Mismatched input lengths");
-        for (uint256 i = 0; i < collectionAddresses.length; i++) {
-            IParent(collectionAddresses[i]).setSoulbound(tokenIds[i], false);
-            inMission[collectionAddresses[i]] = false;
-            hasPaidFee[tokenIds[i]] = false; // Reset fee payment status
-        }
-        emit MissionEnded(collectionAddresses, tokenIds);
+    function endMission(
+        uint256 ryker,
+        uint256 luna,
+        uint256 aria,
+        uint256 thaddeus
+    ) external onlyOwnerOrContributor {
+        require(inMission[msg.sender], "Not currently in a mission");
+
+        IParent(rykerCollection).setSoulbound(ryker, false);
+        IParent(lunaCollection).setSoulbound(luna, false);
+        IParent(ariaCollection).setSoulbound(aria, false);
+        IParent(thaddeusCollection).setSoulbound(thaddeus, false);
+
+        inMission[msg.sender] = false;
+        hasPaidFee[ryker] = false;
+        hasPaidFee[luna] = false;
+        hasPaidFee[aria] = false;
+        hasPaidFee[thaddeus] = false;
+
+        emit MissionEnded(ryker, luna, aria, thaddeus);
     }
 
     /**
@@ -191,10 +285,15 @@ contract AgeOfChronosManager {
     }
 
     /**
-     * @notice Returns the list of parent addresses.
-     * @return An array of parent addresses.
+     * @notice Returns the list of collection addresses.
+     * @return An array of collection addresses.
      */
-    function getParentAddresses() external view returns (address[] memory) {
-        return parentAddresses;
+    function getCollectionAddresses() external view returns (address[] memory) {
+        address[] memory collections = new address[](4);
+        collections[0] = rykerCollection;
+        collections[1] = lunaCollection;
+        collections[2] = ariaCollection;
+        collections[3] = thaddeusCollection;
+        return collections;
     }
 }
