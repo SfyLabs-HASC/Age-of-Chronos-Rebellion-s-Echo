@@ -805,33 +805,91 @@ describe('AgeOfChronosManagerContract', function () {
 
   describe('FeeManagement', function () {
     it('Should set and get fee correctly', async function () {
-      await manager.setFee(ethers.parseEther('0.1'));
-      expect(await manager.getFee()).to.equal(ethers.parseEther('0.1'));
+        await manager.setFee(ethers.parseEther('0.1'));
+        expect(await manager.getFee()).to.equal(ethers.parseEther('0.1'));
     });
 
     it('Should allow the owner to drain fees', async function () {
-      await manager.setFee(ethers.parseEther('0.1'));
-
-      await manager.connect(addr1).payFee(1, 1, 1, 1, { value: ethers.parseEther('0.1') });
-      const initialBalance = await ethers.provider.getBalance(owner.address);
-      await manager.drainFees();
-      const finalBalance = await ethers.provider.getBalance(owner.address);
-      expect(finalBalance).to.be.above(initialBalance);
+        await manager.setFee(ethers.parseEther('0.1'));
+        await timeSquadRyker.mint(addr1.address);
+        await timeSquadLuna.mint(addr1.address);
+        await timeSquadAria.mint(addr1.address);
+        await timeSquadThaddeus.mint(addr1.address);
+        await manager.connect(addr1).payFee(1, 1, 1, 1, { value: ethers.parseEther('0.1') });
+        const initialBalance = await ethers.provider.getBalance(owner.address);
+        await manager.drainFees();
+        const finalBalance = await ethers.provider.getBalance(owner.address);
+        expect(finalBalance).to.be.above(initialBalance);
     });
-  });
 
-  describe('Mission Management', function () {
+    it('Should not allow non-owner to set fee', async function () {
+        await expect(manager.connect(addr1).setFee(ethers.parseEther('0.2'))).to.be.revertedWith('Caller is not the owner');
+    });
+
+    it('Should not allow non-owner to drain fees', async function () {
+        await manager.setFee(ethers.parseEther('0.1'));
+        await timeSquadRyker.mint(addr1.address);
+      await timeSquadLuna.mint(addr1.address);
+      await timeSquadAria.mint(addr1.address);
+      await timeSquadThaddeus.mint(addr1.address);
+        await manager.connect(addr1).payFee(1, 1, 1, 1, { value: ethers.parseEther('0.1') });
+        await expect(manager.connect(addr1).drainFees()).to.be.revertedWith('Caller is not the owner');
+    });
+
+    it('Should revert if fee is not paid correctly', async function () {
+        await manager.setFee(ethers.parseEther('0.1'));
+        await timeSquadRyker.mint(owner.address);
+        await timeSquadLuna.mint(owner.address);
+        await timeSquadAria.mint(owner.address);
+        await timeSquadThaddeus.mint(owner.address);
+
+        await expect(manager.payFee(1, 1, 1, 1, { value: ethers.parseEther('0.05') })).to.be.revertedWith('Incorrect fee amount');
+    });
+
+    it('Should record fee payment correctly', async function () {
+        await manager.setFee(ethers.parseEther('0.1'));
+        await timeSquadRyker.mint(owner.address);
+        await timeSquadLuna.mint(owner.address);
+        await timeSquadAria.mint(owner.address);
+        await timeSquadThaddeus.mint(owner.address);
+
+        await manager.payFee(1, 1, 1, 1, { value: ethers.parseEther('0.1') });
+        expect(await manager.hasTokenPaidFee(1)).to.equal(true);
+    });
+
+    it('Should not allow fee payment if token does not exist', async function () {
+        await manager.setFee(ethers.parseEther('0.1'));
+        await expect(manager.payFee(999, 1, 1, 1, { value: ethers.parseEther('0.1') })).to.be.revertedWith('One or more tokens do not exist');
+    });
+
+    it('Should reset fee payment status after mission ends', async function () {
+        await manager.setFee(ethers.parseEther('0.1'));
+        await timeSquadRyker.mint(owner.address);
+        await timeSquadLuna.mint(owner.address);
+        await timeSquadAria.mint(owner.address);
+        await timeSquadThaddeus.mint(owner.address);
+
+        await manager.payFee(1, 1, 1, 1, { value: ethers.parseEther('0.1') });
+        await manager.startMission(1, 1, 1, 1);
+        await manager.endMission(1, 1, 1, 1, 1);
+
+        expect(await manager.hasTokenPaidFee(1)).to.equal(false);
+    });
+});
+
+
+  describe('MissionManagement', function () {
     beforeEach(async function () {
       await manager.setFee(ethers.parseEther('0.1'));
     });
 
     it('Should start and end a mission', async function () {
-      await timeSquadRyker.mint(owner.address);
-      await timeSquadLuna.mint(owner.address);
-      await timeSquadAria.mint(owner.address);
-      await timeSquadThaddeus.mint(owner.address);
+      await timeSquadRyker.mint(addr2.address);
+      await timeSquadLuna.mint(addr2.address);
+      await timeSquadAria.mint(addr2.address);
+      await timeSquadThaddeus.mint(addr2.address);
 
-      await manager.payFee(1, 1, 1, 1, { value: ethers.parseEther('0.1') });
+      await manager.connect(addr2).payFee(1, 1, 1, 1, { value: ethers.parseEther('0.1') });
 
       await manager.startMission(1, 1, 1, 1);
       expect(await manager.isTokenInMission(1)).to.equal(true);
@@ -841,16 +899,19 @@ describe('AgeOfChronosManagerContract', function () {
     });
   });
 
-  describe('Permission Management', function () {
+  describe('PermissionManagement', function () {
     it('Should set and check external permission', async function () {
       await manager.setFee(ethers.parseEther('0.1'));
-      await timeSquadRyker.mint(owner.address);
-      await manager.payFee(1, 0, 0, 0, { value: ethers.parseEther('0.1') });
+      await timeSquadRyker.mint(addr2.address);
+      await timeSquadLuna.mint(addr2.address);
+      await timeSquadAria.mint(addr2.address);
+      await timeSquadThaddeus.mint(addr2.address);
+      await manager.connect(addr2).payFee(1, 1, 1, 1, { value: ethers.parseEther('0.1') });
 
-      await manager.startMission(1, 0, 0, 0);
-      await manager.endMission(1, 0, 0, 0, 1);
+      await manager.startMission(1, 1,1,1);
+      await manager.endMission(1, 1,1,1, 16);
 
-      expect(await rykerBody.hasExternalPermission(owner.address)).to.equal(true);
+      expect(await thaddeusRightHand.hasExternalPermission(addr2.address)).to.equal(true);
     });
   });
 });
