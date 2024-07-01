@@ -10,8 +10,13 @@ pragma solidity ^0.8.21;
 
 interface IParent {
     function setSoulbound(uint256 tokenId, bool state) external;
-
     function ownerOf(uint256 tokenId) external view returns (address);
+}
+
+interface IChild {
+    function setSoulbound(uint256 tokenId, bool state) external;
+    function ownerOf(uint256 tokenId) external view returns (address);
+    function setExternalPermission(address account, bool permission) external;
 }
 
 contract AgeOfChronosManager {
@@ -25,9 +30,8 @@ contract AgeOfChronosManager {
 
     uint256 public fee; // Variable to store the fee amount in wei
 
-    mapping(address => bool) private inMission;
+    mapping(uint256 => bool) private inMission; // Mapping to track if a token is in a mission
     mapping(uint256 => bool) private hasPaidFee; // Mapping to track who has paid the fee
-    mapping(address => uint256) private lastMissionStart; // Mapping to track the last mission start time
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Caller is not the owner");
@@ -215,73 +219,107 @@ contract AgeOfChronosManager {
 
     /**
      * @notice Starts a mission by setting the soulbound state for a list of tokens. Only callable by the owner or contributor.
-     * @param ryker The token ID for Ryker.
-     * @param luna The token ID for Luna.
-     * @param aria The token ID for Aria.
-     * @param thaddeus The token ID for Thaddeus.
+     * @param rykerTokenId The token ID for Ryker.
+     * @param lunaTokenId The token ID for Luna.
+     * @param ariaTokenId The token ID for Aria.
+     * @param thaddeusTokenId The token ID for Thaddeus.
      */
     function startMission(
-        uint256 ryker,
-        uint256 luna,
-        uint256 aria,
-        uint256 thaddeus
+        uint256 rykerTokenId,
+        uint256 lunaTokenId,
+        uint256 ariaTokenId,
+        uint256 thaddeusTokenId
     ) external onlyOwnerOrContributor {
-        require(!inMission[msg.sender], "Already in a mission");
         require(
-            hasPaidFee[ryker] &&
-                hasPaidFee[luna] &&
-                hasPaidFee[aria] &&
-                hasPaidFee[thaddeus],
+            !inMission[rykerTokenId] &&
+                !inMission[lunaTokenId] &&
+                !inMission[ariaTokenId] &&
+                !inMission[thaddeusTokenId],
+            "One or more tokens are already in a mission"
+        );
+        require(
+            hasPaidFee[rykerTokenId] &&
+                hasPaidFee[lunaTokenId] &&
+                hasPaidFee[ariaTokenId] &&
+                hasPaidFee[thaddeusTokenId],
             "One or more tokens have not paid the fee"
+        );
+/*
+        IParent(rykerCollection).setSoulbound(rykerTokenId, true);
+        IParent(lunaCollection).setSoulbound(lunaTokenId, true);
+        IParent(ariaCollection).setSoulbound(ariaTokenId, true);
+        IParent(thaddeusCollection).setSoulbound(thaddeusTokenId, true);
+*/
+        inMission[rykerTokenId] = true;
+        inMission[lunaTokenId] = true;
+        inMission[ariaTokenId] = true;
+        inMission[thaddeusTokenId] = true;
+
+        emit MissionStarted(rykerTokenId, lunaTokenId, ariaTokenId, thaddeusTokenId);
+    }
+
+    /**
+     * @notice Ends a mission by resetting the soulbound state for a list of tokens and granting external permission. Only callable by the owner or contributor.
+     * @param rykerTokenId The token ID for Ryker.
+     * @param lunaTokenId The token ID for Luna.
+     * @param ariaTokenId The token ID for Aria.
+     * @param thaddeusTokenId The token ID for Thaddeus.
+     * @param whichChild Specifies which child's permission to set (1: Ryker, 2: Luna, 3: Aria, 4: Thaddeus).
+     */
+    function endMission(
+        uint256 rykerTokenId,
+        uint256 lunaTokenId,
+        uint256 ariaTokenId,
+        uint256 thaddeusTokenId,
+        uint8 whichChild
+    ) external onlyOwnerOrContributor {
+        require(
+            inMission[rykerTokenId] &&
+            inMission[lunaTokenId] &&
+            inMission[ariaTokenId] &&
+            inMission[thaddeusTokenId],
+            "One or more tokens are not currently in a mission"
         );
 
 /*
-        IParent(rykerCollection).setSoulbound(ryker, true);
-        IParent(lunaCollection).setSoulbound(luna, true);
-        IParent(ariaCollection).setSoulbound(aria, true);
-        IParent(thaddeusCollection).setSoulbound(thaddeus, true);
+        IParent(rykerCollection).setSoulbound(rykerTokenId, false);
+        IParent(lunaCollection).setSoulbound(lunaTokenId, false);
+        IParent(ariaCollection).setSoulbound(ariaTokenId, false);
+        IParent(thaddeusCollection).setSoulbound(thaddeusTokenId, false);
 */
-        inMission[msg.sender] = true;
+        // Grant external permission for the owner of the specified child token
+        if (whichChild == 1) {
+            IChild(rykerCollection).setExternalPermission(IParent(rykerCollection).ownerOf(rykerTokenId), true);
+        } else if (whichChild == 2) {
+            IChild(lunaCollection).setExternalPermission(IParent(lunaCollection).ownerOf(lunaTokenId), true);
+        } else if (whichChild == 3) {
+            IChild(ariaCollection).setExternalPermission(IParent(ariaCollection).ownerOf(ariaTokenId), true);
+        } else if (whichChild == 4) {
+            IChild(thaddeusCollection).setExternalPermission(IParent(thaddeusCollection).ownerOf(thaddeusTokenId), true);
+        } else {
+            revert("Invalid whichChild value");
+        }
 
-        emit MissionStarted(ryker, luna, aria, thaddeus);
+        inMission[rykerTokenId] = false;
+        inMission[lunaTokenId] = false;
+        inMission[ariaTokenId] = false;
+        inMission[thaddeusTokenId] = false;
+
+        hasPaidFee[rykerTokenId] = false;
+        hasPaidFee[lunaTokenId] = false;
+        hasPaidFee[ariaTokenId] = false;
+        hasPaidFee[thaddeusTokenId] = false;
+
+        emit MissionEnded(rykerTokenId, lunaTokenId, ariaTokenId, thaddeusTokenId);
     }
 
     /**
-     * @notice Ends a mission by resetting the soulbound state for a list of tokens. Only callable by the owner or contributor.
-     * @param ryker The token ID for Ryker.
-     * @param luna The token ID for Luna.
-     * @param aria The token ID for Aria.
-     * @param thaddeus The token ID for Thaddeus.
+     * @notice Checks if a given token is currently in a mission.
+     * @param tokenId The token ID to check.
+     * @return True if the token is in a mission, false otherwise.
      */
-    function endMission(
-        uint256 ryker,
-        uint256 luna,
-        uint256 aria,
-        uint256 thaddeus
-    ) external onlyOwnerOrContributor {
-        require(inMission[msg.sender], "Not currently in a mission");
-
-        IParent(rykerCollection).setSoulbound(ryker, false);
-        IParent(lunaCollection).setSoulbound(luna, false);
-        IParent(ariaCollection).setSoulbound(aria, false);
-        IParent(thaddeusCollection).setSoulbound(thaddeus, false);
-
-        inMission[msg.sender] = false;
-        hasPaidFee[ryker] = false;
-        hasPaidFee[luna] = false;
-        hasPaidFee[aria] = false;
-        hasPaidFee[thaddeus] = false;
-
-        emit MissionEnded(ryker, luna, aria, thaddeus);
-    }
-
-    /**
-     * @notice Checks if a given address is currently in a mission.
-     * @param addr The address to check.
-     * @return True if the address is in a mission, false otherwise.
-     */
-    function isAddressInMission(address addr) external view returns (bool) {
-        return inMission[addr];
+    function isTokenInMission(uint256 tokenId) external view returns (bool) {
+        return inMission[tokenId];
     }
 
     /**
