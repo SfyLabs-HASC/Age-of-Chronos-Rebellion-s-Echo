@@ -148,28 +148,48 @@ async function deployContracts() {
     0n,
     await catalogAria.getAddress(),
     C.ARIA_ASSET_METADATA_URI,
-    [C.FIXED_PART_PARENT_ID, C.SQUAD_BODY_SLOT_PART_ID],
+    [C.FIXED_PART_PARENT_ID,
+        C.SQUAD_BODY_SLOT_PART_ID,
+        C.SQUAD_HEAD_SLOT_PART_ID,
+        C.SQUAD_LEFT_HAND_SLOT_PART_ID,
+        C.SQUAD_RIGHT_HAND_SLOT_PART_ID
+        ],
   );
 
   await timeSquadRyker.addEquippableAssetEntry(
     0n,
     await catalogRyker.getAddress(),
     C.RYKER_ASSET_METADATA_URI,
-    [C.FIXED_PART_PARENT_ID, C.SQUAD_BODY_SLOT_PART_ID],
+    [C.FIXED_PART_PARENT_ID,
+        C.SQUAD_BODY_SLOT_PART_ID,
+        C.SQUAD_HEAD_SLOT_PART_ID,
+        C.SQUAD_LEFT_HAND_SLOT_PART_ID,
+        C.SQUAD_RIGHT_HAND_SLOT_PART_ID
+        ],
   );
 
   await timeSquadLuna.addEquippableAssetEntry(
     0n,
     await catalogLuna.getAddress(),
     C.LUNA_ASSET_METADATA_URI,
-    [C.FIXED_PART_PARENT_ID, C.SQUAD_BODY_SLOT_PART_ID],
+    [C.FIXED_PART_PARENT_ID,
+        C.SQUAD_BODY_SLOT_PART_ID,
+        C.SQUAD_HEAD_SLOT_PART_ID,
+        C.SQUAD_LEFT_HAND_SLOT_PART_ID,
+        C.SQUAD_RIGHT_HAND_SLOT_PART_ID
+        ],
   );
 
   await timeSquadThaddeus.addEquippableAssetEntry(
     0n,
     await catalogThaddeus.getAddress(),
     C.THADDEUS_ASSET_METADATA_URI,
-    [C.FIXED_PART_PARENT_ID, C.SQUAD_BODY_SLOT_PART_ID],
+    [C.FIXED_PART_PARENT_ID,
+        C.SQUAD_BODY_SLOT_PART_ID,
+        C.SQUAD_HEAD_SLOT_PART_ID,
+        C.SQUAD_LEFT_HAND_SLOT_PART_ID,
+        C.SQUAD_RIGHT_HAND_SLOT_PART_ID
+        ],
   );
 
   // Deploy Child Contracts
@@ -287,6 +307,17 @@ async function setupChildAssets(
     slotPartId: bigint
   ) {
     // Add asset
+      // Slot body
+  const txBody = await catalog.addPart({
+    partId: slotPartId,
+    part: {
+      itemType: C.PART_TYPE_SLOT,
+      z: C.Z_INDEX_BODY_ITEMS,
+      equippable: [await childContract.getAddress()],
+      metadataURI: bodyMetadataURI1,  //TODO ANDREBBE QUESTO: C.SQUAD_ITEM_BODY_SLOT_METADATA
+    },
+  });
+  await txBody.wait();
     // Body
     // Set primary asset
     const txChild01_body = await childContract.addAssetEntry(bodyMetadataURI1);
@@ -355,7 +386,7 @@ describe('AgeOfChronosManagerContract', function () {
     } = await loadFixture(deployContracts));
   });
 
-  describe('Deployment', function () {
+  describe('DeploymentManager', function () {
     it('Should set the correct owner', async function () {
       expect(await manager.owner()).to.equal(owner.address);
     });
