@@ -38,87 +38,15 @@ interface IChild {
     ) external view returns (uint256);
 }
 
-contract CalculateRecursivelyBalance {
-    address public rykerCollection;
-    address public lunaCollection;
-    address public ariaCollection;
-    address public thaddeusCollection;
-
-    address private _owner;
-
-    modifier onlyOwner() {
-        require(msg.sender == _owner, "Caller is not the owner");
-        _;
-    }
-
-    constructor() {
-        _owner = msg.sender;
-    }
-
-    /**
-     * @notice Sets the Ryker collection address. Only callable by the owner.
-     * @param _rykerCollection The new Ryker collection address.
-     */
-    function setRykerCollection(address _rykerCollection) external onlyOwner {
-        rykerCollection = _rykerCollection;
-    }
-
-    /**
-     * @notice Sets the Luna collection address. Only callable by the owner.
-     * @param _lunaCollection The new Luna collection address.
-     */
-    function setLunaCollection(address _lunaCollection) external onlyOwner {
-        lunaCollection = _lunaCollection;
-    }
-
-    /**
-     * @notice Sets the Aria collection address. Only callable by the owner.
-     * @param _ariaCollection The new Aria collection address.
-     */
-    function setAriaCollection(address _ariaCollection) external onlyOwner {
-        ariaCollection = _ariaCollection;
-    }
-
-    /**
-     * @notice Sets the Thaddeus collection address. Only callable by the owner.
-     * @param _thaddeusCollection The new Thaddeus collection address.
-     */
-    function setThaddeusCollection(address _thaddeusCollection) external onlyOwner {
-        thaddeusCollection = _thaddeusCollection;
-    }
-
-    /**
-     * @notice Returns the list of collection addresses.
-     * @return An array of collection addresses.
-     */
-    function getCollectionAddresses() internal view returns (address[] memory) {
-        address[] memory collections = new address[](4);
-        collections[0] = rykerCollection;
-        collections[1] = lunaCollection;
-        collections[2] = ariaCollection;
-        collections[3] = thaddeusCollection;
-        return collections;
-    }
-
-        /**
-     * @notice Returns the list of collection addresses.
-     * @return An array of collection addresses.
-     */
-    function getExternalCollectionAddresses() external view returns (address[] memory) {
-        address[] memory collections = new address[](4);
-        collections[0] = rykerCollection;
-        collections[1] = lunaCollection;
-        collections[2] = ariaCollection;
-        collections[3] = thaddeusCollection;
-        return collections;
-    }
+contract OLDCalculateRecursivelyBalance {
+    constructor() {}
 
     function calculateBalance(
         address directOwnerAddress,
+        address[] memory collectionParentAddresses,
         address childAddress
     ) external view returns (uint256[] memory) {
         uint256[] memory tokenIds = new uint256[](0);
-        address[] memory collectionParentAddresses = getCollectionAddresses();
 
         // Calcola il bilancio dei child NFT non annidati
         tokenIds = _calculateUnnestedBalance(
