@@ -58,7 +58,7 @@ contract AgeOfChronosManager {
     mapping(uint256 => bool) private inMission; // Mapping to track if a token is in a mission
     mapping(uint256 => bool) private hasPaidFee; // Mapping to track who has paid the fee
 
-    string public _name;
+    string private _name;
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Caller is not the owner");

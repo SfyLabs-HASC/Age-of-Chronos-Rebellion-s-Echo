@@ -950,4 +950,9 @@ describe('MissionManagement', function () {
       expect(await thaddeusRightHand.hasExternalPermission(addr2.address)).to.equal(true);
     });
   });
+
+  it('correctname', async function () {
+    const name = await manager.name();
+    expect(name).to.equal("Manager-AgeOfChronos");
+  });
 });
