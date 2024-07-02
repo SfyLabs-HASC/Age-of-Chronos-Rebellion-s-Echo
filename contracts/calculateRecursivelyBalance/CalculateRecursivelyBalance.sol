@@ -62,7 +62,7 @@ contract CalculateRecursivelyBalance {
      * @notice Used to retrieve the collection name.
      * @return name_ Name of the collection
      */
-    function name() public view virtual returns (string memory name_) {
+    function name() public view returns (string memory name_) {
         name_ = _name;
     }
 
