@@ -25,6 +25,7 @@ import {
     ThaddeusRightHand,
 
     CalculateRecursivelyBalance,
+    OLDCalculateRecursivelyBalance,
     RMRKCatalogImpl
 } from '../typechain-types';
 import { delay, isHardhatNetwork } from './utils';
@@ -72,7 +73,9 @@ async function main() {
         "ThaddeusRightHand": "0x2455E46D0b0AD9EbB4612E0b39b8D4421379C59e"
     };
 
-    const CalculateBalanceContractAddress = "0x79506fD8b53c557D498cEdB1761Ed4A1D0593616";
+    const CalculateBalanceContractAddress = "0x76903aE372F55e802b83cD2A885006E7915C99aA";
+    const OldCalculateBalanceContractAddress = "0x79506fD8b53c557D498cEdB1761Ed4A1D0593616";
+
 
     const TimeSquadAria: TimeSquadAria = await ethers.getContractAt('TimeSquadAria', contractParentAddresses.Aria, deployer);
     const TimeSquadLuna: TimeSquadLuna = await ethers.getContractAt('TimeSquadLuna', contractParentAddresses.Luna, deployer);
@@ -107,6 +110,7 @@ async function main() {
     const thaddeusRightHand: ThaddeusRightHand = await ethers.getContractAt('ThaddeusRightHand', contractItemAddresses.ThaddeusRightHand, deployer);
 
     const calculateBalance: CalculateRecursivelyBalance = await ethers.getContractAt('CalculateRecursivelyBalance', CalculateBalanceContractAddress, deployer);
+    const OLDcalculateBalance: OLDCalculateRecursivelyBalance = await ethers.getContractAt('OLDCalculateRecursivelyBalance', OldCalculateBalanceContractAddress, deployer);
 
     console.log('start');
 
@@ -115,8 +119,24 @@ async function main() {
     const collectionParentAddresses = Object.values(contractParentAddresses);
     const childAddress = contractItemAddresses.RykerRightHand;
 
+    //setta le parent conllection
+    /*
+    const tx01 = await calculateBalance.setRykerCollection(await TimeSquadRyker.getAddress());
+    const tx02 = await calculateBalance.setLunaCollection(await TimeSquadLuna.getAddress());
+    const tx03 = await calculateBalance.setAriaCollection(await TimeSquadAria.getAddress());
+    const tx04 = await calculateBalance.setThaddeusCollection(await TimeSquadThaddeus.getAddress());
+    await tx01.wait();
+    await delay(1000)
+    await tx02.wait();
+    await delay(1000)
+    await tx03.wait();
+    await delay(1000)
+    await tx04.wait();
+    await delay(1000)
+    */
+
     // Calcolo del balance
-    const tokenIds = await calculateBalance.calculateBalance(directOwnerAddress, collectionParentAddresses, childAddress);
+    const tokenIds = await calculateBalance.calculateBalance(directOwnerAddress, childAddress);
     const totalSupply = await rykerRightHand.totalSupply();
     console.log('totalSupply:', totalSupply);
 
@@ -125,6 +145,17 @@ async function main() {
         const tokenId = tokenIds[i];
         console.log('Token ID at index', i.toString(), ':', tokenId.toString());
     }
+
+        // Calcolo del balance OLD
+        const OLDtokenIds = await OLDcalculateBalance.calculateBalance(directOwnerAddress, collectionParentAddresses,childAddress);
+        const OLDtotalSupply = await rykerRightHand.totalSupply();
+        console.log('totalSupply:', totalSupply);
+    
+        // Utilizzo della funzione tokenOfOwnerByIndex in un ciclo for
+        for (let i = 0; i < tokenIds.length; i++) {
+            const tokenId = tokenIds[i];
+            console.log('Token ID at index', i.toString(), ':', tokenId.toString());
+        }
 
     console.log("fine");
 

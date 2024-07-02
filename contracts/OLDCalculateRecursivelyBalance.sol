@@ -38,7 +38,7 @@ interface IChild {
     ) external view returns (uint256);
 }
 
-contract CalculateRecursivelyBalance {
+contract OLDCalculateRecursivelyBalance {
     constructor() {}
 
     function calculateBalance(
