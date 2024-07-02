@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useActiveAccount, useActiveWalletChain } from "thirdweb/react";
-import { MintAria, MintLuna, MintRyker, MintThaddeus } from '../writeTransactions';
+import { MintAria, MintLuna, MintRyker, MintThaddeus } from '../writeTransactionsUser';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { faXTwitter } from '@fortawesome/free-brands-svg-icons';
