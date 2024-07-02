@@ -46,7 +46,7 @@ contract CalculateRecursivelyBalance {
 
     address private _owner;
 
-    string public name;
+    string private _name;
 
     modifier onlyOwner() {
         require(msg.sender == _owner, "Caller is not the owner");
@@ -55,7 +55,15 @@ contract CalculateRecursivelyBalance {
 
     constructor() {
         _owner = msg.sender;
-        name = "CalculateRecursivelyBalance";
+        _name = "CalculateRecursivelyBalance";
+    }
+
+    /**
+     * @notice Used to retrieve the collection name.
+     * @return name_ Name of the collection
+     */
+    function name() public view virtual returns (string memory name_) {
+        name_ = _name;
     }
 
     /**
@@ -86,7 +94,9 @@ contract CalculateRecursivelyBalance {
      * @notice Sets the Thaddeus collection address. Only callable by the owner.
      * @param _thaddeusCollection The new Thaddeus collection address.
      */
-    function setThaddeusCollection(address _thaddeusCollection) external onlyOwner {
+    function setThaddeusCollection(
+        address _thaddeusCollection
+    ) external onlyOwner {
         thaddeusCollection = _thaddeusCollection;
     }
 
@@ -103,11 +113,15 @@ contract CalculateRecursivelyBalance {
         return collections;
     }
 
-        /**
+    /**
      * @notice Returns the list of collection addresses.
      * @return An array of collection addresses.
      */
-    function getExternalCollectionAddresses() external view returns (address[] memory) {
+    function getExternalCollectionAddresses()
+        external
+        view
+        returns (address[] memory)
+    {
         address[] memory collections = new address[](4);
         collections[0] = rykerCollection;
         collections[1] = lunaCollection;

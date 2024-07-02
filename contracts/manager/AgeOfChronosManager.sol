@@ -58,7 +58,7 @@ contract AgeOfChronosManager {
     mapping(uint256 => bool) private inMission; // Mapping to track if a token is in a mission
     mapping(uint256 => bool) private hasPaidFee; // Mapping to track who has paid the fee
 
-    string public name;
+    string public _name;
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Caller is not the owner");
@@ -101,7 +101,15 @@ contract AgeOfChronosManager {
      */
     constructor() {
         owner = msg.sender;
-        name = "Manager-AgeOfChronos";
+        _name = "Manager-AgeOfChronos";
+    }
+
+    /**
+     * @notice Used to retrieve the collection name.
+     * @return name_ Name of the collection
+     */
+    function name() public view virtual returns (string memory name_) {
+        name_ = _name;
     }
 
     /**
