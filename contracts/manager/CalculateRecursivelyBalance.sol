@@ -46,6 +46,8 @@ contract CalculateRecursivelyBalance {
 
     address private _owner;
 
+    string public name;
+
     modifier onlyOwner() {
         require(msg.sender == _owner, "Caller is not the owner");
         _;
@@ -53,6 +55,7 @@ contract CalculateRecursivelyBalance {
 
     constructor() {
         _owner = msg.sender;
+        name = "CalculateRecursivelyBalance";
     }
 
     /**
