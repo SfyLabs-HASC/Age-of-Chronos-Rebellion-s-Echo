@@ -137,7 +137,7 @@ async function main() {
 
   //delay(1000)
 
-  const attributesKey = "multiCorp";
+  const attributesKey = "NomindioLabs";
   const accessType = 0;  //0 is owner
 
   
