@@ -1,4 +1,5 @@
 // src/types/react-unity-webgl.d.ts
+/* eslint-disable @typescript-eslint/no-explicit-any */
 declare module 'react-unity-webgl' {
     import { CSSProperties, ReactElement } from 'react';
   
