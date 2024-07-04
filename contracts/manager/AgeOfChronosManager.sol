@@ -24,8 +24,15 @@ interface IChild {
     function setExternalPermission(address account, bool permission) external;
 }
 
+interface IAttributeManager {
+    function setUintAttribute(address collection, uint256 tokenId, string memory key, uint256 value) external;
+
+    function getUintAttribute(address collection, uint256 tokenId, string memory key) external view returns (uint256);
+}
+
 contract AgeOfChronosManager {
     address public owner;
+    address public externalAccount;
     mapping(address => bool) public contributors;
 
     address public rykerCollection;
@@ -55,8 +62,8 @@ contract AgeOfChronosManager {
 
     uint256 public fee; // Variable to store the fee amount in wei
 
-    mapping(uint256 => bool) private inMission; // Mapping to track if a token is in a mission
-    mapping(uint256 => bool) private hasPaidFee; // Mapping to track who has paid the fee
+    mapping(address => mapping(uint256 => bool)) private inMission; // Mapping to track if a token is in a mission
+    mapping(address => mapping(uint256 => bool)) private hasPaidFee; // Mapping to track who has paid the fee
 
     string private _name;
 
@@ -70,7 +77,6 @@ contract AgeOfChronosManager {
             msg.sender == owner || contributors[msg.sender],
             "Caller is not the owner or contributor"
         );
-
         _;
     }
 
@@ -96,12 +102,14 @@ contract AgeOfChronosManager {
         uint256 thaddeusTokenId
     );
 
+    event ExternalAccountSet(address account);
+
     /**
      * @notice Sets the deployer as the owner upon contract creation.
      */
     constructor() {
         owner = msg.sender;
-        _name = "Manager-AgeOfChronos";
+        _name = "ManagerAgeOfChronos"; // Adjusted the name
     }
 
     /**
@@ -121,20 +129,20 @@ contract AgeOfChronosManager {
     }
 
     /**
-     * @notice Allows the owner to withdraw all collected fees from the contract.
+     * @notice Sets the external account to receive fees. Only callable by the owner.
+     * @param _externalAccount The address of the external account.
      */
-    function drainFees() external onlyOwner {
-        uint256 contractBalance = address(this).balance;
-        require(contractBalance > 0, "No fees to drain");
-        payable(owner).transfer(contractBalance);
+    function setExternalAccount(address _externalAccount) external onlyOwner {
+        externalAccount = _externalAccount;
+        emit ExternalAccountSet(_externalAccount);
     }
 
     /**
-     * @notice Returns the current fee amount.
-     * @return The current fee amount.
+     * @notice Returns the external account address.
+     * @return The external account address.
      */
-    function getFee() external view returns (uint256) {
-        return fee;
+    function getExternalAccount() external view returns (address) {
+        return externalAccount;
     }
 
     /**
@@ -175,10 +183,12 @@ contract AgeOfChronosManager {
             "Caller does not own the Thaddeus token"
         );
 
-        hasPaidFee[rykerTokenId] = true;
-        hasPaidFee[lunaTokenId] = true;
-        hasPaidFee[ariaTokenId] = true;
-        hasPaidFee[thaddeusTokenId] = true;
+        hasPaidFee[rykerCollection][rykerTokenId] = true;
+        hasPaidFee[lunaCollection][lunaTokenId] = true;
+        hasPaidFee[ariaCollection][ariaTokenId] = true;
+        hasPaidFee[thaddeusCollection][thaddeusTokenId] = true;
+
+        payable(externalAccount).transfer(msg.value);
 
         emit FeePaid(
             msg.sender,
@@ -191,11 +201,12 @@ contract AgeOfChronosManager {
 
     /**
      * @notice Checks if a token has paid the fee.
+     * @param collection The collection of the token to check.
      * @param tokenId The ID of the token to check.
      * @return True if the token has paid the fee, false otherwise.
      */
-    function hasTokenPaidFee(uint256 tokenId) external view returns (bool) {
-        return hasPaidFee[tokenId];
+    function hasTokenPaidFee(address collection, uint256 tokenId) external view returns (bool) {
+        return hasPaidFee[collection][tokenId];
     }
 
     /**
@@ -212,11 +223,11 @@ contract AgeOfChronosManager {
         uint256 ariaTokenId,
         uint256 thaddeusTokenId,
         bool status
-    ) external onlyOwnerOrContributor {
-        hasPaidFee[rykerTokenId] = status;
-        hasPaidFee[lunaTokenId] = status;
-        hasPaidFee[ariaTokenId] = status;
-        hasPaidFee[thaddeusTokenId] = status;
+    ) external onlyOwner {
+        hasPaidFee[rykerCollection][rykerTokenId] = status;
+        hasPaidFee[lunaCollection][lunaTokenId] = status;
+        hasPaidFee[ariaCollection][ariaTokenId] = status;
+        hasPaidFee[thaddeusCollection][thaddeusTokenId] = status;
     }
 
     /**
@@ -314,38 +325,42 @@ contract AgeOfChronosManager {
      * @param lunaTokenId The token ID for Luna.
      * @param ariaTokenId The token ID for Aria.
      * @param thaddeusTokenId The token ID for Thaddeus.
+     * @param key The attribute key.
      */
     function startMission(
         uint256 rykerTokenId,
         uint256 lunaTokenId,
         uint256 ariaTokenId,
-        uint256 thaddeusTokenId
+        uint256 thaddeusTokenId,
+        string memory key
     ) external onlyOwnerOrContributor {
         require(
-            !inMission[rykerTokenId] &&
-                !inMission[lunaTokenId] &&
-                !inMission[ariaTokenId] &&
-                !inMission[thaddeusTokenId],
+            !inMission[rykerCollection][rykerTokenId] &&
+                !inMission[lunaCollection][lunaTokenId] &&
+                !inMission[ariaCollection][ariaTokenId] &&
+                !inMission[thaddeusCollection][thaddeusTokenId],
             "One or more tokens are already in a mission"
         );
         require(
-            hasPaidFee[rykerTokenId] &&
-                hasPaidFee[lunaTokenId] &&
-                hasPaidFee[ariaTokenId] &&
-                hasPaidFee[thaddeusTokenId],
+            hasPaidFee[rykerCollection][rykerTokenId] &&
+                hasPaidFee[lunaCollection][lunaTokenId] &&
+                hasPaidFee[ariaCollection][ariaTokenId] &&
+                hasPaidFee[thaddeusCollection][thaddeusTokenId],
             "One or more tokens have not paid the fee"
         );
 
-        inMission[rykerTokenId] = true;
-        inMission[lunaTokenId] = true;
-        inMission[ariaTokenId] = true;
-        inMission[thaddeusTokenId] = true;
+        inMission[rykerCollection][rykerTokenId] = true;
+        inMission[lunaCollection][lunaTokenId] = true;
+        inMission[ariaCollection][ariaTokenId] = true;
+        inMission[thaddeusCollection][thaddeusTokenId] = true;
 
         emit MissionStarted(
             rykerTokenId,
             lunaTokenId,
             ariaTokenId,
-            thaddeusTokenId
+            thaddeusTokenId,
+            key,
+            msg.sender
         );
     }
 
@@ -355,6 +370,7 @@ contract AgeOfChronosManager {
      * @param lunaTokenId The token ID for Luna.
      * @param ariaTokenId The token ID for Aria.
      * @param thaddeusTokenId The token ID for Thaddeus.
+     * @param key The attribute key.
      * @param whichChild Specifies which child's permission to set (1-16).
      */
     function endMission(
@@ -362,13 +378,14 @@ contract AgeOfChronosManager {
         uint256 lunaTokenId,
         uint256 ariaTokenId,
         uint256 thaddeusTokenId,
-        uint8 whichChild
+        uint8 whichChild,
+        string memory key
     ) external onlyOwnerOrContributor {
         require(
-            inMission[rykerTokenId] &&
-                inMission[lunaTokenId] &&
-                inMission[ariaTokenId] &&
-                inMission[thaddeusTokenId],
+            inMission[rykerCollection][rykerTokenId] &&
+                inMission[lunaCollection][lunaTokenId] &&
+                inMission[ariaCollection][ariaTokenId] &&
+                inMission[thaddeusCollection][thaddeusTokenId],
             "One or more tokens are not currently in a mission"
         );
 
@@ -405,31 +422,49 @@ contract AgeOfChronosManager {
             true
         );
 
-        inMission[rykerTokenId] = false;
-        inMission[lunaTokenId] = false;
-        inMission[ariaTokenId] = false;
-        inMission[thaddeusTokenId] = false;
+        inMission[rykerCollection][rykerTokenId] = false;
+        inMission[lunaCollection][lunaTokenId] = false;
+        inMission[ariaCollection][ariaTokenId] = false;
+        inMission[thaddeusCollection][thaddeusTokenId] = false;
 
-        hasPaidFee[rykerTokenId] = false;
-        hasPaidFee[lunaTokenId] = false;
-        hasPaidFee[ariaTokenId] = false;
-        hasPaidFee[thaddeusTokenId] = false;
+        hasPaidFee[rykerCollection][rykerTokenId] = false;
+        hasPaidFee[lunaCollection][lunaTokenId] = false;
+        hasPaidFee[ariaCollection][ariaTokenId] = false;
+        hasPaidFee[thaddeusCollection][thaddeusTokenId] = false;
+
+        
+        uint256 rykervalue = IAttributeManager(rykerCollection).getUintAttribute(rykerCollection, rykerTokenId, key);
+        uint256 lunavalue = IAttributeManager(lunaCollection).getUintAttribute(lunaCollection, lunaTokenId, key);
+        uint256 ariavalue = IAttributeManager(ariaCollection).getUintAttribute(ariaCollection, ariaTokenId, key);
+        uint256 thaddeusvalue = IAttributeManager(thaddeusCollection).getUintAttribute(thaddeusCollection, thaddeusTokenId, key);
+        uint newrykerValue = rykervalue++;
+        uint newlunaValue = lunavalue++;
+        uint newariaValue = ariavalue++;
+        uint newthaddeusValue = thaddeusvalue++;
+        IAttributeManager(rykerCollection).setUintAttribute(rykerCollection, rykerTokenId, key, newrykerValue);
+        IAttributeManager(rykerCollection).setUintAttribute(rykerCollection, rykerTokenId, key, newlunaValue);
+        IAttributeManager(rykerCollection).setUintAttribute(rykerCollection, rykerTokenId, key, newariaValue);
+        IAttributeManager(rykerCollection).setUintAttribute(rykerCollection, rykerTokenId, key, newthaddeusValue);
 
         emit MissionEnded(
             rykerTokenId,
             lunaTokenId,
             ariaTokenId,
-            thaddeusTokenId
+            thaddeusTokenId,
+            whichChild,
+            key,
+            msg.sender
         );
     }
 
     /**
      * @notice Checks if a given token is currently in a mission.
+     * @param collection The collection address.
      * @param tokenId The token ID to check.
      * @return True if the token is in a mission, false otherwise.
      */
-    function isTokenInMission(uint256 tokenId) external view returns (bool) {
-        return inMission[tokenId];
+    function isTokenInMission(address collection, uint256 tokenId) external view returns (bool) {
+        return inMission[collection][tokenId];
     }
 
     /**
@@ -469,5 +504,36 @@ contract AgeOfChronosManager {
         uint256 tokenId
     ) external view returns (bool) {
         return tokenExists(collection, tokenId);
+    }
+
+    /**
+     * @notice Sets a uint attribute for a token in a specified collection.
+     * @param collection The address of the collection contract.
+     * @param tokenId The token ID.
+     * @param key The attribute key.
+     * @param value The attribute value.
+     */
+    function setUintAttribute(
+        address collection,
+        uint256 tokenId,
+        string memory key,
+        uint256 value
+    ) external onlyOwnerOrContributor {
+        IAttributeManager(collection).setUintAttribute(collection, tokenId, key, value);
+    }
+
+    /**
+     * @notice Gets a uint attribute for a token in a specified collection.
+     * @param collection The address of the collection contract.
+     * @param tokenId The token ID.
+     * @param key The attribute key.
+     * @return The attribute value.
+     */
+    function getUintAttribute(
+        address collection,
+        uint256 tokenId,
+        string memory key
+    ) external view returns (uint256) {
+        return IAttributeManager(collection).getUintAttribute(collection, tokenId, key);
     }
 }

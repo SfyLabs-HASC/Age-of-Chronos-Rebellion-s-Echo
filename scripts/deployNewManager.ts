@@ -160,11 +160,11 @@ const managerAddress = "0xC785C764d759a2d5860bb966a159DD72b15b9B07"
   console.log("Manager configured")  
 
     //set parent collections
-    await manager.setRykerCollection(await timeSquadAria.getAddress());
+    await manager.setRykerCollection(await timeSquadRyker.getAddress());
     await delay(5000)
     await manager.setLunaCollection(await timeSquadLuna.getAddress());
     await delay(5000)
-    await manager.setAriaCollection(await timeSquadRyker.getAddress());
+    await manager.setAriaCollection(await timeSquadAria.getAddress());
     await delay(5000)
     await manager.setThaddeusCollection(await timeSquadThaddeus.getAddress());
     await delay(5000)
