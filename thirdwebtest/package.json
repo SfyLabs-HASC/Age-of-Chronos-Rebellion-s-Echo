@@ -17,6 +17,7 @@
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
     "bootstrap": "^5.3.3",
+    "compression": "^1.7.4",
     "dotenv": "^16.4.5",
     "eslint": "8.57.0",
     "eslint-config-next": "14.2.3",
@@ -25,8 +26,9 @@
     "pino-pretty": "^11.2.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "react-unity-webgl": "^9.5.2",
     "thirdweb": "^5.25.1",
     "typescript": "5.4.5",
-    "vercel": "^34.2.4"
+    "vercel": "^32.3.0"
   }
 }
