@@ -23,6 +23,11 @@
     "@rmrk-team/evm-contracts": "^2.5.4",
     "@thirdweb-dev/react": "^3.10.3",
     "bootstrap": "^5.3.3",
+    "crypto": "^1.0.1",
+    "fs": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.2",
+    "node-fetch": "^3.3.2",
+    "path": "^0.12.7",
     "thirdweb": "^5.29.0"
   },
   "devDependencies": {
