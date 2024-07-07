@@ -127,6 +127,16 @@ const contract7508Address = "0xE5CF7218253535E019bb4B38Fb9d0167BB6D049e"
 const managerAddress = "0xceed712979DE2D082cBDc50c58FB4411F8b1A006"
   const manager: AgeOfChronosManager = await ethers.getContractAt('AgeOfChronosManager', managerAddress, deployer);
 
+  if (!isHardhatNetwork()) {
+    console.log('Waiting 20 seconds before verifying contract...');
+    //await delay(20000);
+    await run('verify:verify', {
+        address: managerAddress,
+        constructorArguments: [],
+        contract: 'contracts/manager/AgeOfChronosManager.sol:AgeOfChronosManager',
+    });
+}
+
 
 /*
   //configure manager
@@ -140,6 +150,9 @@ const managerAddress = "0xceed712979DE2D082cBDc50c58FB4411F8b1A006"
   await delay(5000)
   console.log("Manager configured")  
 */
+
+
+/*
     //set parent collections
     await manager.setRykerCollection(await timeSquadRyker.getAddress());
     await delay(5000)
@@ -199,6 +212,12 @@ const managerAddress = "0xceed712979DE2D082cBDc50c58FB4411F8b1A006"
     await manager.setFeeAttribute("NomindioLabs",0)
     console.log("add set7508") 
     await delay(5000)
+
+
+
+    */
+       //configura la 7508
+       
 }
 
 main().catch((error) => {

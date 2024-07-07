@@ -81,7 +81,7 @@ export async function deployManager(): Promise<AgeOfChronosManager> {
         await run('verify:verify', {
             address: contractAddress,
             constructorArguments: [],
-            contract: 'contracts/AgeOfChronosManager.sol:AgeOfChronosManager',
+            contract: 'contracts/manager/AgeOfChronosManager.sol:AgeOfChronosManager',
         });
     }
     */

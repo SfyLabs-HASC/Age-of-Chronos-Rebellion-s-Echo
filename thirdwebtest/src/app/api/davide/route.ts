@@ -18,7 +18,7 @@ const publicKeyPath = 'src/keys/public.pem';
 // Define the engine URL and wallet addresses
 const engineBaseUrl = 'https://c33fdf82.engine-usw2.thirdweb.com';
 const backendWalletAddress = '0x93e7b1f3fA8f57425B8a80337D94Ae3992879911';
-const managerContractAddress = '0x93e7b1f3fA8f57425B8a80337D94Ae3992879911';
+const managerContractAddress = '0xceed712979DE2D082cBDc50c58FB4411F8b1A006';
 const recipientAddress = '0xe204E95cD77Fa95FE669aeCCD8d51A59bFa25A52'; // Wallet to send funds to
 const chain = '1284'; // Assuming '1284' is the correct chain ID for Moonbeam
 
