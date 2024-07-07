@@ -70,6 +70,7 @@ contract AgeOfChronosManager {
     address public thaddeusRightHandCollection;
 
     uint256 public fee; // Variable to store the fee amount in wei
+    address public contractAddress7508; // the ERC7508
 
     string public feeAttributeKey;
     uint256 public feeAttributeValue;
@@ -77,7 +78,7 @@ contract AgeOfChronosManager {
     mapping(address => mapping(uint256 => bool)) private inMission; // Mapping to track if a token is in a mission
     mapping(address => mapping(uint256 => bool)) private hasPaidFee; // Mapping to track who has paid the fee
 
-    string public _name;
+    string public name;
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Caller is not the owner");
@@ -126,15 +127,7 @@ contract AgeOfChronosManager {
      */
     constructor() {
         owner = msg.sender;
-        _name = "ManagerAgeOfChronos"; // Adjusted the name
-    }
-
-    /**
-     * @notice Used to retrieve the collection name.
-     * @return _name Name of the collection
-     */
-    function name() external view returns (string memory) {
-        return _name;
+        name = "ManagerAgeOfChronos"; // Adjusted the name
     }
 
     /**
@@ -143,6 +136,30 @@ contract AgeOfChronosManager {
      */
     function setFee(uint256 _fee) external onlyOwner {
         fee = _fee;
+    }
+
+    /**
+     * @notice Returns the fee amount.
+     * @return The fee amount.
+     */
+    function getFee() external view returns (uint256) {
+        return fee;
+    }
+
+    /**
+     * @notice Sets the 7508 contract address. Only callable by the owner.
+     * @param _contractAddress7508 The new 7508 contract address.
+     */
+    function set7508Address(address _contractAddress7508) external onlyOwner {
+        contractAddress7508 = _contractAddress7508;
+    }
+
+    /**
+     * @notice Returns the 7508 contract address.
+     * @return The 7508 contract address.
+     */
+    function getContractAddress7508() external view returns (address) {
+        return contractAddress7508;
     }
 
     /**
@@ -213,32 +230,28 @@ contract AgeOfChronosManager {
             "Caller does not own the Thaddeus token"
         );
 
-        // Check if the attribute is already set to 1
+        // Check if the attribute is already set to the required value
         require(
-            IAttributeManager(rykerCollection).getUintAttribute(
+            IAttributeManager(contractAddress7508).getUintAttribute(
                 rykerCollection,
                 rykerTokenId,
                 feeAttributeKey
-            ) ==
-                feeAttributeValue &&
-                IAttributeManager(lunaCollection).getUintAttribute(
+            ) == feeAttributeValue &&
+                IAttributeManager(contractAddress7508).getUintAttribute(
                     lunaCollection,
                     lunaTokenId,
                     feeAttributeKey
-                ) ==
-                feeAttributeValue &&
-                IAttributeManager(ariaCollection).getUintAttribute(
+                ) == feeAttributeValue &&
+                IAttributeManager(contractAddress7508).getUintAttribute(
                     ariaCollection,
                     ariaTokenId,
                     feeAttributeKey
-                ) ==
-                feeAttributeValue &&
-                IAttributeManager(thaddeusCollection).getUintAttribute(
+                ) == feeAttributeValue &&
+                IAttributeManager(contractAddress7508).getUintAttribute(
                     thaddeusCollection,
                     thaddeusTokenId,
                     feeAttributeKey
-                ) ==
-                feeAttributeValue,
+                ) == feeAttributeValue,
             "Attribute is not set to required value"
         );
 
@@ -272,7 +285,7 @@ contract AgeOfChronosManager {
     }
 
     /**
-     * @notice Sets the fee payment status of a token. Only callable by the owner.
+     * @notice Sets the fee payment status of a token. Only callable by the owner or contributor.
      * @param rykerTokenId The token ID for Ryker.
      * @param lunaTokenId The token ID for Luna.
      * @param ariaTokenId The token ID for Aria.
@@ -494,19 +507,19 @@ contract AgeOfChronosManager {
         hasPaidFee[ariaCollection][ariaTokenId] = false;
         hasPaidFee[thaddeusCollection][thaddeusTokenId] = false;
 
-        uint256 rykerValue = IAttributeManager(rykerCollection)
+        uint256 rykerValue = IAttributeManager(contractAddress7508)
             .getUintAttribute(rykerCollection, rykerTokenId, key);
-        uint256 lunaValue = IAttributeManager(lunaCollection).getUintAttribute(
+        uint256 lunaValue = IAttributeManager(contractAddress7508).getUintAttribute(
             lunaCollection,
             lunaTokenId,
             key
         );
-        uint256 ariaValue = IAttributeManager(ariaCollection).getUintAttribute(
+        uint256 ariaValue = IAttributeManager(contractAddress7508).getUintAttribute(
             ariaCollection,
             ariaTokenId,
             key
         );
-        uint256 thaddeusValue = IAttributeManager(thaddeusCollection)
+        uint256 thaddeusValue = IAttributeManager(contractAddress7508)
             .getUintAttribute(thaddeusCollection, thaddeusTokenId, key);
 
         rykerValue++;
@@ -514,25 +527,25 @@ contract AgeOfChronosManager {
         ariaValue++;
         thaddeusValue++;
 
-        IAttributeManager(rykerCollection).setUintAttribute(
+        IAttributeManager(contractAddress7508).setUintAttribute(
             rykerCollection,
             rykerTokenId,
             key,
             rykerValue
         );
-        IAttributeManager(lunaCollection).setUintAttribute(
+        IAttributeManager(contractAddress7508).setUintAttribute(
             lunaCollection,
             lunaTokenId,
             key,
             lunaValue
         );
-        IAttributeManager(ariaCollection).setUintAttribute(
+        IAttributeManager(contractAddress7508).setUintAttribute(
             ariaCollection,
             ariaTokenId,
             key,
             ariaValue
         );
-        IAttributeManager(thaddeusCollection).setUintAttribute(
+        IAttributeManager(contractAddress7508).setUintAttribute(
             thaddeusCollection,
             thaddeusTokenId,
             key,
@@ -577,6 +590,31 @@ contract AgeOfChronosManager {
     }
 
     /**
+     * @notice Returns the list of child collection addresses.
+     * @return An array of child collection addresses.
+     */
+    function getChildCollectionAddresses() external view returns (address[] memory) {
+        address[] memory childCollections = new address[](16);
+        childCollections[0] = ariaBodyCollection;
+        childCollections[1] = ariaHeadCollection;
+        childCollections[2] = ariaLeftHandCollection;
+        childCollections[3] = ariaRightHandCollection;   
+        childCollections[4] = lunaBodyCollection;
+        childCollections[5] = lunaHeadCollection;
+        childCollections[6] = lunaLeftHandCollection;
+        childCollections[7] = lunaRightHandCollection;
+        childCollections[8] = rykerBodyCollection;
+        childCollections[9] = rykerHeadCollection;
+        childCollections[10] = rykerLeftHandCollection;
+        childCollections[11] = rykerRightHandCollection;
+        childCollections[12] = thaddeusBodyCollection;
+        childCollections[13] = thaddeusHeadCollection;
+        childCollections[14] = thaddeusLeftHandCollection;
+        childCollections[15] = thaddeusRightHandCollection;
+        return childCollections;
+    }
+
+    /**
      * @dev Internal function to check if a token exists in the collection.
      * @param collection The address of the collection contract.
      * @param tokenId The token ID to check.
@@ -615,7 +653,7 @@ contract AgeOfChronosManager {
         string memory key,
         uint256 value
     ) external onlyOwnerOrContributor {
-        IAttributeManager(collection).setUintAttribute(
+        IAttributeManager(contractAddress7508).setUintAttribute(
             collection,
             tokenId,
             key,
@@ -636,7 +674,7 @@ contract AgeOfChronosManager {
         string memory key
     ) external view returns (uint256) {
         return
-            IAttributeManager(collection).getUintAttribute(
+            IAttributeManager(contractAddress7508).getUintAttribute(
                 collection,
                 tokenId,
                 key
