@@ -52,40 +52,41 @@ async function main() {
 
 
   const contractParentAddresses: { [key: string]: string } = {
-    "Aria": "0xf6F0130799de29cf1A402290766a1C9c95B6d017",
-    "Luna": "0xe429fb9fD5dcFe9B148f0E6FF922C8A6d12B4f53",
-    "Ryker": "0x972009B42a51CaCd43e059a2C56e92541EF2Bc2f",
-    "Thaddeus": "0xE7AeB43Ed1dE5D357F190847830b2a9f31E0C032"
-  };
+    "Aria": "0xB594ff9BF060FE2fbb45f2eC528676856D8Da511",
+    "Luna": "0xA8c3Cd7F534E6cA415F2978097885B9C6c5C749C",
+    "Ryker": "0x53a2ee42506939bcEf2a9bf69097Ac7616D4AA66",
+    "Thaddeus": "0x55A7dd722eAAb2e8Becd08b54b9f2cB79755a059"
+};
 
-  const contractCatalogAddresses: { [key: string]: string } = {
-    "Aria": "0xA9390e1009aBC0B3fA9cDfcCaC379CF15DecA3F6",
-    "Luna": "0xCb7aE692aa7C042715FCA463789F1aC91924a2CA",
-    "Ryker": "0x6ad1c0226f5ecc90e109b57c75af3Db7b5ad74aC",
-    "Thaddeus": "0xDDc1Da0373fd9494a6d599E7520543953BA94672"
-  };
+const contractCatalogAddresses: { [key: string]: string } = {
+    "Aria": "0x8E4773ff3Cb94E78cA44ed0E5aA0844033B462db",
+    "Luna": "0xa4DdF7045925e96acfBe5d789A5994D07eb56a1D",
+    "Ryker": "0x49827CF9ac8c00bf13dE240aF5211401D448e133",
+    "Thaddeus": "0x3025CB69FaD0Eb26aB6F90DC01b02B31048f1Bf1"
+};
 
-  const contractItemAddresses = {
-    "AriaBody": "0x225f647344418AD2FaBf4282649bd045656870Dc",
-    "AriaHead": "0xFd2694a26127A34DeF6Eddb04760102821ca2dd9",
-    "AriaLeftHand": "0x9Ea72623340C7420f5cAb670e7a77Cca879ED9bD",
-    "AriaRightHand": "0xfF1923f1Ae0601bD962FD2eE4Ad6B285dF668e0d",
+const contractItemAddresses = {
+  "AriaBody": "0x20D730B01ff9749b76e21D865128Da1B3Fe64392",
+  "AriaHead": "0x24ec16B0A24554c857C5D58bF1f4BBE556f6D6A1",
+  "AriaLeftHand": "0x962ac89d6DeF62E09e0e6BAE6a981b8A4536E6b5",
+  "AriaRightHand": "0xF616d4c889654D81BBaA388D2c6fb1CA54Eea25E",
 
-    "LunaBody": "0xBA88F7834D9D3f350222b78b4046c0f12B00d980",
-    "LunaHead": "0xC24f2A9263b9F86680C4F56F2B83E9fFA1ccdc9b",
-    "LunaLeftHand": "0x1F88d1694372BE1cAe8037888A2A2c22E949bb7d",
-    "LunaRightHand": "0x1d67c78882e2dba65659958d1Db09566E5aaf2aC",
+  "LunaBody": "0x07a2016536cc594ADca5CfF95A77aE6AdEbA8E83",
+  "LunaHead": "0xceBA956B5C38E12330552C73dd8e718572541F07",
+  "LunaLeftHand": "0x99Ccc376D152504f673b7D7D5875A1C30F43F987",
+  "LunaRightHand": "0xf09484859C3750Ec880eC6349D1D021881c183bc",
 
-    "RykerBody": "0xc6d66e35DF2f3150056DcC7D2c5d2BA4e719c054",
-    "RykerHead": "0x903eEaC60a50f5f459E5Fa5bF87C5BB0552cF8F0",
-    "RykerLeftHand": "0xbCfc42003bC3eFC7813A355DD514532525dc6b0f",
-    "RykerRightHand": "0x9dB9312A55550B0F6a5fcaAb31F5fBb9Abfbb3Cb",
+  "RykerBody": "0xba228c1500912deE060227C5E9376800caefFbF9",
+  "RykerHead": "0xA63dd6aC8E22FA4d09e81680168aBeF95fC97B46",
+  "RykerLeftHand": "0x0A4e95b961ecB2E0c8212933966cc2609C33bb1C",
+  "RykerRightHand": "0xebb8D47B02040131fCeB371C87948ade9c20e613",
 
-    "ThaddeusBody": "0xbbE40d2dC88e21B5FF7600239867ea033725b02a",
-    "ThaddeusHead": "0xC352128862fDE7b6C02edc40D0d8b2F92D472392",
-    "ThaddeusLeftHand": "0xa7A13411b55daFd9c0Cc69f5bfa21B3d71ca6bb7",
-    "ThaddeusRightHand": "0x7ea2542c69B768747583D90a41cF35916571c15C"
-  };
+  "ThaddeusBody": "0x7beb49b806Dc8F5c07d93aFE2c99c248CeA156Fb",
+  "ThaddeusHead": "0x920334512979058ea29594e65212E3E641f9e66a",
+  "ThaddeusLeftHand": "0x189457A1Be8f89D84aD24dE400B5748c8A825Af4",
+  "ThaddeusRightHand": "0xfd68e0eEb4Ad3fA20A6BFcf1ffCf718AB65F677F"
+};
+
 
   const timeSquadAria: TimeSquadAria = await ethers.getContractAt('TimeSquadAria', contractParentAddresses.Aria, deployer);
   const timeSquadLuna: TimeSquadLuna = await ethers.getContractAt('TimeSquadLuna', contractParentAddresses.Luna, deployer);
@@ -119,36 +120,15 @@ async function main() {
   const thaddeusLeftHand: ThaddeusLeftHand = await ethers.getContractAt('ThaddeusLeftHand', contractItemAddresses.ThaddeusLeftHand, deployer);
   const thaddeusRightHand: ThaddeusRightHand = await ethers.getContractAt('ThaddeusRightHand', contractItemAddresses.ThaddeusRightHand, deployer);
   
+
+
 const vicedirettoreAddress = "0x93e7b1f3fA8f57425B8a80337D94Ae3992879911"
-  
-const managerAddress = "0xC785C764d759a2d5860bb966a159DD72b15b9B07"
+const contract7508Address = "0xE5CF7218253535E019bb4B38Fb9d0167BB6D049e"
+const managerAddress = "0xceed712979DE2D082cBDc50c58FB4411F8b1A006"
   const manager: AgeOfChronosManager = await ethers.getContractAt('AgeOfChronosManager', managerAddress, deployer);
 
 
 /*
-  // Deploying Manager contract
-  const Manager = await ethers.getContractFactory('AgeOfChronosManager');
-  const manager = await Manager.deploy();
-  await manager.waitForDeployment();
-
-  const managerAddress = await manager.getAddress();
-  console.log('managerAddress deployed to:', managerAddress);
-
-
-  if (!isHardhatNetwork()) {
-      console.log('Waiting 20 seconds before verifying contract...');
-      await delay(20000);
-      await run('verify:verify', {
-          address: managerAddress,
-          constructorArguments: [],
-          contract: `contracts/manager/AgeOfChronosManager.sol:AgeOfChronosManager`,
-      });
-  }
-  console.log('Deployment complete!');
-  await delay(2000);
-*/
-
-
   //configure manager
   await configureManager(timeSquadAria, [ariaBody, ariaHead, ariaLeftHand, ariaRightHand], manager);
   await delay(5000)
@@ -159,7 +139,7 @@ const managerAddress = "0xC785C764d759a2d5860bb966a159DD72b15b9B07"
   await configureManager(timeSquadThaddeus, [thaddeusBody, thaddeusHead, thaddeusLeftHand, thaddeusRightHand], manager);
   await delay(5000)
   console.log("Manager configured")  
-
+*/
     //set parent collections
     await manager.setRykerCollection(await timeSquadRyker.getAddress());
     await delay(5000)
@@ -206,10 +186,19 @@ const managerAddress = "0xC785C764d759a2d5860bb966a159DD72b15b9B07"
     await delay(5000)
 
     //set7508
-    decodeUnsafe
+    await manager.set7508Address(contract7508Address)
+    console.log("add set7508") 
+    await delay(5000)
 
+    //setExternalAccount
+    await manager.setExternalAccount(vicedirettoreAddress)
+    console.log("setExternalAccount") 
+    await delay(5000)
 
     //set key e value
+    await manager.setFeeAttribute("NomindioLabs",0)
+    console.log("add set7508") 
+    await delay(5000)
 }
 
 main().catch((error) => {

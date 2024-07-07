@@ -31,18 +31,20 @@ async function main() {
 
 
   const contractParentAddresses: { [key: string]: string } = {
-    "Aria": "0x870D7B70d763FbD4CFBd980CEE92BeD8ea681859",
-    "Luna": "0x09C774cbD3b784C5f93F053ba56C11c1c036A3Af",
-    "Ryker": "0x456Ad22F5F40B183cc5a8E1AD6377d6A317CDB87",
-    "Thaddeus": "0x959cDAfeeE9ecbd5ea7Ea6C2D3fcB1595F10e8bd"
-  };
+    "Aria": "0xB594ff9BF060FE2fbb45f2eC528676856D8Da511",
+    "Luna": "0xA8c3Cd7F534E6cA415F2978097885B9C6c5C749C",
+    "Ryker": "0x53a2ee42506939bcEf2a9bf69097Ac7616D4AA66",
+    "Thaddeus": "0x55A7dd722eAAb2e8Becd08b54b9f2cB79755a059"
+};
 
-  const contractCatalogAddresses: { [key: string]: string } = {
-    "Aria": "0x0a3fdc64FD9799c07f5E13644580914326d54AB3",
-    "Luna": "0x3c48fa60bE6C45704ddcCffA7FbFC36dEe52b045",
-    "Ryker": "0x631934D67177bA789E3e5f1f49d046456624fA6B",
-    "Thaddeus": "0x93b87941640d7f7Bf28cab5AD1B77f40C7570cC7"
-  };
+const contractCatalogAddresses: { [key: string]: string } = {
+    "Aria": "0x8E4773ff3Cb94E78cA44ed0E5aA0844033B462db",
+    "Luna": "0xa4DdF7045925e96acfBe5d789A5994D07eb56a1D",
+    "Ryker": "0x49827CF9ac8c00bf13dE240aF5211401D448e133",
+    "Thaddeus": "0x3025CB69FaD0Eb26aB6F90DC01b02B31048f1Bf1"
+};
+
+
 
 const TimeSquadAria: TimeSquadAria = await ethers.getContractAt('TimeSquadAria', contractParentAddresses.Aria, deployer);
 const TimeSquadLuna: TimeSquadLuna = await ethers.getContractAt('TimeSquadLuna', contractParentAddresses.Luna, deployer);
