@@ -11,7 +11,6 @@ import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import { isMobile } from 'react-device-detect';
 
-
 export default function GamesPage() {  
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
