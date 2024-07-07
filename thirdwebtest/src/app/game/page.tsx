@@ -14,6 +14,19 @@ import { faXTwitter } from '@fortawesome/free-brands-svg-icons';
 export default function GamesPage() {
   const [isMobile, setIsMobile] = useState(false);
   const [hasLoadedGame, setHasLoadedGame] = useState(false);
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadScript = () => {
+      const script = document.createElement('script');
+      script.src = '/unity/lib/thirdweb-unity-bridge.js';
+      script.async = true;
+      script.onload = () => setScriptLoaded(true);
+      document.body.appendChild(script);
+    };
+
+    loadScript();
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -67,7 +80,7 @@ export default function GamesPage() {
         ) : (
           <Unity
             unityProvider={unityProvider}
-            style={{ width: '100vw', height: '100vh', border: 'none' }}
+            style={{ width: '80vw', height: '80vh', border: 'none' }}
           />
         )}
 
