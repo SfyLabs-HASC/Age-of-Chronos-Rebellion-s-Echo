@@ -23,6 +23,19 @@ declare global {
 export default function GamesPage() {
   const [isMobile, setIsMobile] = useState(false);
   const [hasLoadedGame, setHasLoadedGame] = useState(false);
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadScript = () => {
+      const script = document.createElement('script');
+      script.src = '/unity/lib/thirdweb-unity-bridge.js';
+      script.async = true;
+      script.onload = () => setScriptLoaded(true);
+      document.body.appendChild(script);
+    };
+
+    loadScript();
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -113,16 +126,10 @@ export default function GamesPage() {
             </Link>
           </div>
         ) : (
-          <>
-            <div id="spinner">Loading...</div>
-            <div id="loadingCover">
-              <div id="progressBarEmpty">
-                <div id="progressBarFull"></div>
-              </div>
-            </div>
-            <button id="fullscreenButton" style={{ display: 'none' }}>Fullscreen</button>
-            <Unity unityProvider={unityProvider} style={{ width: '80vw', height: '80vh', border: 'none' }} />
-          </>
+          <Unity
+            unityProvider={unityProvider}
+            style={{ width: '80vw', height: '80vh', border: 'none' }}
+          />
         )}
 
         <ul className="socialLink d-flex flex-row justify-content-center m-0 p-0">
