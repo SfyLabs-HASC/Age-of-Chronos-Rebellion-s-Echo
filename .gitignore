@@ -8,6 +8,8 @@ scripts/dist
 pythonAutomation/output
 pythonAutomation/output.zip
 temp
+testKeypair/private.key
+testKeypair/public.key
 .idea
 
 #Hardhat files
