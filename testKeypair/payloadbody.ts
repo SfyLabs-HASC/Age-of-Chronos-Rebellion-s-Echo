@@ -34,7 +34,7 @@ const createAccessToken = (body: any) => {
   // Sign the payload to create the access token with a longer expiration for testing
   return jsonwebtoken.sign(payload, {
     algorithm: 'ES256',
-    expiresIn: '5m', // Token valid for 5 minutes
+    expiresIn: '15s', // Token valid for 15s
   });
 };
 
