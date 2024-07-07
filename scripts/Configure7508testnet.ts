@@ -83,7 +83,7 @@ async function main() {
     "ThaddeusRightHand": "0xfd68e0eEb4Ad3fA20A6BFcf1ffCf718AB65F677F"
   };
 
-  const managerAddress: string = "0xceed712979DE2D082cBDc50c58FB4411F8b1A006";
+  const managerAddress: string = "0x7ccDc0BCaf6d3B4787Fd39e96587eEb1B384986d";
   const TOKEN_ATTRIBUTES_REPOSITORY_ADDRESS_DRAFT_MOONBASE =
     '0xE5CF7218253535E019bb4B38Fb9d0167BB6D049e';
   const vicedirettoreAddress = "0x93e7b1f3fA8f57425B8a80337D94Ae3992879911"
@@ -184,32 +184,11 @@ async function main() {
       console.log(`manageCollaborators: ${vicedirettoreAddress} is set as ${true} for ${key} collection`)
       delay(2000)
     }
-  }
-
-
-  /*
-  for (const [key, address] of Object.entries(contractParentAddresses)) {
-    let isSpecificAddressDeployer = await tokenAttributesContract.isSpecificAddress(deployer.address, address, "NomindioLabs");
-    console.log(`${key} collection (address: ${address}):isSpecificAddress for Deployer: ${isSpecificAddressDeployer}`);
-
-    let isSpecificAddressAddr1 = await tokenAttributesContract.isSpecificAddress(addr1.address, address, "NomindioLabs");
-    console.log(`${key} collection (address: ${address}):isSpecificAddress for addr1: ${isSpecificAddressAddr1}`);
-
-  }
-*/
-
-  const tokenId = 1;
-  for (const [key, address] of Object.entries(contractParentAddresses)) {
-    const whichLevel = await getUintAttribute(address, tokenId, attributesKey);
-    console.log(`${key} collection TokenID: ${tokenId} (address: ${address}):whichLevel: ${whichLevel}`);
-  }
-
-
-  console.log("provo col videdirettore")
 
 
 
-  const accessTypeCollaborator = 1;  //1 is collaborator
+    //per Address1
+    const accessTypeCollaborator = 1;  //1 is collaborator
     for (const [key, address] of Object.entries(contractParentAddresses)) {
       //Only the owner of the collection can call this function
       let tx = await tokenAttributesContract.manageAccessControl(
@@ -241,6 +220,35 @@ async function main() {
     }
 
     delay(5000)
+
+
+
+  }
+
+
+  /*
+  for (const [key, address] of Object.entries(contractParentAddresses)) {
+    let isSpecificAddressDeployer = await tokenAttributesContract.isSpecificAddress(deployer.address, address, "NomindioLabs");
+    console.log(`${key} collection (address: ${address}):isSpecificAddress for Deployer: ${isSpecificAddressDeployer}`);
+
+    let isSpecificAddressAddr1 = await tokenAttributesContract.isSpecificAddress(addr1.address, address, "NomindioLabs");
+    console.log(`${key} collection (address: ${address}):isSpecificAddress for addr1: ${isSpecificAddressAddr1}`);
+
+  }
+*/
+
+  const tokenId = 1;
+  for (const [key, address] of Object.entries(contractParentAddresses)) {
+    const whichLevel = await getUintAttribute(address, tokenId, attributesKey);
+    console.log(`${key} collection TokenID: ${tokenId} (address: ${address}):whichLevel: ${whichLevel}`);
+  }
+
+
+  console.log("provo col videdirettore")
+
+
+
+  
   const tokenAttributesContractAddr1: RMRKTokenAttributesRepository = await ethers.getContractAt('RMRKTokenAttributesRepository', TOKEN_ATTRIBUTES_REPOSITORY_ADDRESS_DRAFT_MOONBASE, addr1);
 
   for (const [key, address] of Object.entries(contractParentAddresses)) {
@@ -248,65 +256,6 @@ async function main() {
     delay(2000)
     console.log("ricevuta",resultato.hash)
   }
-
-  /*
-  const resultato = await setUintAttribute(collection,2,attributesKey,0)
-    delay(2000)
-    console.log("ricevuta",resultato)
-    */
-
-
-
-  /*
-  
-    const firstTime = false
-    if (firstTime) {
-      const tx = await tokenAttributesContract.registerAccessControl(collection, deployer.address, true);
-      await tx.wait();
-    }
-  
-    whois = await tokenAttributesContract.isCollaborator(deployer.address, collection);
-    console.log(whois);
-  
-    //delay(1000)
-  
-    const attributesKey = "NomindioLabs";
-    const accessType = 0;  //0 is owner
-  
-    
-    let tx = await tokenAttributesContract.manageAccessControl(
-      collection,
-      attributesKey,
-      accessType,
-      deployer.address,
-    );
-    await tx.wait(); 
-  
-  
-    
-  
-    //whois= await tokenAttributesContract.isCollaborator(deployer.address, collection);
-    //console.log(whois);
-  
-    whois = await tokenAttributesContract.isSpecificAddress(deployer.address, collection, "multiCorp");
-    console.log(whois);
-    whois = await tokenAttributesContract.isSpecificAddress(deployer.address, collection, "MultiCorp");
-    console.log(whois);
-  
-    
-  
-    
-    const resultato = await setUintAttribute(collection,2,"Nomindio Labs",0)
-    delay(2000)
-    console.log("ricevuta",resultato)
-    
-    
-    
-  
-    const whichLevel = await getUintAttribute(collection,2,"Nomindio Labs");
-    console.log(whichLevel)
-  
-  */
 
   // Function to check if an address is a collaborator
   async function isCollaborator(collection: string, collaborator: string): Promise<boolean> {

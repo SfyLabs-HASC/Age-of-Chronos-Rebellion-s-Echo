@@ -18,9 +18,10 @@ const publicKeyPath = 'src/keys/public.pem';
 // Define the engine URL and wallet addresses
 const engineBaseUrl = 'https://c33fdf82.engine-usw2.thirdweb.com';
 const backendWalletAddress = '0x93e7b1f3fA8f57425B8a80337D94Ae3992879911';
-const managerContractAddress = '0xceed712979DE2D082cBDc50c58FB4411F8b1A006';
+const managerContractAddress = '0x7ccDc0BCaf6d3B4787Fd39e96587eEb1B384986d';
 const recipientAddress = '0xe204E95cD77Fa95FE669aeCCD8d51A59bFa25A52'; // Wallet to send funds to
-const chain = '1284'; // Assuming '1284' is the correct chain ID for Moonbeam
+//const chain = '1284'; // Assuming '1284' is the correct chain ID for Moonbeam
+const chain = '1287'; // Assuming '1287' is the correct chain ID for MoonbaseAlpha
 
 export async function GET(req: NextRequest) {
   return NextResponse.json({ message: 'Ciao Davide!' });
@@ -45,7 +46,7 @@ export async function POST(req: NextRequest) {
   // Crea access token
   const accessToken = jsonwebtoken.sign(payload, privateKey, {
     algorithm: 'ES256',
-    expiresIn: '5m', // Token valid for 15s
+    expiresIn: '5m', // Token valid for 5m
   });
 
   // Configura il corpo della richiesta per endMission

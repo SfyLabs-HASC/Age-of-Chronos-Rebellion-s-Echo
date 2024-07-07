@@ -44,6 +44,9 @@ import {
 import * as C from './constants';
 import { decodeUnsafe } from 'bs58';
 
+import { createThirdwebClient, defineChain, getContract, prepareContractCall, readContract } from 'thirdweb';
+import { verifyContract } from "thirdweb/contract";
+
 async function main() {
   const [deployer, addr1, addr2] = await ethers.getSigners();
   console.log('Deployer:', deployer.address);
@@ -124,9 +127,12 @@ const contractItemAddresses = {
 
 const vicedirettoreAddress = "0x93e7b1f3fA8f57425B8a80337D94Ae3992879911"
 const contract7508Address = "0xE5CF7218253535E019bb4B38Fb9d0167BB6D049e"
-const managerAddress = "0xceed712979DE2D082cBDc50c58FB4411F8b1A006"
+const managerAddress = "0x7ccDc0BCaf6d3B4787Fd39e96587eEb1B384986d"
   const manager: AgeOfChronosManager = await ethers.getContractAt('AgeOfChronosManager', managerAddress, deployer);
 
+
+
+  
   if (!isHardhatNetwork()) {
     console.log('Waiting 20 seconds before verifying contract...');
     //await delay(20000);
@@ -138,7 +144,7 @@ const managerAddress = "0xceed712979DE2D082cBDc50c58FB4411F8b1A006"
 }
 
 
-/*
+
   //configure manager
   await configureManager(timeSquadAria, [ariaBody, ariaHead, ariaLeftHand, ariaRightHand], manager);
   await delay(5000)
@@ -149,10 +155,10 @@ const managerAddress = "0xceed712979DE2D082cBDc50c58FB4411F8b1A006"
   await configureManager(timeSquadThaddeus, [thaddeusBody, thaddeusHead, thaddeusLeftHand, thaddeusRightHand], manager);
   await delay(5000)
   console.log("Manager configured")  
-*/
 
 
-/*
+
+
     //set parent collections
     await manager.setRykerCollection(await timeSquadRyker.getAddress());
     await delay(5000)
@@ -215,9 +221,9 @@ const managerAddress = "0xceed712979DE2D082cBDc50c58FB4411F8b1A006"
 
 
 
-    */
-       //configura la 7508
-       
+    console.log("fine")
+
+
 }
 
 main().catch((error) => {
