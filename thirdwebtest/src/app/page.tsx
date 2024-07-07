@@ -19,7 +19,7 @@ export default function Home() {
             <Link href="./mint" passHref className="hex_button turret-road-bold me-3">
               JOIN THE REBELLION
             </Link>
-            <Link href="/game" passHref className="hex_button turret-road-bold">
+            <Link href="/game" passHref className="hex_button turret-road-bold play-game-button">
               Play game
             </Link>
           </div>
