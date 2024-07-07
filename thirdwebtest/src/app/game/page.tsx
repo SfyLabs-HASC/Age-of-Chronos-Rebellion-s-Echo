@@ -1,28 +1,17 @@
 'use client';
 
 import { Unity, useUnityContext } from 'react-unity-webgl';
+import { AiOutlineFullscreen } from 'react-icons/ai';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Image from 'next/image';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { faXTwitter } from '@fortawesome/free-brands-svg-icons';
+import { isMobile } from 'react-device-detect';
 
-// Dichiara createUnityInstance come variabile globale se non è importata
-declare const createUnityInstance: any;
-
-// Dichiara initializeThirdweb come funzione globale
-declare global {
-  interface Window {
-    initializeThirdweb: (unityInstance: any) => void;
-  }
-}
-
-export default function GamesPage() {
-  const [isMobile, setIsMobile] = useState(false);
-  const [hasLoadedGame, setHasLoadedGame] = useState(false);
+export default function GamesPage() {  
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
   useEffect(() => {
@@ -37,81 +26,12 @@ export default function GamesPage() {
     loadScript();
   }, []);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (!hasLoadedGame) {
-        setIsMobile(window.innerWidth <= 990);
-      }
-    };
-
-    if (typeof window !== 'undefined') {
-      handleResize();
-      window.addEventListener('resize', handleResize);
-
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    }
-  }, [hasLoadedGame]);
-
-  const { unityProvider, isLoaded, loadingProgression, error } = useUnityContext({
+  const { unityProvider, isLoaded, requestFullscreen, loadingProgression } = useUnityContext({
     loaderUrl: '/unity/Build/TestWebGL.loader.js',
     dataUrl: '/unity/Build/TestWebGL.data',
     frameworkUrl: '/unity/Build/TestWebGL.framework.js',
     codeUrl: '/unity/Build/TestWebGL.wasm',
   });
-
-  useEffect(() => {
-    if (isLoaded) {
-      setHasLoadedGame(true);
-      setIsMobile(false);
-
-      // Load the Thirdweb script dynamically
-      const script = document.createElement('script');
-      script.src = '/unity/lib/thirdweb-unity-bridge.js';
-      script.onload = () => {
-        if (typeof window !== 'undefined') {
-          const canvas = document.getElementById('unityCanvas');
-          const config = {
-            dataUrl: '/unity/Build/TestWebGL.data',
-            frameworkUrl: '/unity/Build/TestWebGL.framework.js',
-            codeUrl: '/unity/Build/TestWebGL.wasm',
-          };
-          const spinner = document.getElementById('spinner');
-          const progressBarEmpty = document.getElementById('progressBarEmpty');
-          const progressBarFull = document.getElementById('progressBarFull');
-          const loadingCover = document.getElementById('loadingCover');
-          const fullscreenButton = document.getElementById('fullscreenButton');
-          const canFullscreen = typeof fullscreenButton !== 'undefined';
-          const hideFullScreenButton = false;
-
-          if (spinner && progressBarEmpty && progressBarFull && loadingCover && canvas) {
-            createUnityInstance(canvas, config, (progress: number) => {
-              spinner.style.display = "none";
-              progressBarEmpty.style.display = "";
-              progressBarFull.style.width = `${100 * progress}%`;
-            }).then((unityInstance: any) => {
-              loadingCover.style.display = "none";
-              if (canFullscreen && fullscreenButton) {
-                if (!hideFullScreenButton) {
-                  fullscreenButton.style.display = "";
-                }
-                fullscreenButton.onclick = () => {
-                  unityInstance.SetFullscreen(1);
-                };
-              }
-              if (typeof window.initializeThirdweb === 'function') {
-                window.initializeThirdweb(unityInstance);
-              }
-            }).catch((message: any) => {
-              alert(message);
-            });
-          }
-        }
-      };
-      document.body.appendChild(script);
-    }
-  }, [isLoaded]);
 
   return (
     <section id="home">
@@ -126,13 +46,26 @@ export default function GamesPage() {
             </Link>
           </div>
         ) : (
-          <Unity
-            unityProvider={unityProvider}
-            style={{ width: '80vw', height: '80vh', border: 'none' }}
-          />
+          <div className='unity-container'>
+            {!isLoaded && (
+              <div className="progress-container">
+                <div className="progress-bar" style={{ width: `${loadingProgression * 100}%` }}></div>
+                <p>Loading... {Math.round(loadingProgression * 100)}%</p>
+              </div>
+            )}
+            <div className="unity-wrapper">
+              <Unity
+                unityProvider={unityProvider}
+                style={{ visibility: isLoaded ? "visible" : "hidden", width: '75vw', height: 'calc(75vw * 9 / 16)', border: 'none' }}
+              />
+              <button key='fullscreen' className='btn btn-info mb-4 rounded-sm fullscreen-button' onClick={() => requestFullscreen(true)}>
+                <AiOutlineFullscreen size={32} />
+              </button>
+            </div>
+          </div>
         )}
 
-        <ul className="socialLink d-flex flex-row justify-content-center m-0 p-0">
+        <ul className="socialLink d-flex flex-row justify-content-center m-0 p-0 mt-3">
           <li>
             <Link href="https://hub.xyz/sfy-labs">
               <FontAwesomeIcon icon={faLink} />
@@ -144,7 +77,7 @@ export default function GamesPage() {
             </Link>
           </li>
         </ul>
-        <ul className="brandList d-flex flex-row justify-content-center m-0 mt-5 p-0">
+        <ul className="brandList d-flex flex-row justify-content-center m-0 mt-3 p-0">
           <li>
             <Image src="/img/svg/moonbeam.svg" alt="Moonbeam" width={80} height={30} />
           </li>
@@ -156,6 +89,63 @@ export default function GamesPage() {
           </li>
         </ul>
       </div>
+      <style jsx>{`
+        .unity-container {
+          position: relative;
+          width: 75vw;
+          height: calc(75vw * 9 / 16); /* Maintain 16:9 aspect ratio */
+          max-width: 100%;
+          max-height: 100%;
+          margin: 20px 0;
+        }
+
+        .unity-wrapper {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end; /* Align items to the right */
+        }
+
+        .fullscreen-button {          
+          border: none;
+          color: white;
+          padding: 10px;
+          cursor: pointer;
+          margin-top: 10px; /* Add margin from the Unity canvas */
+        }
+
+        .progress-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          width: 80vw;
+          height: calc(80vw * 9 / 16);
+          border: none;
+          background: rgba(0, 0, 0, 0.5);
+          color: white;
+        }
+
+        .progress-bar {
+          width: 0%;
+          height: 10px;
+          background: #00ff00;
+          margin-bottom: 10px;
+          transition: width 0.3s ease-in-out;
+        }
+
+        .socialLink,
+        .brandList {
+          list-style: none;
+          padding: 0;
+        }
+
+        .socialLink li,
+        .brandList li {
+          margin: 0 10px;
+        }
+      `}</style>
+
     </section>
   );
 }
