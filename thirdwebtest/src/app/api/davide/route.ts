@@ -20,7 +20,6 @@ const engineBaseUrl = 'https://c33fdf82.engine-usw2.thirdweb.com';
 const backendWalletAddress = '0x93e7b1f3fA8f57425B8a80337D94Ae3992879911';
 const managerContractAddress = '0x7ccDc0BCaf6d3B4787Fd39e96587eEb1B384986d';
 const recipientAddress = '0xe204E95cD77Fa95FE669aeCCD8d51A59bFa25A52'; // Wallet to send funds to
-//const chain = '1284'; // Assuming '1284' is the correct chain ID for Moonbeam
 const chain = '1287'; // Assuming '1287' is the correct chain ID for MoonbaseAlpha
 
 export async function GET(req: NextRequest) {
@@ -29,40 +28,120 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const data = await req.json();
-  const {solidityFunction, rykerTokenId, lunaTokenId, ariaTokenId, thaddeusTokenId, key } = data;
-  const dataToTransfer = { rykerTokenId, lunaTokenId, ariaTokenId, thaddeusTokenId, key }
+  const { rykerTokenId, lunaTokenId, ariaTokenId, thaddeusTokenId, key } = data;
+
+  const bodyToHash = {
+    functionName: "startMission",
+    args: [
+      rykerTokenId,
+      lunaTokenId,
+      ariaTokenId,
+      thaddeusTokenId,
+      key
+    ],
+    txOverrides: {
+      gas: "530000",
+      maxFeePerGas: "1000000000",
+      maxPriorityFeePerGas: "1000000000",
+      value: "10000000000"
+    },
+    abi: [
+      {
+        type: "function",
+        name: "startMission",
+        inputs: [
+          {
+            type: "uint256",
+            name: "rykerTokenId"
+          },
+          {
+            type: "uint256",
+            name: "lunaTokenId"
+          },
+          {
+            type: "uint256",
+            name: "ariaTokenId"
+          },
+          {
+            type: "uint256",
+            name: "thaddeusTokenId"
+          },
+          {
+            type: "string",
+            name: "key"
+          }
+        ],
+        stateMutability: "nonpayable"
+      }
+    ]
+  };
+
   // Carica le chiavi
-  //const privateKey = await loadKey(privateKeyPath);
-  //const publicKey = await loadKey(publicKeyPath);
-
-
+  const privateKey = await loadKey(privateKeyPath);
+  const publicKey = await loadKey(publicKeyPath);
 
   const payload = {
     iss: publicKey,
-    bodyHash: createHash('sha256').update(JSON.stringify(dataToTransfer)).digest('hex'),
+    bodyHash: createHash('sha256').update(JSON.stringify(bodyToHash)).digest('hex'),
   };
 
-  console.log("bodyhash",JSON.stringify(dataToTransfer))
   // Crea access token
   const accessToken = jsonwebtoken.sign(payload, privateKey, {
     algorithm: 'ES256',
-    expiresIn: '5m', // Token valid for 5m
+    expiresIn: '5m', // Token valid for 5 minutes
   });
 
   // Configura il corpo della richiesta per endMission
   const requestBody = JSON.stringify({
-    rykerTokenId,
-    lunaTokenId,
-    ariaTokenId,
-    thaddeusTokenId,
-    key,
+    functionName: "startMission",
+    args: [
+      rykerTokenId,
+      lunaTokenId,
+      ariaTokenId,
+      thaddeusTokenId,
+      key
+    ],
+    txOverrides: {
+      gas: "530000",
+      maxFeePerGas: "1000000000",
+      maxPriorityFeePerGas: "1000000000",
+      value: "10000000000"
+    },
+    abi: [
+      {
+        type: "function",
+        name: "startMission",
+        inputs: [
+          {
+            type: "uint256",
+            name: "rykerTokenId"
+          },
+          {
+            type: "uint256",
+            name: "lunaTokenId"
+          },
+          {
+            type: "uint256",
+            name: "ariaTokenId"
+          },
+          {
+            type: "uint256",
+            name: "thaddeusTokenId"
+          },
+          {
+            type: "string",
+            name: "key"
+          }
+        ],
+        stateMutability: "nonpayable"
+      }
+    ]
   });
-  console.log("requestBody",requestBody)
 
   try {
     // Effettua la richiesta all'engine
     const response = await axios.post(
-      `${engineBaseUrl}/contract/${chain}/${managerContractAddress}/${solidityFunction}`,
+      `${engineBaseUrl}/contract/${chain}/${managerContractAddress}/write?simulateTx=true`,
       requestBody,
       {
         headers: {
