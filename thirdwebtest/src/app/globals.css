@@ -451,4 +451,8 @@ header .logo_inside {
   .player span.name{
     font-size: 0.8em;
   }
+
+  .hex_button.play-game-button {
+    display: none;
+  }
 }

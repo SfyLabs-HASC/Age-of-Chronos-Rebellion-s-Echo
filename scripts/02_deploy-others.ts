@@ -95,7 +95,6 @@ const TimeSquadThaddeus: TimeSquadThaddeus = await ethers.getContractAt('TimeSqu
   await delay(5000)
   await configureManager(TimeSquadAria, [ariaBody, ariaHead, ariaLeftHand, ariaRightHand], manager);
   await delay(5000)
-  //da qua devi riprendere
   await configureManager(TimeSquadLuna, [lunaBody, lunaHead, lunaLeftHand, lunaRightHand], manager);
   await delay(5000)
   await configureManager(TimeSquadRyker, [rykerBody, rykerHead, rykerLeftHand, rykerRightHand], manager);
