@@ -119,98 +119,116 @@ async function main() {
   const thaddeusLeftHand: ThaddeusLeftHand = await ethers.getContractAt('ThaddeusLeftHand', contractItemAddresses.ThaddeusLeftHand, deployer);
   const thaddeusRightHand: ThaddeusRightHand = await ethers.getContractAt('ThaddeusRightHand', contractItemAddresses.ThaddeusRightHand, deployer);
   
-const vicedirettoreAddress = "0x93e7b1f3fA8f57425B8a80337D94Ae3992879911"
-  
-const managerAddress = "0xC785C764d759a2d5860bb966a159DD72b15b9B07"
+
+
+  const vicedirettoreAddress = "0x93e7b1f3fA8f57425B8a80337D94Ae3992879911"
+  const contract7508Address = "0xE5CF7218253535E019bb4B38Fb9d0167BB6D049e"
+  const managerAddress = "0xd50248022D8b254De8923109664918f707e4D074"
   const manager: AgeOfChronosManager = await ethers.getContractAt('AgeOfChronosManager', managerAddress, deployer);
-
-
-/*
+  
+    
+  /*
   // Deploying Manager contract
-  const Manager = await ethers.getContractFactory('AgeOfChronosManager');
-  const manager = await Manager.deploy();
-  await manager.waitForDeployment();
-
-  const managerAddress = await manager.getAddress();
-  console.log('managerAddress deployed to:', managerAddress);
-
-
-  if (!isHardhatNetwork()) {
+    const Manager = await ethers.getContractFactory('AgeOfChronosManager');
+    const manager = await Manager.deploy();
+    await manager.waitForDeployment();
+  
+    const managerAddress = await manager.getAddress();
+    console.log('managerAddress deployed to:', managerAddress);
+  
+  
+    if (!isHardhatNetwork()) {
       console.log('Waiting 20 seconds before verifying contract...');
       await delay(20000);
       await run('verify:verify', {
           address: managerAddress,
           constructorArguments: [],
-          contract: `contracts/manager/AgeOfChronosManager.sol:AgeOfChronosManager`,
+          contract: 'contracts/manager/AgeOfChronosManager.sol:AgeOfChronosManager',
       });
   }
-  console.log('Deployment complete!');
-  await delay(2000);
-*/
-
-
-  //configure manager
-  await configureManager(timeSquadAria, [ariaBody, ariaHead, ariaLeftHand, ariaRightHand], manager);
-  await delay(5000)
-  await configureManager(timeSquadLuna, [lunaBody, lunaHead, lunaLeftHand, lunaRightHand], manager);
-  await delay(5000)
-  await configureManager(timeSquadRyker, [rykerBody, rykerHead, rykerLeftHand, rykerRightHand], manager);
-  await delay(5000)
-  await configureManager(timeSquadThaddeus, [thaddeusBody, thaddeusHead, thaddeusLeftHand, thaddeusRightHand], manager);
-  await delay(5000)
-  console.log("Manager configured")  
-
-    //set parent collections
-    await manager.setRykerCollection(await timeSquadRyker.getAddress());
+  */
+  
+  
+    //configure manager
+    await configureManager(timeSquadAria, [ariaBody, ariaHead, ariaLeftHand, ariaRightHand], manager);
     await delay(5000)
-    await manager.setLunaCollection(await timeSquadLuna.getAddress());
+    await configureManager(timeSquadLuna, [lunaBody, lunaHead, lunaLeftHand, lunaRightHand], manager);
     await delay(5000)
-    await manager.setAriaCollection(await timeSquadAria.getAddress());
+    await configureManager(timeSquadRyker, [rykerBody, rykerHead, rykerLeftHand, rykerRightHand], manager);
     await delay(5000)
-    await manager.setThaddeusCollection(await timeSquadThaddeus.getAddress());
+    await configureManager(timeSquadThaddeus, [thaddeusBody, thaddeusHead, thaddeusLeftHand, thaddeusRightHand], manager);
     await delay(5000)
-    console.log("parent collection configured") 
-        //set child collections
-        const childCollections = [
-            await ariaBody.getAddress(),
-            await ariaHead.getAddress(),
-            await ariaLeftHand.getAddress(),
-            await ariaRightHand.getAddress(),
-            await lunaBody.getAddress(),
-            await lunaHead.getAddress(),
-            await lunaLeftHand.getAddress(),
-            await lunaRightHand.getAddress(),
-            await rykerBody.getAddress(),
-            await rykerHead.getAddress(),
-            await rykerLeftHand.getAddress(),
-            await rykerRightHand.getAddress(),
-            await thaddeusBody.getAddress(),
-            await thaddeusHead.getAddress(),
-            await thaddeusLeftHand.getAddress(),
-            await thaddeusRightHand.getAddress()
-        ];
-        
-        await manager.setChildCollections(childCollections);
-        console.log("child collection configured") 
-        await delay(5000)
-    //metti al vicedirettore come contributor al manager
-    
-    await manager.addContributor(vicedirettoreAddress)
-    console.log("add contributor vicedirettore") 
-    await delay(5000)
-
-
-    //setFee
-    await manager.setFee(100000000000000000n)  //0.1 ether
-    console.log("fee configured") 
-    await delay(5000)
-
-    //set7508
-    decodeUnsafe
-
-
-    //set key e value
-}
+    console.log("Manager configured")  
+  
+  
+  
+  
+      //set parent collections
+      await manager.setRykerCollection(await timeSquadRyker.getAddress());
+      await delay(5000)
+      await manager.setLunaCollection(await timeSquadLuna.getAddress());
+      await delay(5000)
+      await manager.setAriaCollection(await timeSquadAria.getAddress());
+      await delay(5000)
+      await manager.setThaddeusCollection(await timeSquadThaddeus.getAddress());
+      await delay(5000)
+      console.log("parent collection configured") 
+          //set child collections
+          const childCollections = [
+              await ariaBody.getAddress(),
+              await ariaHead.getAddress(),
+              await ariaLeftHand.getAddress(),
+              await ariaRightHand.getAddress(),
+              await lunaBody.getAddress(),
+              await lunaHead.getAddress(),
+              await lunaLeftHand.getAddress(),
+              await lunaRightHand.getAddress(),
+              await rykerBody.getAddress(),
+              await rykerHead.getAddress(),
+              await rykerLeftHand.getAddress(),
+              await rykerRightHand.getAddress(),
+              await thaddeusBody.getAddress(),
+              await thaddeusHead.getAddress(),
+              await thaddeusLeftHand.getAddress(),
+              await thaddeusRightHand.getAddress()
+          ];
+          
+          await manager.setChildCollections(childCollections);
+          console.log("child collection configured") 
+          await delay(5000)
+      //metti al vicedirettore come contributor al manager
+      
+      await manager.addContributor(vicedirettoreAddress)
+      console.log("add contributor vicedirettore") 
+      await delay(5000)
+  
+  
+      //setFee
+      await manager.setFee(100000000000000000n)  //0.1 ether
+      console.log("fee configured") 
+      await delay(5000)
+  
+      //set7508
+      await manager.set7508Address(contract7508Address)
+      console.log("add set7508") 
+      await delay(5000)
+  
+      //setExternalAccount
+      await manager.setExternalAccount(vicedirettoreAddress)
+      console.log("setExternalAccount") 
+      await delay(5000)
+  
+      //set key e value
+      await manager.setFeeAttribute("NomindioLabs",0)
+      console.log("add set7508") 
+      await delay(5000);
+  
+  
+  
+      console.log("fine")
+  
+  
+  }
 
 main().catch((error) => {
   console.error(error);
