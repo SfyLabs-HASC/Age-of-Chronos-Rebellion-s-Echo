@@ -410,9 +410,9 @@ contract AgeOfChronosManager {
         string memory key
     ) external onlyOwnerOrContributor {
         require(
-            !inMission[rykerCollection][rykerTokenId] &&
-                !inMission[lunaCollection][lunaTokenId] &&
-                !inMission[ariaCollection][ariaTokenId] &&
+            !inMission[rykerCollection][rykerTokenId] ||
+                !inMission[lunaCollection][lunaTokenId] ||
+                !inMission[ariaCollection][ariaTokenId] ||
                 !inMission[thaddeusCollection][thaddeusTokenId],
             "One or more tokens are already in a mission"
         );
