@@ -1,4 +1,6 @@
 // src/app/api/davide/route.ts
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { NextRequest, NextResponse } from 'next/server';
 import { createHash } from 'crypto';
 import jsonwebtoken from 'jsonwebtoken';
