@@ -6,11 +6,12 @@ import axios from 'axios';
 import { promises as fs } from 'fs';
 import path from 'path';
 
-// Carica chiavi pubblica e privata
 const loadKey = async (keyPath: string): Promise<string> => {
   const keyAbsolutePath = path.resolve(process.cwd(), keyPath);
-  return await fs.readFile(keyAbsolutePath, 'utf-8');
+  const key = await fs.readFile(keyAbsolutePath, 'utf-8');
+  return key.replace(/\r/g, '').trim(); // Remove any carriage returns and trim spaces
 };
+
 
 const privateKeyPath = 'src/keys/private.pem';
 const publicKeyPath = 'src/keys/public.pem';
