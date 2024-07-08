@@ -19,6 +19,27 @@ const client = createThirdwebClient({
     clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID!
 });
 
+
+//ATTENZIONE TESTING
+/*
+const myChain = defineChain({
+    id: 1287,
+    name: 'MoonbaseAlpha',
+    rpc: 'https://rpc.testnet.moonbeam.network',
+    nativeCurrency: {
+      name: 'DEV',
+      symbol: 'DEV',
+      decimals: 18,
+    },
+    blockExplorers: [
+      {
+        name: 'Moonscan',
+        url: 'https://moonbase.moonscan.io'
+      }
+    ]
+  });
+  */
+  
 const myChain = defineChain({
     id: 1284,
     name: 'Moonbeam',

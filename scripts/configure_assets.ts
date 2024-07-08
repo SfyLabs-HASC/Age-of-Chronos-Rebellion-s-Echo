@@ -55,55 +55,59 @@ import {
 import { exit } from 'process';
 
 async function main() {
-  const [deployer, addr1, addr2] = await ethers.getSigners();
+  const [deployer, addr1, addr2, addr044] = await ethers.getSigners();
   console.log('Deployer:', deployer.address);
   console.log('Addr1:', addr1 ? addr1.address : 'undefined');
   console.log('Addr2:', addr2 ? addr2.address : 'undefined');
+  console.log('addr044:', addr044 ? addr044.address : 'undefined');
 
-  const contractParentAddresses = {
-      "Aria": "0x28E6bB44976A8CbdF32a826bf2b0F3C83827fBB4",
-      "Luna": "0x713bDF77C02342c975ad16fcA41d923dea3D03B7",
-      "Ryker": "0xa9f2E818A524b51900bc517A6EC97b27C7167F79",
-      "Thaddeus": "0x44700E473182dC3ff512b98424fCd397634BE4EF"
+  const contractParentAddresses: { [key: string]: string } = {
+    "Aria": "0xB594ff9BF060FE2fbb45f2eC528676856D8Da511",
+    "Luna": "0xA8c3Cd7F534E6cA415F2978097885B9C6c5C749C",
+    "Ryker": "0x53a2ee42506939bcEf2a9bf69097Ac7616D4AA66",
+    "Thaddeus": "0x55A7dd722eAAb2e8Becd08b54b9f2cB79755a059"
   };
 
-  const contractCatalogAddresses = {
-      "Aria": "0x5D1A13A03b03c8A6183503f901C06676240DA6a3",
-      "Luna": "0x7C50A1160E0d0B50c6BF302E4b7F90886654947D",
-      "Ryker": "0xc16ee43a79beAcD8811729752EBE77ED9E0D43b3",
-      "Thaddeus": "0x6b4318B1a0afEBA0263300488c42B2AE13a138A9"
+  const contractCatalogAddresses: { [key: string]: string } = {
+    "Aria": "0x8E4773ff3Cb94E78cA44ed0E5aA0844033B462db",
+    "Luna": "0xa4DdF7045925e96acfBe5d789A5994D07eb56a1D",
+    "Ryker": "0x49827CF9ac8c00bf13dE240aF5211401D448e133",
+    "Thaddeus": "0x3025CB69FaD0Eb26aB6F90DC01b02B31048f1Bf1"
   };
 
   const contractItemAddresses = {
-      "AriaBody": "0xcDAC21a0396FCb696284d7e27e5c420A9002559a",
-      "AriaHead": "0xBa8A397438F00b04840c7043f050cD7d57E01AA9",
-      "AriaLeftHand": "0xA595b26ea43B69138e7498e2051453890031c16a",
-      "AriaRightHand": "0xB4bD56aF329d9619E5912E22EE68299EA5e2d160",
-      "LunaBody": "0x5b3927B951Ac8c13143EBb060fAA919A8192B08e",
-      "LunaHead": "0x91de5daf1577f4b71624e62C4c4497678b403AE0",
-      "LunaLeftHand": "0x09263E4a5e7FDA64eF3CE940221D11c56D8c2579",
-      "LunaRightHand": "0x77E1bbA48Fa7Da070a3c070A5d082e5854a4aBF3",
-      "RykerBody": "0x0AC928c0435FE8e884cb0385D26A828CAFa7d8dC",
-      "RykerHead": "0x963eEC4B9330DdD594Bb064db30Ea2D03EfaB5Ac",
-      "RykerLeftHand": "0x3f7Df31f787c07C8101c7be8C6916785aC5A3f61",
-      "RykerRightHand": "0x804bC6FeA5b94e12c9ea82d4d79cc7E21C27727c",
-      "ThaddeusBody": "0x14F448e072A0Bb30fB96a4cF402DE8179beAEC0D",
-      "ThaddeusHead": "0xEd98Bd5D6Cff12472142bd553e300E044dde8Fbb",
-      "ThaddeusLeftHand": "0x7C069383b7f0B54A8de1EEb395eb719545fD8F21",
-      "ThaddeusRightHand": "0x78D5Ff1017d276E9397ab888F635B50937760fB7"
+    "AriaBody": "0x20D730B01ff9749b76e21D865128Da1B3Fe64392",
+    "AriaHead": "0x24ec16B0A24554c857C5D58bF1f4BBE556f6D6A1",
+    "AriaLeftHand": "0x962ac89d6DeF62E09e0e6BAE6a981b8A4536E6b5",
+    "AriaRightHand": "0xF616d4c889654D81BBaA388D2c6fb1CA54Eea25E",
+
+    "LunaBody": "0x07a2016536cc594ADca5CfF95A77aE6AdEbA8E83",
+    "LunaHead": "0xceBA956B5C38E12330552C73dd8e718572541F07",
+    "LunaLeftHand": "0x99Ccc376D152504f673b7D7D5875A1C30F43F987",
+    "LunaRightHand": "0xf09484859C3750Ec880eC6349D1D021881c183bc",
+
+    "RykerBody": "0xba228c1500912deE060227C5E9376800caefFbF9",
+    "RykerHead": "0xA63dd6aC8E22FA4d09e81680168aBeF95fC97B46",
+    "RykerLeftHand": "0x0A4e95b961ecB2E0c8212933966cc2609C33bb1C",
+    "RykerRightHand": "0xebb8D47B02040131fCeB371C87948ade9c20e613",
+
+    "ThaddeusBody": "0x7beb49b806Dc8F5c07d93aFE2c99c248CeA156Fb",
+    "ThaddeusHead": "0x920334512979058ea29594e65212E3E641f9e66a",
+    "ThaddeusLeftHand": "0x189457A1Be8f89D84aD24dE400B5748c8A825Af4",
+    "ThaddeusRightHand": "0xfd68e0eEb4Ad3fA20A6BFcf1ffCf718AB65F677F"
   };
 
-const managerAddress: string = "0x77107E792C3a3bB0A05E27c141182B67Dc411baB";
+  const managerAddress: string = "0x7ccDc0BCaf6d3B4787Fd39e96587eEb1B384986d";
+  const TOKEN_ATTRIBUTES_REPOSITORY_ADDRESS_DRAFT_MOONBASE =
+    '0xE5CF7218253535E019bb4B38Fb9d0167BB6D049e';
+  const vicedirettoreAddress = "0x93e7b1f3fA8f57425B8a80337D94Ae3992879911";
 
 
 
-  const timeSquadAria: TimeSquadAria = await ethers.getContractAt('TimeSquadAria', contractParentAddresses.Aria, deployer);
-  const timeSquadLuna: TimeSquadLuna = await ethers.getContractAt('TimeSquadLuna', contractParentAddresses.Luna, deployer);
-  const timeSquadRyker: TimeSquadRyker = await ethers.getContractAt('TimeSquadRyker', contractParentAddresses.Ryker, deployer);
-  const timeSquadThaddeus: TimeSquadThaddeus = await ethers.getContractAt('TimeSquadThaddeus', contractParentAddresses.Thaddeus, deployer);
-
-  const thaddeusLeftHand: ThaddeusLeftHand = await ethers.getContractAt('ThaddeusLeftHand', contractItemAddresses.ThaddeusLeftHand, deployer);
-  const catalogThaddeus: RMRKCatalogImpl = await ethers.getContractAt('RMRKCatalogImpl', contractCatalogAddresses.Thaddeus, deployer);
+  const timeSquadAria: TimeSquadAria = await ethers.getContractAt('TimeSquadAria', contractParentAddresses.Aria, addr044);
+  const timeSquadLuna: TimeSquadLuna = await ethers.getContractAt('TimeSquadLuna', contractParentAddresses.Luna, addr044);
+  const timeSquadRyker: TimeSquadRyker = await ethers.getContractAt('TimeSquadRyker', contractParentAddresses.Ryker, addr044);
+  const timeSquadThaddeus: TimeSquadThaddeus = await ethers.getContractAt('TimeSquadThaddeus', contractParentAddresses.Thaddeus, addr044);
 
 
 
@@ -111,9 +115,55 @@ const managerAddress: string = "0x77107E792C3a3bB0A05E27c141182B67Dc411baB";
   try {
     const tx00 = await timeSquadThaddeus.totalSupply();
     console.log(`parent totalSupply: ${tx00}`);
-    const tx01 = await thaddeusLeftHand.totalSupply();
-    console.log(`child totalSupply: ${tx01}`);
+/*
+    // Ensure approvals
+    await ensureApproval(timeSquadAria, deployer, 1, "0x9bc3b51B229e0664dd48B2275f6580f973Dca044");
+    await ensureApproval(timeSquadLuna, deployer, 1, "0x9bc3b51B229e0664dd48B2275f6580f973Dca044");
+    await ensureApproval(timeSquadRyker, deployer, 1, "0x9bc3b51B229e0664dd48B2275f6580f973Dca044");
+    await ensureApproval(timeSquadThaddeus, deployer, 1, "0x9bc3b51B229e0664dd48B2275f6580f973Dca044");
 
+//manca il soulbound!!!!!!
+
+    const tx02 = await timeSquadAria.transferFrom(deployer.address, "0x9bc3b51B229e0664dd48B2275f6580f973Dca044", 1);
+    await tx02.wait();
+    await delay(2000);
+    const tx03 = await timeSquadLuna.transferFrom(deployer.address, "0x9bc3b51B229e0664dd48B2275f6580f973Dca044", 1);
+    await tx03.wait();
+    await delay(2000);
+    const tx04 = await timeSquadRyker.transferFrom(deployer.address, "0x9bc3b51B229e0664dd48B2275f6580f973Dca044", 1);
+    await tx04.wait();
+    await delay(2000);
+    const tx05 = await timeSquadThaddeus.transferFrom(deployer.address, "0x9bc3b51B229e0664dd48B2275f6580f973Dca044", 1);
+    await tx05.wait();
+*/
+
+
+//const tx02 = await timeSquadAria.mint("0x9bc3b51B229e0664dd48B2275f6580f973Dca044");
+//await tx02.wait();
+//await delay(2000);
+const tx03 = await timeSquadLuna.mint("0x9bc3b51B229e0664dd48B2275f6580f973Dca044");
+await tx03.wait();
+await delay(2000);
+const tx04 = await timeSquadRyker.mint("0x9bc3b51B229e0664dd48B2275f6580f973Dca044");
+await tx04.wait();
+await delay(2000);
+const tx05 = await timeSquadThaddeus.mint("0x9bc3b51B229e0664dd48B2275f6580f973Dca044");
+await tx05.wait();
+
+
+    async function ensureApproval(contract: any, owner: any, tokenId: number, recipient: string) {
+      const approvedAddress = await contract.getApproved(tokenId);
+      console.log(`Approved address for token ID ${tokenId}: ${approvedAddress}`);
+    
+      const isApprovedForAll = await contract.isApprovedForAll(owner.address, recipient);
+      console.log(`Is approved for all: ${isApprovedForAll}`);
+    
+      if (approvedAddress !== recipient && !isApprovedForAll) {
+        console.log(`Approving ${recipient} to transfer token ID ${tokenId}`);
+        const tx = await contract.approve(recipient, tokenId);
+        await tx.wait();
+      }
+    }
 
 
     //set primary asset
@@ -137,33 +187,34 @@ const managerAddress: string = "0x77107E792C3a3bB0A05E27c141182B67Dc411baB";
 
     //readAssetsToToken(thaddeusLeftHand,1n)
 
-    const replacesAssetWithId = 3n;  //quello vecchio da rimpiazzare
-    const tokenId = 1;
-    const assetId = 1n;
+
+    //const replacesAssetWithId = 3n;  //quello vecchio da rimpiazzare
+    //const tokenId = 1;
+    //const assetId = 1n;
 
 
     // await addAssetToChildToken(thaddeusLeftHand, tokenId, assetId, replacesAssetWithId)
-/*
-    let lol2 = await timeSquadAria.manageContributor(deployer, true);
-    lol2 = await timeSquadLuna.manageContributor(deployer, true);
-    lol2 = await timeSquadRyker.manageContributor(deployer, true);
-    lol2 = await timeSquadThaddeus.manageContributor(deployer, true);
-    await delay(10000)
-*/
-/*
-    await mintParentNFT(timeSquadAria, deployer.address);
-    await delay(1000);
-    await mintParentNFT(timeSquadLuna, deployer.address);
-    await delay(1000);
-    await mintParentNFT(timeSquadRyker, deployer.address);
-    await delay(1000);
-    await mintParentNFT(timeSquadThaddeus, deployer.address);
-
-    
-    let lol = await timeSquadThaddeus.isContributor(deployer);
-    console.log(lol)
-
+    /*
+        let lol2 = await timeSquadAria.manageContributor(deployer, true);
+        lol2 = await timeSquadLuna.manageContributor(deployer, true);
+        lol2 = await timeSquadRyker.manageContributor(deployer, true);
+        lol2 = await timeSquadThaddeus.manageContributor(deployer, true);
+        await delay(10000)
     */
+    /*
+        await mintParentNFT(timeSquadAria, deployer.address);
+        await delay(1000);
+        await mintParentNFT(timeSquadLuna, deployer.address);
+        await delay(1000);
+        await mintParentNFT(timeSquadRyker, deployer.address);
+        await delay(1000);
+        await mintParentNFT(timeSquadThaddeus, deployer.address);
+    
+        
+        let lol = await timeSquadThaddeus.isContributor(deployer);
+        console.log(lol)
+    
+        */
     //set approval to all per il parent2
 
     // Uncomment these lines if needed
@@ -341,34 +392,38 @@ const managerAddress: string = "0x77107E792C3a3bB0A05E27c141182B67Dc411baB";
                 });
               }
 */
-              if (!isHardhatNetwork()) {
-                const collectionMeta = C.SQUAD_ITEM_METADATA_RYKER_LEFT_HAND;
-                const maxSupply = ethers.MaxUint256;
-                const royaltyRecipient = (await ethers.getSigners())[0].address;
-                const royaltyPercentageBps = 1000; // 10%
-            
-                const args = [collectionMeta, maxSupply, royaltyRecipient, royaltyPercentageBps] as const;
-                  console.log('Waiting 10 seconds before verifying contract...');
-                  await delay(10000);
-                  await run('verify:verify', {
-                    address: contractItemAddresses.rykerLeftHand,
-                    constructorArguments: args,
-                    contract: 'contracts/parent/RykerLeftHand.sol:RykerLeftHand',
-                  });
-                }
-/*
-        if (!isHardhatNetwork()) {
-     
-          const args = [] as const;
-            console.log('Waiting 10 seconds before verifying contract...');
-            await delay(10000);
-            await run('verify:verify', {
-              address: managerAddress,
-              constructorArguments: args,
-              contract: 'contracts/parent/AgeOfChronosManager.sol:AgeOfChronosManager',
-            });
-          }
-      */
+
+
+    /*
+    if (!isHardhatNetwork()) {
+                    const collectionMeta = C.SQUAD_ITEM_METADATA_RYKER_LEFT_HAND;
+                    const maxSupply = ethers.MaxUint256;
+                    const royaltyRecipient = (await ethers.getSigners())[0].address;
+                    const royaltyPercentageBps = 1000; // 10%
+                
+                    const args = [collectionMeta, maxSupply, royaltyRecipient, royaltyPercentageBps] as const;
+                      console.log('Waiting 10 seconds before verifying contract...');
+                      await delay(10000);
+                      await run('verify:verify', {
+                        address: contractItemAddresses.rykerLeftHand,
+                        constructorArguments: args,
+                        contract: 'contracts/parent/RykerLeftHand.sol:RykerLeftHand',
+                      });
+                    }
+                      */
+    /*
+            if (!isHardhatNetwork()) {
+         
+              const args = [] as const;
+                console.log('Waiting 10 seconds before verifying contract...');
+                await delay(10000);
+                await run('verify:verify', {
+                  address: managerAddress,
+                  constructorArguments: args,
+                  contract: 'contracts/parent/AgeOfChronosManager.sol:AgeOfChronosManager',
+                });
+              }
+          */
 
     /*
     const tokenId = 1;
