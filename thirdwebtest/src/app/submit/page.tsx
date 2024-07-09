@@ -1,8 +1,6 @@
-// src/app/SubmitData.tsx
 'use client';
 import React, { useState } from 'react';
 import { useActiveAccount, useSendTransaction, TransactionButton, ThirdwebProvider } from 'thirdweb/react';
-
 import { createThirdwebClient, defineChain, getContract, prepareContractCall, prepareTransaction, toWei } from 'thirdweb';
 
 const client = createThirdwebClient({
@@ -28,30 +26,47 @@ const myChain = defineChain({
 
 const contractManagerAddress = '0x7ccDc0BCaf6d3B4787Fd39e96587eEb1B384986d';
 
+type ResponseType = {
+  result?: any;
+  error?: string;
+};
+
 const SubmitData: React.FC = () => {
-  const [solidityFunction, setSolidityFunction] = useState('');
+  const [whichChild, setWhichChild] = useState('');
   const [rykerTokenId, setRykerTokenId] = useState('');
   const [lunaTokenId, setLunaTokenId] = useState('');
   const [ariaTokenId, setAriaTokenId] = useState('');
   const [thaddeusTokenId, setThaddeusTokenId] = useState('');
-  const [key, setKey] = useState('');
-  const [response, setResponse] = useState(null);
+  const [key, setKey] = useState('NomindioLabs');
+  const [response, setResponse] = useState<ResponseType | null>(null);
+  const [responseMessage, setResponseMessage] = useState<string | null>(null);
 
   const activeAccount = useActiveAccount();
-
   const [loading, setLoading] = useState(false);
 
-  async function sendData(endpoint: string) {
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ solidityFunction, rykerTokenId, lunaTokenId, ariaTokenId, thaddeusTokenId, key })
-    });
+  async function sendData(endpoint: string, solidityFunction: string) {
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ solidityFunction, rykerTokenId, lunaTokenId, ariaTokenId, thaddeusTokenId, whichChild, key })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-    const result = await response.json();
-    setResponse(result);
+      const result = await response.json();
+      console.log("Server response:", result);
+      setResponse({ result });
+      setResponseMessage(JSON.stringify(result, null, 2));
+    } catch (error) {
+      console.error('Error sending data:', error);
+      setResponse({ error: (error as Error).message });
+      setResponseMessage((error as Error).message);
+    }
   }
 
   async function preparePayFeeTransaction() {
@@ -86,80 +101,147 @@ const SubmitData: React.FC = () => {
       chain: myChain,
       to: contractManagerAddress,
       data: callData.data,
-      value: toWei("0.1") as bigint, // Replace with the actual fee value in wei
+      value: toWei("0.1") as bigint, // TODO PRENDILE CON UNA GET getFee al manager
     });
   }
 
   return (
-    <div>
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       <h1>Invia Dati a Davide</h1>
-      <input
-        type="text"
-        placeholder="solidityFunction Nome"
-        value={solidityFunction}
-        onChange={(e) => setSolidityFunction(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Ryker Token ID"
-        value={rykerTokenId}
-        onChange={(e) => setRykerTokenId(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Luna Token ID"
-        value={lunaTokenId}
-        onChange={(e) => setLunaTokenId(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Aria Token ID"
-        value={ariaTokenId}
-        onChange={(e) => setAriaTokenId(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Thaddeus Token ID"
-        value={thaddeusTokenId}
-        onChange={(e) => setThaddeusTokenId(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Key"
-        value={key}
-        onChange={(e) => setKey(e.target.value)}
-      />
+      <div style={{ marginBottom: '20px' }}>
+        <h2>Token IDs</h2>
+        <input
+          type="text"
+          placeholder="Ryker Token ID"
+          value={rykerTokenId}
+          onChange={(e) => setRykerTokenId(e.target.value)}
+          style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
+        />
+        <input
+          type="text"
+          placeholder="Luna Token ID"
+          value={lunaTokenId}
+          onChange={(e) => setLunaTokenId(e.target.value)}
+          style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
+        />
+        <input
+          type="text"
+          placeholder="Aria Token ID"
+          value={ariaTokenId}
+          onChange={(e) => setAriaTokenId(e.target.value)}
+          style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
+        />
+        <input
+          type="text"
+          placeholder="Thaddeus Token ID"
+          value={thaddeusTokenId}
+          onChange={(e) => setThaddeusTokenId(e.target.value)}
+          style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
+        />
 
-      <button onClick={() => sendData('/api/davide/startMission')}>Start Mission</button>
-      <button onClick={() => sendData('/api/davide/endMission')}>End Mission</button>
+        <h2>whichChild in endmission lascia bianco se fai altro</h2>
+        <input
+          type="text"
+          placeholder="whichChild"
+          value={whichChild}
+          onChange={(e) => setWhichChild(e.target.value)}
+          style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
+        />
+      </div>
+      
+      <div style={{ marginBottom: '20px' }}>
+        <h2>Chiave</h2>
+        <input
+          type="text"
+          placeholder="Key"
+          value={key}
+          onChange={(e) => setKey(e.target.value)}
+          style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
+        />
+      </div>
 
-      <ThirdwebProvider>
-            <TransactionButton
-        transaction={preparePayFeeTransaction}
-        onTransactionSent={() => setLoading(true)}
-        onTransactionConfirmed={() => {
-          setLoading(false);
-          alert('Fee paid successfully');
-        }}
-        onError={(error) => {
-          setLoading(false);
-          if (error instanceof Error) {
-            alert('Error paying fee: ' + error.message);
-          } else {
-            alert('An unknown error occurred');
-          }
-        }}
-        disabled={loading}
-        unstyled
-      >
-        <button disabled={loading}>{loading ? 'Loading...' : 'Pay Fee'}</button>
-        </TransactionButton>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+        <button
+          onClick={() => sendData('/api/davide','startMission')}
+          style={{
+            padding: '10px 20px',
+            backgroundColor: '#007bff',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer'
+          }}
+        >
+          Start Mission
+        </button>
+        <button
+          onClick={() => sendData('/api/davide','endMission')}
+          style={{
+            padding: '10px 20px',
+            backgroundColor: '#28a745',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer'
+          }}
+        >
+          End Mission
+        </button>
+      </div>
+
+      <div style={{ marginBottom: '20px' }}>
+        <ThirdwebProvider>
+          <TransactionButton
+            transaction={preparePayFeeTransaction}
+            onTransactionSent={() => setLoading(true)}
+            onTransactionConfirmed={() => {
+              setLoading(false);
+              alert('Fee paid successfully');
+            }}
+            onError={(error) => {
+              setLoading(false);
+              if (error instanceof Error) {
+                alert('Error paying fee: ' + error.message);
+              } else {
+                alert('An unknown error occurred');
+              }
+            }}
+            disabled={loading}
+            unstyled
+          >
+            <div
+              style={{
+                width: '100%',
+                padding: '10px 20px',
+                backgroundColor: '#ffc107',
+                color: '#000',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                textAlign: 'center'
+              }}
+            >
+              {loading ? 'Loading...' : 'Pay Fee'}
+            </div>
+          </TransactionButton>
         </ThirdwebProvider>
+      </div>
 
       {response && (
         <div>
           <h2>Risposta del server:</h2>
-          <pre>{JSON.stringify(response, null, 2)}</pre>
+          <pre style={{ backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '4px' }}>
+            {JSON.stringify(response, null, 2)}
+          </pre>
+        </div>
+      )}
+
+      {responseMessage && (
+        <div>
+          <h2>Response Message:</h2>
+          <text style={{ backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '4px', display: 'block' }}>
+            {responseMessage}
+          </text>
         </div>
       )}
     </div>
