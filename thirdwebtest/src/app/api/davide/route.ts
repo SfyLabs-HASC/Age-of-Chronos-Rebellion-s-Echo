@@ -19,8 +19,14 @@ const publicKeyPath = 'src/keys/public.pem';
 
 const engineBaseUrl = 'https://c33fdf82.engine-usw2.thirdweb.com';
 const backendWalletAddress = '0x93e7b1f3fA8f57425B8a80337D94Ae3992879911';
-const managerContractAddress = '0x7ccDc0BCaf6d3B4787Fd39e96587eEb1B384986d';
-const chain = '1287';  //moonbasealpha
+//testing
+//const managerContractAddress = '0x7ccDc0BCaf6d3B4787Fd39e96587eEb1B384986d';
+//const chain = '1287';  //moonbasealpha
+
+//productino
+const managerContractAddress = '0xd50248022D8b254De8923109664918f707e4D074';
+const chain = '1284';  //moonbeam
+
 
 export async function GET(req: NextRequest) {
   return NextResponse.json({ message: 'Ciao Davide!' });

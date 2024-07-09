@@ -1,12 +1,15 @@
 'use client';
 import React, { useState } from 'react';
-import { useActiveAccount, useSendTransaction, TransactionButton, ThirdwebProvider } from 'thirdweb/react';
+import { useActiveAccount, TransactionButton, ThirdwebProvider } from 'thirdweb/react';
 import { createThirdwebClient, defineChain, getContract, prepareContractCall, prepareTransaction, toWei } from 'thirdweb';
 
 const client = createThirdwebClient({
   clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID!
 });
 
+
+/*
+//TESTING
 const myChain = defineChain({
   id: 1287,
   name: 'MoonbaseAlpha',
@@ -23,11 +26,34 @@ const myChain = defineChain({
     }
   ]
 });
-
 const contractManagerAddress = '0x7ccDc0BCaf6d3B4787Fd39e96587eEb1B384986d';
+*/
 
-type ResponseType = {
-  result?: any;
+
+
+///*
+const myChain = defineChain({
+  id: 1284,
+  name: 'Moonbeam',
+  rpc: 'https://rpc.api.moonbeam.network',
+  nativeCurrency: {
+      name: 'GLMR',
+      symbol: 'GLMR',
+      decimals: 18,
+  },
+  blockExplorers: [
+      {
+          name: 'Moonscan',
+          url: 'https://moonbeam.moonscan.io'
+      }
+  ]
+});
+const contractManagerAddress = '0xd50248022D8b254De8923109664918f707e4D074';
+
+//*/
+
+type ResponseType<T = any> = {
+  result?: T;
   error?: string;
 };
 
@@ -53,19 +79,26 @@ const SubmitData: React.FC = () => {
         },
         body: JSON.stringify({ solidityFunction, rykerTokenId, lunaTokenId, ariaTokenId, thaddeusTokenId, whichChild, key })
       });
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
 
       const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error.message || `HTTP error! status: ${response.status}`);
+      }
+
       console.log("Server response:", result);
       setResponse({ result });
-      setResponseMessage(JSON.stringify(result, null, 2));
-    } catch (error) {
+      setResponseMessage(`Queue ID: ${result.queueId}`);
+      
+    } catch (error: unknown) {
       console.error('Error sending data:', error);
-      setResponse({ error: (error as Error).message });
-      setResponseMessage((error as Error).message);
+      if (error instanceof Error) {
+        setResponse({ error: error.message });
+        setResponseMessage(error.message);
+      } else {
+        setResponse({ error: 'An unknown error occurred' });
+        setResponseMessage('An unknown error occurred');
+      }
     }
   }
 
