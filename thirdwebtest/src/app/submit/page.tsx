@@ -1,4 +1,5 @@
 'use client';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import { useActiveAccount, TransactionButton, ThirdwebProvider } from 'thirdweb/react';
 import { createThirdwebClient, defineChain, getContract, prepareContractCall, prepareTransaction, toWei } from 'thirdweb';
