@@ -122,7 +122,7 @@ async function main() {
 
 
   const vicedirettoreAddress = "0x93e7b1f3fA8f57425B8a80337D94Ae3992879911"
-  const contract7508Address = "0xE5CF7218253535E019bb4B38Fb9d0167BB6D049e"
+  const contract7508Address = "0x4778B7e8088B258A447990e18AdB5fD14B1bD100"
   const managerAddress = "0xd50248022D8b254De8923109664918f707e4D074"
   const manager: AgeOfChronosManager = await ethers.getContractAt('AgeOfChronosManager', managerAddress, deployer);
   

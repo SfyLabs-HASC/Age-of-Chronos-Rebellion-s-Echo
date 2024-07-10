@@ -7,31 +7,6 @@ const client = createThirdwebClient({
   clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID!
 });
 
-
-/*
-//TESTING
-const myChain = defineChain({
-  id: 1287,
-  name: 'MoonbaseAlpha',
-  rpc: 'https://rpc.testnet.moonbeam.network',
-  nativeCurrency: {
-    name: 'DEV',
-    symbol: 'DEV',
-    decimals: 18,
-  },
-  blockExplorers: [
-    {
-      name: 'Moonscan',
-      url: 'https://moonbase.moonscan.io'
-    }
-  ]
-});
-const contractManagerAddress = '0x7ccDc0BCaf6d3B4787Fd39e96587eEb1B384986d';
-*/
-
-
-
-///*
 const myChain = defineChain({
   id: 1284,
   name: 'Moonbeam',
@@ -48,9 +23,8 @@ const myChain = defineChain({
       }
   ]
 });
-const contractManagerAddress = '0xd50248022D8b254De8923109664918f707e4D074';
 
-//*/
+const contractManagerAddress = '0xd50248022D8b254De8923109664918f707e4D074';
 
 type ResponseType<T = any> = {
   result?: T;
@@ -88,8 +62,24 @@ const SubmitData: React.FC = () => {
 
       console.log("Server response:", result);
       setResponse({ result });
-      setResponseMessage(`Queue ID: ${result.queueId}`);
-      
+      const queueId = result.queueId;
+      setResponseMessage(`Queue ID: ${queueId}`);
+
+      // Effettua la richiesta GET per ottenere lo stato della transazione
+      const statusResponse = await fetch(
+        `https://c33fdf82.engine-usw2.thirdweb.com/transaction/status/${queueId}`, // Usa l'URL corretto del tuo engine
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`, // Assicurati che l'access token sia configurato correttamente
+          },
+        }
+      );
+
+      const statusResult = await statusResponse.json();
+
+      // Aggiorna lo stato con il risultato della transazione
+      setResponseMessage(JSON.stringify(statusResult, null, 2));
     } catch (error: unknown) {
       console.error('Error sending data:', error);
       if (error instanceof Error) {
@@ -134,7 +124,7 @@ const SubmitData: React.FC = () => {
       chain: myChain,
       to: contractManagerAddress,
       data: callData.data,
-      value: toWei("0.1") as bigint, // TODO PRENDILE CON UNA GET getFee al manager
+      value: toWei("0.3") as bigint, // TODO PRENDILE CON UNA GET getFee al manager
     });
   }
 
