@@ -141,7 +141,7 @@ const MintChild: React.FC = () => {
 
   return (
     <ThirdwebProvider>
-      {(hasMintPermission && selectedChild) || 1===1 ? (
+      {(hasMintPermission && selectedChild)? (
         <TransactionButton
           transaction={handleTransaction}
           onTransactionSent={handleTransactionSent}
