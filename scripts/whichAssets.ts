@@ -136,7 +136,7 @@ async function main() {
   for (const key in contractItemAddresses) {
     if (contractItemAddresses.hasOwnProperty(key)) {
       const contract = await ethers.getContractAt(key, contractItemAddresses[key], deployer);
-      const hasPermission = await contract.hasExternalPermission("0x9bc3b51B229e0664dd48B2275f6580f973Dca044");
+      const hasPermission = await contract.hasExternalPermission("0x34e0a808aEfFd37548253bAd6d62a55d93a8AB87");
       console.log(`for ${key} collection: ${hasPermission}`);
       await delay(50); // Delay to avoid rate limiting or overwhelming the network
     }

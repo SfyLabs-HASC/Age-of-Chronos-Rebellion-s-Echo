@@ -4,7 +4,7 @@
   "description": "Template for new projects using RMRK protocol on EVM",
   "scripts": {
     "test": "hardhat typechain && hardhat test",
-    "postinstall": "(cd thirdwebtest && sudo npm install --force)",
+    "postinstall": "(cd thirdwebtest && sudo npm install --legacy-peer-deps)",
     "compile": "hardhat compile",
     "typechain": "hardhat typechain",
     "deploy:catalog": "hardhat run scripts/run-deploy-catalog.ts",
