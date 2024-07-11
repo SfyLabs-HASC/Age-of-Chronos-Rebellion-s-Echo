@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { useActiveAccount, useActiveWalletChain } from "thirdweb/react";
 import MintChild from '../mintChild';
@@ -9,12 +9,10 @@ import { faLink } from '@fortawesome/free-solid-svg-icons';
 import { faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import Link from 'next/link';
 
-
 export default function MintPage() {
   const account = useActiveAccount();
   const activeChain = useActiveWalletChain();
   const isMoonbeamNetwork = activeChain?.id === 1284; // ID di Moonbeam
-
 
   return (
     <main className="main">
@@ -41,6 +39,7 @@ export default function MintPage() {
         <div className="container-fluid main-container">
           <div className="row align-items-center mobrow">
             <div className="col-12 text-center">
+              lol
               <MintChild />
             </div>
           </div>

@@ -53,11 +53,13 @@ const MintChild: React.FC = () => {
   const [hasMintPermission, setHasMintPermission] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedChild, setSelectedChild] = useState<keyof typeof contractItemAddresses | null>(null);
+  const [transactionHash, setTransactionHash] = useState<string | null>(null);
   const account = useActiveAccount();
 
   useEffect(() => {
     async function checkPermissions() {
       if (account) {
+        let permissionFound = false;
         for (const key in contractItemAddresses) {
           if (contractItemAddresses.hasOwnProperty(key)) {
             const contractInstance = await getContract({
@@ -90,9 +92,13 @@ const MintChild: React.FC = () => {
               setSelectedChild(key as keyof typeof contractItemAddresses);
               setHasMintPermission(true);
               setContract(contractInstance);
+              permissionFound = true;
               break;
             }
           }
+        }
+        if (!permissionFound) {
+          setHasMintPermission(false);
         }
       }
       setLoading(false);
@@ -116,6 +122,7 @@ const MintChild: React.FC = () => {
 
   const handleTransactionSent = (result: any) => {
     console.log("Transaction submitted", result.transactionHash);
+    setTransactionHash(result.transactionHash);
   };
 
   const handleTransactionConfirmed = (receipt: any) => {
@@ -134,7 +141,7 @@ const MintChild: React.FC = () => {
 
   return (
     <ThirdwebProvider>
-      {hasMintPermission && selectedChild ? (
+      {(hasMintPermission && selectedChild) || 1===1 ? (
         <TransactionButton
           transaction={handleTransaction}
           onTransactionSent={handleTransactionSent}
@@ -143,11 +150,16 @@ const MintChild: React.FC = () => {
           disabled={!account || loading}
           unstyled
         >
-          <span>{loading ? 'Loading' : 'Mint Child'}</span>
+          <a className="hex_button">{loading ? 'Loading' : 'Mint your Item'}</a>
         </TransactionButton>
       ) : (
         <div className="aoc_panel">
-          <p className="no-permission">You do not have permission to mint any child.</p>
+          <p className="no-permission">You do not have permission to mint any item.</p>
+        </div>
+      )}
+      {transactionHash && (
+        <div className="aoc_panel">
+          <p>Transaction successful! <a href={`https://moonbeam.moonscan.io/tx/${transactionHash}`} target="_blank" rel="noopener noreferrer">View on Moonscan</a></p>
         </div>
       )}
     </ThirdwebProvider>
