@@ -1,6 +1,6 @@
 'use client';
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useActiveAccount, ThirdwebProvider } from 'thirdweb/react';
 import { createThirdwebClient, defineChain } from 'thirdweb';
 
@@ -25,59 +25,37 @@ const myChain = defineChain({
   ]
 });
 
-const contractItemAddresses = {
-  "AriaLeftHand": "0x9Ea72623340C7420f5cAb670e7a77Cca879ED9bD",
-  "LunaLeftHand": "0x1F88d1694372BE1cAe8037888A2A2c22E949bb7d",
-  "RykerRightHand": "0x9dB9312A55550B0F6a5fcaAb31F5fBb9Abfbb3Cb",
-  "ThaddeusRightHand": "0x7ea2542c69B768747583D90a41cF35916571c15C"
+const contractParentAddresses: { [key: string]: string } = {
+  "Aria": "0xf6F0130799de29cf1A402290766a1C9c95B6d017",
+  "Luna": "0xe429fb9fD5dcFe9B148f0E6FF922C8A6d12B4f53",
+  "Ryker": "0x972009B42a51CaCd43e059a2C56e92541EF2Bc2f",
+  "Thaddeus": "0xE7AeB43Ed1dE5D357F190847830b2a9f31E0C032"
 };
 
 const SubmitData: React.FC = () => {
   const [responseMessage, setResponseMessage] = useState<string | null>(null);
-  const activeAccount = useActiveAccount();
+  const activeWallet = useActiveAccount();
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (activeAccount) {
-      getBalanceOf();
-    }
-  }, [activeAccount]);
-
-  async function generateAccessToken() {
-    const response = await fetch('/api/get', {
-      method: 'GET'
-    });
-    const result = await response.json();
-    console.log('Generated Access Token:', result.accessToken);
-    return result.accessToken;
-  }
-
-  async function getBalanceOf() {
+  const getBalanceOf = async () => {
     try {
-      if (!activeAccount || !activeAccount.address) {
-        throw new Error('No active account found');
+      if (!activeWallet || !activeWallet.address) {
+        throw new Error('No active wallet found');
       }
 
       setLoading(true);
-      const accessToken = await generateAccessToken();
-      const chainId = myChain.id;
-      const args = activeAccount.address;
 
       const balances: Record<string, any> = {};
 
-      for (const [key, contractAddress] of Object.entries(contractItemAddresses)) {
+      for (const [key, contractAddress] of Object.entries(contractParentAddresses)) {
         console.log('Making GET request to balanceOf:', {
-          url: `https://c33fdf82.engine-usw2.thirdweb.com/contract/${chainId}/${contractAddress}/read?functionName=balanceOf&args=${args}`,
-          accessToken
+          url: `/api/balanceof?parentContract=${contractAddress}&walletAddress=${activeWallet.address}`
         });
 
         const balanceResponse = await fetch(
-          `https://c33fdf82.engine-usw2.thirdweb.com/contract/${chainId}/${contractAddress}/read?functionName=balanceOf&args=${args}`,
+          `/api/balanceof?parentContract=${contractAddress}&walletAddress=${activeWallet.address}`,
           {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${accessToken}`
-            }
+            method: 'GET'
           }
         );
 
@@ -97,29 +75,38 @@ const SubmitData: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
-    <ThirdwebProvider>
-      <main className="main">
-        <section id="inside">
-          <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-            {loading ? (
-              <div>Loading...</div>
-            ) : (
-              responseMessage && (
-                <div>
-                  <h2>Response Message:</h2>
-                  <pre style={{ backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '4px' }}>
-                    {responseMessage}
-                  </pre>
-                </div>
-              )
-            )}
-          </div>
-        </section>
-      </main>
-    </ThirdwebProvider>
+
+      <div>
+      <div>
+      <div>
+      <div>
+        <div>
+          <button
+            onClick={getBalanceOf}
+            
+          >
+            Get Balance Of
+          </button>
+        </div>
+        {loading ? (
+          <div>Loading...</div>
+        ) : (
+          responseMessage && (
+            <div>
+              <h2>Response Message:</h2>
+              <pre style={{ backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '4px' }}>
+                {responseMessage}
+              </pre>
+            </div>
+          )
+        )}
+      </div>
+      </div>
+      </div>
+      </div>
   );
 };
 
