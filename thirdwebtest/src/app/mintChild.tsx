@@ -1,5 +1,5 @@
 'use client'
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import { ThirdwebProvider, TransactionButton, useActiveAccount } from "thirdweb/react";
 import { createThirdwebClient, defineChain, getContract, prepareContractCall, readContract } from 'thirdweb';
@@ -30,14 +30,16 @@ const contractItemAddresses = {
   "LunaLeftHand": "0x1F88d1694372BE1cAe8037888A2A2c22E949bb7d",
   "RykerRightHand": "0x9dB9312A55550B0F6a5fcaAb31F5fBb9Abfbb3Cb",
   "ThaddeusRightHand": "0x7ea2542c69B768747583D90a41cF35916571c15C"
-};
+} as const;
 
 const childData = {
   "AriaLeftHand": { assetIds: [BigInt(3), BigInt(4)] },
   "LunaLeftHand": { assetIds: [BigInt(3), BigInt(4)] },
   "RykerRightHand": { assetIds: [BigInt(7), BigInt(8)] },
   "ThaddeusRightHand": { assetIds: [BigInt(3), BigInt(4)] }
-};
+} as const;
+
+type ContractItemAddresses = keyof typeof contractItemAddresses;
 
 async function hasPermission(contract: any, address: string) {
   const permission = await readContract({
@@ -52,7 +54,7 @@ const MintChild: React.FC = () => {
   const [contract, setContract] = useState<any>(null);
   const [hasMintPermission, setHasMintPermission] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [selectedChild, setSelectedChild] = useState<keyof typeof contractItemAddresses | null>(null);
+  const [selectedChild, setSelectedChild] = useState<ContractItemAddresses | null>(null);
   const [transactionHash, setTransactionHash] = useState<string | null>(null);
   const account = useActiveAccount();
 
@@ -61,11 +63,11 @@ const MintChild: React.FC = () => {
       if (account) {
         let permissionFound = false;
         for (const key in contractItemAddresses) {
-          if (contractItemAddresses.hasOwnProperty(key)) {
+          if (Object.prototype.hasOwnProperty.call(contractItemAddresses, key)) {
             const contractInstance = await getContract({
               client,
               chain: myChain,
-              address: contractItemAddresses[key],
+              address: contractItemAddresses[key as ContractItemAddresses],
               abi: [
                 {
                   "constant": true,
@@ -89,7 +91,7 @@ const MintChild: React.FC = () => {
             });
             const permission = await hasPermission(contractInstance, account.address);
             if (permission) {
-              setSelectedChild(key as keyof typeof contractItemAddresses);
+              setSelectedChild(key as ContractItemAddresses);
               setHasMintPermission(true);
               setContract(contractInstance);
               permissionFound = true;
@@ -120,17 +122,17 @@ const MintChild: React.FC = () => {
     throw new Error("Failed to prepare transaction");
   };
 
-  const handleTransactionSent = (result: any) => {
+  const handleTransactionSent = (result: { transactionHash: string }) => {
     console.log("Transaction submitted", result.transactionHash);
     setTransactionHash(result.transactionHash);
   };
 
-  const handleTransactionConfirmed = (receipt: any) => {
+  const handleTransactionConfirmed = (receipt: { transactionHash: string }) => {
     console.log("Transaction confirmed", receipt.transactionHash);
     setLoading(false);
   };
 
-  const handleError = (error: any) => {
+  const handleError = (error: Error) => {
     console.error("Transaction error", error);
     setLoading(false);
   };
