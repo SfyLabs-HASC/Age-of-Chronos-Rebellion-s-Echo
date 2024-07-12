@@ -30,19 +30,8 @@ const chain = '1284';  //moonbeam
 
 export async function GET(req: NextRequest) {
   try {
-    const privateKey = await loadKey(privateKeyPath);
-    const publicKey = await loadKey(publicKeyPath);
-
-    const payload = {
-      iss: publicKey
-    };
-
-    const accessToken = jsonwebtoken.sign(payload, privateKey, {
-      algorithm: 'ES256',
-      expiresIn: '15s',
-    });
-
-    return NextResponse.json({ accessToken });
+    
+    return NextResponse.json({ message: 'Age Of Chronos will go to the Moon!!!' });
   } catch (error) {
     console.error("Error generating access token:", error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

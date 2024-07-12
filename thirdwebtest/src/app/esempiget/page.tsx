@@ -77,18 +77,61 @@ const SubmitData: React.FC = () => {
     }
   };
 
-  return (
+  const getOwnedCharacters = async () => {
+    try {
+      if (!activeWallet || !activeWallet.address) {
+        throw new Error('No active wallet found');
+      }
 
-      <div>
-      <div>
-      <div>
-      <div>
+      setLoading(true);
+
+      const characters: Record<string, any> = {};
+
+      for (const [key, contractAddress] of Object.entries(contractParentAddresses)) {
+        console.log('Making GET request to getOwnedCharacters:', {
+          url: `/api/GetOwnedCharacters?parentContract=${contractAddress}&walletAddress=${activeWallet.address}`
+        });
+
+        const charactersResponse = await fetch(
+          `/api/GetOwnedCharacters?parentContract=${contractAddress}&walletAddress=${activeWallet.address}`,
+          {
+            method: 'GET'
+          }
+        );
+
+        const charactersResult = await charactersResponse.json();
+        console.log(`Received getOwnedCharacters response for ${key}:`, charactersResult);
+        characters[key] = charactersResult;
+      }
+
+      setResponseMessage(JSON.stringify(characters, null, 2));
+    } catch (error: unknown) {
+      console.error('Error getting owned characters:', error);
+      if (error instanceof Error) {
+        setResponseMessage(error.message);
+      } else {
+        setResponseMessage('An unknown error occurred');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+   
+      <div >
         <div>
           <button
             onClick={getBalanceOf}
             
           >
             Get Balance Of
+          </button>
+          <button
+            onClick={getOwnedCharacters}
+            
+          >
+            Get Owned Characters
           </button>
         </div>
         {loading ? (
@@ -104,9 +147,7 @@ const SubmitData: React.FC = () => {
           )
         )}
       </div>
-      </div>
-      </div>
-      </div>
+
   );
 };
 
