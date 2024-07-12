@@ -36,6 +36,11 @@ const SubmitData: React.FC = () => {
   const [responseMessage, setResponseMessage] = useState<string | null>(null);
   const activeWallet = useActiveAccount();
   const [loading, setLoading] = useState(false);
+  const [rykerTokenId, setRykerTokenId] = useState('');
+  const [lunaTokenId, setLunaTokenId] = useState('');
+  const [ariaTokenId, setAriaTokenId] = useState('');
+  const [thaddeusTokenId, setThaddeusTokenId] = useState('');
+  const [key, setKey] = useState('NomindioLabs');
 
   const getBalanceOf = async () => {
     try {
@@ -117,22 +122,124 @@ const SubmitData: React.FC = () => {
     }
   };
 
+  const getCharacterDropRate = async () => {
+    try {
+      if (!activeWallet || !activeWallet.address) {
+        throw new Error('No active wallet found');
+      }
+
+      setLoading(true);     
+        
+        console.log('Making GET request to getCharacterDropRate:', {
+          url: `/api/getCharacterDropRate?rykerTokenId=${rykerTokenId}&lunaTokenId=${lunaTokenId}&ariaTokenId=${ariaTokenId}&thaddeusTokenId=${thaddeusTokenId}&key=${key}`
+        });
+        const dropRateResponse = await fetch(
+          `/api/getCharacterDropRate?rykerTokenId=${rykerTokenId}&lunaTokenId=${lunaTokenId}&ariaTokenId=${ariaTokenId}&thaddeusTokenId=${thaddeusTokenId}&key=${key}`,
+          {
+            method: 'GET'
+          }
+        );
+
+        const dropRateResult = await dropRateResponse.json();
+        console.log(`Received getCharacterDropRate response`, dropRateResult);
+        
+      
+
+      setResponseMessage(JSON.stringify(dropRateResult, null, 2));
+    } catch (error: unknown) {
+      console.error('Error getting character drop rates:', error);
+      if (error instanceof Error) {
+        setResponseMessage(error.message);
+      } else {
+        setResponseMessage('An unknown error occurred');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-   
-      <div >
-        <div>
+    <div style={{ paddingTop: '30vh' }}>
+      <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+        <div style={{ marginBottom: '20px' }}>
           <button
             onClick={getBalanceOf}
-            
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#007bff',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
           >
             Get Balance Of
           </button>
           <button
             onClick={getOwnedCharacters}
-            
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#28a745',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              marginLeft: '10px'
+            }}
           >
             Get Owned Characters
           </button>
+          <div style={{ marginTop: '20px' }}>
+            <input
+              type="text"
+              placeholder="Ryker Token ID"
+              value={rykerTokenId}
+              onChange={(e) => setRykerTokenId(e.target.value)}
+              style={{ padding: '10px', marginRight: '10px' }}
+            />
+            <input
+              type="text"
+              placeholder="Luna Token ID"
+              value={lunaTokenId}
+              onChange={(e) => setLunaTokenId(e.target.value)}
+              style={{ padding: '10px', marginRight: '10px' }}
+            />
+            <input
+              type="text"
+              placeholder="Aria Token ID"
+              value={ariaTokenId}
+              onChange={(e) => setAriaTokenId(e.target.value)}
+              style={{ padding: '10px', marginRight: '10px' }}
+            />
+            <input
+              type="text"
+              placeholder="Thaddeus Token ID"
+              value={thaddeusTokenId}
+              onChange={(e) => setThaddeusTokenId(e.target.value)}
+              style={{ padding: '10px', marginRight: '10px' }}
+            />
+            <input
+              type="text"
+              placeholder="Key"
+              value={key}
+              onChange={(e) => setKey(e.target.value)}
+              style={{ padding: '10px' }}
+            />
+            <button
+              onClick={getCharacterDropRate}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: '#ffc107',
+                color: '#000',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                marginLeft: '10px'
+              }}
+            >
+              Get Character Drop Rate
+            </button>
+          </div>
         </div>
         {loading ? (
           <div>Loading...</div>
@@ -147,7 +254,7 @@ const SubmitData: React.FC = () => {
           )
         )}
       </div>
-
+    </div>
   );
 };
 
