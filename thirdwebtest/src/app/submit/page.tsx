@@ -13,15 +13,15 @@ const myChain = defineChain({
   name: 'Moonbeam',
   rpc: 'https://rpc.api.moonbeam.network',
   nativeCurrency: {
-      name: 'GLMR',
-      symbol: 'GLMR',
-      decimals: 18,
+    name: 'GLMR',
+    symbol: 'GLMR',
+    decimals: 18,
   },
   blockExplorers: [
-      {
-          name: 'Moonscan',
-          url: 'https://moonbeam.moonscan.io'
-      }
+    {
+      name: 'Moonscan',
+      url: 'https://moonbeam.moonscan.io'
+    }
   ]
 });
 
@@ -45,6 +45,14 @@ const SubmitData: React.FC = () => {
   const activeAccount = useActiveAccount();
   const [loading, setLoading] = useState(false);
 
+  async function generateAccessToken() {
+    const response = await fetch('/api/davide', {
+      method: 'GET'
+    });
+    const result = await response.json();
+    return result.accessToken;
+  }
+
   async function sendData(endpoint: string, solidityFunction: string) {
     try {
       const response = await fetch(endpoint, {
@@ -63,16 +71,19 @@ const SubmitData: React.FC = () => {
 
       console.log("Server response:", result);
       setResponse({ result });
-      const queueId = result.queueId;
+      const queueId = result.result.queueId;
       setResponseMessage(`Queue ID: ${queueId}`);
-
+      console.log(`Queue ID: ${queueId}`)
+      // Genera l'access token dinamicamente
+      const accessToken = await generateAccessToken();
+      console.log("acess", accessToken)
       // Effettua la richiesta GET per ottenere lo stato della transazione
       const statusResponse = await fetch(
-        `https://c33fdf82.engine-usw2.thirdweb.com/transaction/status/${queueId}`, // Usa l'URL corretto del tuo engine
+        `https://c33fdf82.engine-usw2.thirdweb.com/transaction/status/${queueId}`,
         {
           method: 'GET',
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`, // Assicurati che l'access token sia configurato correttamente
+            Authorization: `Bearer ${accessToken}`, // Usa l'access token generato
           },
         }
       );
@@ -172,7 +183,7 @@ const SubmitData: React.FC = () => {
           style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
         />
       </div>
-      
+
       <div style={{ marginBottom: '20px' }}>
         <h2>Chiave</h2>
         <input
@@ -186,7 +197,7 @@ const SubmitData: React.FC = () => {
 
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
         <button
-          onClick={() => sendData('/api/davide','startMission')}
+          onClick={() => sendData('/api/davide', 'startMission')}
           style={{
             padding: '10px 20px',
             backgroundColor: '#007bff',
@@ -199,7 +210,7 @@ const SubmitData: React.FC = () => {
           Start Mission
         </button>
         <button
-          onClick={() => sendData('/api/davide','endMission')}
+          onClick={() => sendData('/api/davide', 'endMission')}
           style={{
             padding: '10px 20px',
             backgroundColor: '#28a745',

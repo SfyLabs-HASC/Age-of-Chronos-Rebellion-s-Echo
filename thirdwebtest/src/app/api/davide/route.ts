@@ -29,13 +29,30 @@ const chain = '1284';  //moonbeam
 
 
 export async function GET(req: NextRequest) {
-  return NextResponse.json({ message: 'Ciao Davide!' });
+  try {
+    const privateKey = await loadKey(privateKeyPath);
+    const publicKey = await loadKey(publicKeyPath);
+
+    const payload = {
+      iss: publicKey
+    };
+
+    const accessToken = jsonwebtoken.sign(payload, privateKey, {
+      algorithm: 'ES256',
+      expiresIn: '15s',
+    });
+
+    return NextResponse.json({ accessToken });
+  } catch (error) {
+    console.error("Error generating access token:", error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
 }
 
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
-    console.log("Data received in POST request:", data);
+    //console.log("Data received in POST request:", data);
     const { solidityFunction, rykerTokenId, lunaTokenId, ariaTokenId, thaddeusTokenId, whichChild, key } = data;
 
     // Controlli sui parametri ricevuti
@@ -68,7 +85,7 @@ export async function POST(req: NextRequest) {
         ]
       };
     }
-    console.log("JSON.stringify(bodyToHash):", JSON.stringify(bodyToHash));
+    //console.log("JSON.stringify(bodyToHash):", JSON.stringify(bodyToHash));
     const privateKey = await loadKey(privateKeyPath);
     const publicKey = await loadKey(publicKeyPath);
 
@@ -99,11 +116,10 @@ export async function POST(req: NextRequest) {
         }
       );
 
-      console.log("Response:", response.data);
+      //console.log("Response:", response.data);
       return NextResponse.json({ result: response.data }, { status: 201 });
     } catch (error: any) {
       if (error.response) {
-        console.log("CE UN ERRORER");
         console.log("Error response:", error.response.data);
         return NextResponse.json({ error: error.response.data }, { status: error.response.status });
       } else if (error.request) {
