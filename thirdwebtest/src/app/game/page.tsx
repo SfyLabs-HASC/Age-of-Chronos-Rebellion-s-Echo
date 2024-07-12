@@ -27,10 +27,10 @@ export default function GamesPage() {
   }, []);
 
   const { unityProvider, isLoaded, requestFullscreen, loadingProgression } = useUnityContext({
-    loaderUrl: '/unity/Build/TestWebGL.loader.js',
-    dataUrl: '/unity/Build/TestWebGL.data',
-    frameworkUrl: '/unity/Build/TestWebGL.framework.js',
-    codeUrl: '/unity/Build/TestWebGL.wasm',
+    loaderUrl: '/unity/Build/unity.loader.js',
+    dataUrl: '/unity/Build/unity.data',
+    frameworkUrl: '/unity/Build/unity.framework.js',
+    codeUrl: '/unity/Build/unity.wasm',
   });
 
   return (
@@ -129,7 +129,7 @@ export default function GamesPage() {
         .progress-bar {
           width: 0%;
           height: 10px;
-          background: #00ff00;
+          background: #ffffff;
           margin-bottom: 10px;
           transition: width 0.3s ease-in-out;
         }
