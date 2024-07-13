@@ -32,6 +32,13 @@ const contractParentAddresses: { [key: string]: string } = {
   "Thaddeus": "0xE7AeB43Ed1dE5D357F190847830b2a9f31E0C032"
 };
 
+const contractItemAddresses: { [key: string]: string } = {
+  "AriaLeftHand": "0x9Ea72623340C7420f5cAb670e7a77Cca879ED9bD",
+  "LunaLeftHand": "0x1F88d1694372BE1cAe8037888A2A2c22E949bb7d",
+  "RykerRightHand": "0x9dB9312A55550B0F6a5fcaAb31F5fBb9Abfbb3Cb",
+  "ThaddeusRightHand": "0x7ea2542c69B768747583D90a41cF35916571c15C"
+};
+
 const SubmitData: React.FC = () => {
   const [responseMessage, setResponseMessage] = useState<string | null>(null);
   const activeWallet = useActiveAccount();
@@ -158,6 +165,46 @@ const SubmitData: React.FC = () => {
     }
   };
 
+  const getEquipmentChildren = async () => {
+    try {
+      if (!activeWallet || !activeWallet.address) {
+        throw new Error('No active wallet found');
+      }
+
+      setLoading(true);
+
+      const balances: Record<string, any> = {};
+
+      for (const [key, childAddress] of Object.entries(contractItemAddresses)) {
+        console.log('Making GET request to calculateBalance:', {
+          url: `/api/getEquipmentChildren?walletAddress=${activeWallet.address}&childAddress=${childAddress}`
+        });
+
+        const balanceResponse = await fetch(
+          `/api/getEquipmentChildren?walletAddress=${activeWallet.address}&childAddress=${childAddress}`,
+          {
+            method: 'GET'
+          }
+        );
+
+        const balanceResult = await balanceResponse.json();
+        console.log(`Received calculateBalance response for ${key}:`, balanceResult);
+        balances[key] = balanceResult;
+      }
+
+      setResponseMessage(JSON.stringify(balances, null, 2));
+    } catch (error: unknown) {
+      console.error('Error getting equipment children:', error);
+      if (error instanceof Error) {
+        setResponseMessage(error.message);
+      } else {
+        setResponseMessage('An unknown error occurred');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div style={{ paddingTop: '30vh' }}>
       <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
@@ -240,6 +287,20 @@ const SubmitData: React.FC = () => {
               Get Character Drop Rate
             </button>
           </div>
+          <button
+            onClick={getEquipmentChildren}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#17a2b8',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              marginTop: '20px'
+            }}
+          >
+            Get Equipment Children
+          </button>
         </div>
         {loading ? (
           <div>Loading...</div>
