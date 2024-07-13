@@ -48,6 +48,8 @@ const SubmitData: React.FC = () => {
   const [ariaTokenId, setAriaTokenId] = useState('');
   const [thaddeusTokenId, setThaddeusTokenId] = useState('');
   const [key, setKey] = useState('NomindioLabs');
+  const [childContract, setChildContract] = useState('');
+  const [childTokenId, setChildTokenId] = useState('');
 
   const getBalanceOf = async () => {
     try {
@@ -205,6 +207,36 @@ const SubmitData: React.FC = () => {
     }
   };
 
+  const getChildInfo = async () => {
+    try {
+      setLoading(true);
+
+      console.log('Making GET request to getChildInfo:', {
+        url: `/api/getChildInfo?childContract=${childContract}&tokenId=${childTokenId}`
+      });
+
+      const childInfoResponse = await fetch(
+        `/api/getChildInfo?childContract=${childContract}&tokenId=${childTokenId}`,
+        {
+          method: 'GET'
+        }
+      );
+
+      const childInfoResult = await childInfoResponse.json();
+      console.log(`Received getChildInfo response:`, childInfoResult);
+      setResponseMessage(JSON.stringify(childInfoResult, null, 2));
+    } catch (error: unknown) {
+      console.error('Error getting child info:', error);
+      if (error instanceof Error) {
+        setResponseMessage(error.message);
+      } else {
+        setResponseMessage('An unknown error occurred');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div style={{ paddingTop: '30vh' }}>
       <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
@@ -301,6 +333,36 @@ const SubmitData: React.FC = () => {
           >
             Get Equipment Children
           </button>
+          <div style={{ marginTop: '20px' }}>
+            <input
+              type="text"
+              placeholder="Child Contract Address"
+              value={childContract}
+              onChange={(e) => setChildContract(e.target.value)}
+              style={{ padding: '10px', marginRight: '10px', marginTop: '20px' }}
+            />
+            <input
+              type="text"
+              placeholder="Child Token ID"
+              value={childTokenId}
+              onChange={(e) => setChildTokenId(e.target.value)}
+              style={{ padding: '10px', marginRight: '10px', marginTop: '20px' }}
+            />
+            <button
+              onClick={getChildInfo}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: '#fd7e14',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                marginTop: '20px'
+              }}
+            >
+              Get Child Info
+            </button>
+          </div>
         </div>
         {loading ? (
           <div>Loading...</div>
