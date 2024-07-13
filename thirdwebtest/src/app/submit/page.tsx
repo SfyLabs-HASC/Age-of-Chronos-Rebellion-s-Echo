@@ -131,12 +131,22 @@ const SubmitData: React.FC = () => {
       params: [BigInt(rykerTokenId), BigInt(lunaTokenId), BigInt(ariaTokenId), BigInt(thaddeusTokenId)],
     });
 
+    //const gasLimit = 10000n
+    //const gasPrice:bigint = toWei("155") as bigint
+    //const maxFeePerGas:bigint = toWei("165") as bigint
+    //const maxPriorityFeePerGas:bigint = toWei("10") as bigint
+
+
     return await prepareTransaction({
       client: client,
       chain: myChain,
       to: contractManagerAddress,
       data: callData.data,
       value: toWei("0.3") as bigint, // TODO PRENDILE CON UNA GET getFee al manager
+      //gas: gasLimit,
+      //gasPrice: gasPrice,
+      //maxPriorityFeePerGas:maxPriorityFeePerGas,
+      //maxFeePerGas: maxFeePerGas,
     });
   }
 
