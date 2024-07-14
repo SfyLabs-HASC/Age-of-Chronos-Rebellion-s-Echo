@@ -19,9 +19,6 @@ export default function Home() {
           <Link href="./mint" passHref className="hex_button turret-road-bold">
             JOIN THE REBELLION
           </Link>
-          <Link href="./game" passHref className="hex_button turret-road-bold">
-            PLAY GAME
-          </Link>
           
           <ul className="socialLink d-flex flex-row justify-content-center m-0 p-0">
             <li>
