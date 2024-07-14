@@ -29,6 +29,9 @@ const chain = '1284';  //moonbeam
 
 
 export async function GET(req: NextRequest) {
+  if (req.headers.get('x-forwarded-proto') !== 'https') {
+    return NextResponse.json({ error: 'HTTPS is required' }, { status: 400 });
+  }
   try {
     
     return NextResponse.json({ message: 'Age Of Chronos will go to the Moon!!!' });
@@ -124,10 +127,16 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
+  if (req.headers.get('x-forwarded-proto') !== 'https') {
+    return NextResponse.json({ error: 'HTTPS is required' }, { status: 400 });
+  }
   const data = await req.json();
   return NextResponse.json({ message: 'Dati aggiornati', data }, { status: 200 });
 }
 
 export async function DELETE(req: NextRequest) {
+  if (req.headers.get('x-forwarded-proto') !== 'https') {
+    return NextResponse.json({ error: 'HTTPS is required' }, { status: 400 });
+  }
   return NextResponse.json({ message: 'Risorsa eliminata' }, { status: 200 });
 }
