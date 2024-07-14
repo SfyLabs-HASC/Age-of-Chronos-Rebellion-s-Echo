@@ -14,9 +14,6 @@ const loadKey = async (keyPath: string): Promise<string> => {
 };
 
 export async function GET(req: NextRequest) {
-  if (req.headers.get('x-forwarded-proto') !== 'https') {
-    return NextResponse.json({ error: 'HTTPS is required' }, { status: 400 });
-  }
   const { searchParams } = new URL(req.url);
   const rykerTokenId = searchParams.get('rykerTokenId');
   const lunaTokenId = searchParams.get('lunaTokenId');
