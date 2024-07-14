@@ -15,16 +15,18 @@ const loadKey = async (keyPath: string): Promise<string> => {
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const tokenId = searchParams.get('tokenId');
-  const parentCollectionAddress = searchParams.get('parentContract');
+  const rykerTokenId = searchParams.get('rykerTokenId');
+  const lunaTokenId = searchParams.get('lunaTokenId');
+  const ariaTokenId = searchParams.get('ariaTokenId');
+  const thaddeusTokenId = searchParams.get('thaddeusTokenId');
   const key = searchParams.get('key');
 
-  if (!tokenId || !parentCollectionAddress || !key) {
-    return NextResponse.json({ error: 'Missing tokenId, parentContract, or key' }, { status: 400 });
+  if (!rykerTokenId || !lunaTokenId || !ariaTokenId || !thaddeusTokenId || !key) {
+    return NextResponse.json({ error: 'Missing rykerTokenId, lunaTokenId, ariaTokenId, thaddeusTokenId, or key' }, { status: 400 });
   }
 
   try {
-    const results = await getCharacterDropRates(tokenId, parentCollectionAddress, key);
+    const results = await getCharacterDropRates(rykerTokenId, lunaTokenId, ariaTokenId, thaddeusTokenId, key);
     return NextResponse.json(results);
   } catch (error) {
     console.error("Error:", error);
@@ -32,13 +34,18 @@ export async function GET(req: NextRequest) {
   }
 }
 
-async function getCharacterDropRates(tokenId: string, parentCollectionAddress: string, key: string) {
+async function getCharacterDropRates(rykerTokenId: string, lunaTokenId: string, ariaTokenId: string, thaddeusTokenId: string, key: string) {
   const privateKeyPath = 'src/keys/private.pem';
   const publicKeyPath = 'src/keys/public.pem';
 
   const engineBaseUrl = 'https://c33fdf82.engine-usw2.thirdweb.com';
   const backendWalletAddress = '0x93e7b1f3fA8f57425B8a80337D94Ae3992879911';
   const managerContractAddress = '0xd50248022D8b254De8923109664918f707e4D074';
+  
+  const rykerCollectionAddress = '0x972009B42a51CaCd43e059a2C56e92541EF2Bc2f';
+  const lunaCollectionAddress = '0xe429fb9fD5dcFe9B148f0E6FF922C8A6d12B4f53';
+  const ariaCollectionAddress = '0xf6F0130799de29cf1A402290766a1C9c95B6d017';
+  const thaddeusCollectionAddress = '0xE7AeB43Ed1dE5D357F190847830b2a9f31E0C032';
   
   const chain = '1284';  //moonbeam
 
@@ -85,9 +92,21 @@ async function getCharacterDropRates(tokenId: string, parentCollectionAddress: s
     }
   };
 
-  const payload = createPayload(parentCollectionAddress, tokenId, key);
-  const accessToken = createAccessToken(payload);
-  const result = await makeRequest(parentCollectionAddress, tokenId, accessToken, key);
+  const rykerPayload = createPayload(rykerCollectionAddress, rykerTokenId, key);
+  const rykerAccessToken = createAccessToken(rykerPayload);
+  const rykerResponse = await makeRequest(rykerCollectionAddress, rykerTokenId, rykerAccessToken, key);
 
-  return { result };
+  const lunaPayload = createPayload(lunaCollectionAddress, lunaTokenId, key);
+  const lunaAccessToken = createAccessToken(lunaPayload);
+  const lunaResponse = await makeRequest(lunaCollectionAddress, lunaTokenId, lunaAccessToken, key);
+
+  const ariaPayload = createPayload(ariaCollectionAddress, ariaTokenId, key);
+  const ariaAccessToken = createAccessToken(ariaPayload);
+  const ariaResponse = await makeRequest(ariaCollectionAddress, ariaTokenId, ariaAccessToken, key);
+
+  const thaddeusPayload = createPayload(thaddeusCollectionAddress, thaddeusTokenId, key);
+  const thaddeusAccessToken = createAccessToken(thaddeusPayload);
+  const thaddeusResponse = await makeRequest(thaddeusCollectionAddress, thaddeusTokenId, thaddeusAccessToken, key);
+
+  return { rykerResponse, lunaResponse, ariaResponse, thaddeusResponse };
 }
