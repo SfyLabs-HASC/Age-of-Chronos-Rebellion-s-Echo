@@ -29,9 +29,6 @@ const chain = '1284';  //moonbeam
 
 
 export async function GET(req: NextRequest) {
-  if (req.headers.get('x-forwarded-proto') !== 'https') {
-    return NextResponse.json({ error: 'Requests must be made over HTTPS' }, { status: 400 });
-  }
   try {
     
     return NextResponse.json({ message: 'Age Of Chronos will go to the Moon!!!' });
@@ -42,9 +39,6 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  if (req.headers.get('x-forwarded-proto') !== 'https') {
-    return NextResponse.json({ error: 'Requests must be made over HTTPS' }, { status: 400 });
-  }
   try {
     const data = await req.json();
     //console.log("Data received in POST request:", data);

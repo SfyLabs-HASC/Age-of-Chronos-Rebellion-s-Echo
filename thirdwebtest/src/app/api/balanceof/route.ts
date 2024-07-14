@@ -14,9 +14,6 @@ const loadKey = async (keyPath: string): Promise<string> => {
 };
 
 export async function GET(req: NextRequest) {
-  if (req.headers.get('x-forwarded-proto') !== 'https') {
-    return NextResponse.json({ error: 'Requests must be made over HTTPS' }, { status: 400 });
-  }
   const { searchParams } = new URL(req.url);
   const parentContract = searchParams.get('parentContract');
   const walletAddress = searchParams.get('walletAddress');
