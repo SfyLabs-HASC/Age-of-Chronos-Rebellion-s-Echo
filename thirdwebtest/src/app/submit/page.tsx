@@ -207,7 +207,7 @@ const SubmitData: React.FC = () => {
 
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
         <button
-          onClick={() => sendData('/api/davide', 'startMission')}
+          onClick={() => sendData('/api/davide', '')}
           style={{
             padding: '10px 20px',
             backgroundColor: '#007bff',
@@ -217,10 +217,10 @@ const SubmitData: React.FC = () => {
             cursor: 'pointer'
           }}
         >
-          Start Mission
+          A
         </button>
         <button
-          onClick={() => sendData('/api/davide', 'endMission')}
+          onClick={() => sendData('/api/davide', '')}
           style={{
             padding: '10px 20px',
             backgroundColor: '#28a745',
@@ -230,7 +230,7 @@ const SubmitData: React.FC = () => {
             cursor: 'pointer'
           }}
         >
-          End Mission
+          B
         </button>
       </div>
 
