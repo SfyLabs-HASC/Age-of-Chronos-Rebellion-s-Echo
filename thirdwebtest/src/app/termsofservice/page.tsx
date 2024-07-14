@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import React from 'react';
 import Head from 'next/head';
+import Image from 'next/image';
 
 export default function TermsOfService() {
   return (
@@ -25,7 +26,7 @@ export default function TermsOfService() {
       <section id="inside">
         <Link href="/">
             <header className="pt-3 py-lg-5">
-              <img src="/img/logo-main-aoc.webp" alt="Logo" width={142} height={100} />
+              <Image src="/img/logo-main-aoc.webp" alt="Logo" width={142} height={100} />
             </header>
         </Link>
         <div className="container-fluid main-container py-3 pb-lg-3">
@@ -50,7 +51,7 @@ export default function TermsOfService() {
               <p>Age Of Chronos (“Web 3 Game”), operated by SFY Labs, allows you to participate by crafting and creating NFTs for your characters, and is made available to you by SFY Labs.</p>
 
               <h3>Acceptance</h3>
-              <p>By connecting your EVM Wallet, you confirm that you understand and agree to these terms and conditions (“Terms”). These Terms constitute a legal agreement between you and the Company and govern your access to and use of Age Of Chronos, including any content, functionality, and services offered on or through the website <a href="https://ageofchronos.app">https://ageofchronos.app</a> (the “Site”). The Company reserves the right to change or modify these terms at any time at our sole discretion. By accessing or using Age Of Chronos and the Site following any change to these Terms, you agree to the revised Terms.</p>
+              <p>By connecting your EVM Wallet, you confirm that you understand and agree to these terms and conditions (&quot;Terms&quot;). These Terms constitute a legal agreement between you and the Company and govern your access to and use of Age Of Chronos, including any content, functionality, and services offered on or through the website <a href="https://ageofchronos.app">https://ageofchronos.app</a> (the “Site”). The Company reserves the right to change or modify these terms at any time at our sole discretion. By accessing or using Age Of Chronos and the Site following any change to these Terms, you agree to the revised Terms.</p>
 
               <h3>Definitions</h3>
               <ul>
@@ -95,7 +96,7 @@ export default function TermsOfService() {
                 <li>Reverse-engineer or derive source code.</li>
                 <li>Infringe on intellectual property rights.</li>
                 <li>Damage, disable, impair or compromise the Site.</li>
-                <li>Gain unauthorized access to other users' accounts.</li>
+                <li>Gain unauthorized access to other users accounts.</li>
                 <li>Impose large burdens on the Company infrastructure.</li>
                 <li>Engage in inappropriate activities or violate these Terms.</li>
                 <li>Provide false or incomplete information.</li>
@@ -118,7 +119,7 @@ export default function TermsOfService() {
               <p>You are solely responsible for determining and paying any taxes applicable to your NFT transactions.</p>
 
               <h3>Disclaimers</h3>
-              <p>The Company is not responsible for communications and promotional activities by Creators. The Site, content, and NFTs are provided "as is" without warranties. The Company does not guarantee accuracy, completeness, reliability, or safety. The Company is not liable for security breaches unless due to gross negligence.</p>
+              <p>The Company is not responsible for communications and promotional activities by Creators. The Site, content, and NFTs are provided &quot;as is&quot; without warranties. The Company does not guarantee accuracy, completeness, reliability, or safety. The Company is not liable for security breaches unless due to gross negligence.</p>
 
               <h3>Limitation of Liability</h3>
               <p>The Company is not liable for indirect, consequential, exemplary, incidental, special, or punitive damages. The maximum aggregate liability is limited to US$100.</p>

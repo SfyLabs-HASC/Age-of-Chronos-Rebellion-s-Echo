@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import React from 'react';
 import Head from 'next/head';
+import Image from 'next/image';
 
 export default function PrivacyPolicy() {
   return (
@@ -25,7 +26,7 @@ export default function PrivacyPolicy() {
       <section id="inside">
         <Link href="/">
             <header className="pt-3 py-lg-5">
-              <img src="/img/logo-main-aoc.webp" alt="Logo" width={142} height={100} />
+              <Image src="/img/logo-main-aoc.webp" alt="Logo" width={142} height={100} />
             </header>
         </Link>
         <div className="container-fluid main-container py-3 pb-lg-3">
@@ -47,7 +48,7 @@ export default function PrivacyPolicy() {
             <div className="col-12">
               <h2>Privacy Policy</h2>
               <p><strong>Effective Date: July 15, 2024</strong></p>
-              <p>This Privacy Policy describes how SFY Labs Association ("Company", "we", "our", or "us") collects, uses, and shares information about you when you access and use Age Of Chronos (“Web 3 Game”), including any content, functionality, and services offered on or through the website <a href="https://ageofchronos.com">https://ageofchronos.com</a> (the “Site”).</p>
+              <p>This Privacy Policy describes how SFY Labs Association (&quot;Company&quot;, &quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) collects, uses, and shares information about you when you access and use Age Of Chronos (“Web 3 Game”), including any content, functionality, and services offered on or through the website <a href="https://ageofchronos.com">https://ageofchronos.com</a> (the “Site”).</p>
 
               <h3>1. Information We Collect</h3>
               <h4>1.1 Information You Provide to Us:</h4>
