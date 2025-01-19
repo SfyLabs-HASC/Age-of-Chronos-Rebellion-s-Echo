@@ -26,9 +26,16 @@ interface IChild {
     function ownerOf(uint256 tokenId) external view returns (address);
 
     function setExternalPermission(address account, bool permission) external;
+
+    function mintWithAssets(address to, uint64[] memory assetIds) external;
 }
 
 interface IAttributeManager {
+    struct UintAttribute {
+        string key;
+        uint256 value;
+    }
+
     function setUintAttribute(
         address collection,
         uint256 tokenId,
@@ -145,7 +152,6 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
      * @notice Sets the deployer as the owner upon contract creation.
      */
     function initialize() public initializer {
-        __OwnableUpgradeable_init();
         owner = msg.sender;
         name = "ManagerAgeOfChronos";
     }
@@ -239,17 +245,14 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
         _checkTokenOwnership(ariaCollection, ariaTokenId);
         _checkTokenOwnership(thaddeusCollection, thaddeusTokenId);
 
-        uint256[] memory feesValues = IAttributeManager(contractAddress7508)
-            .getUintAttributes(
-                [
-                    rykerCollection,
-                    lunaCollection,
-                    ariaCollection,
-                    thaddeusCollection
-                ],
-                [rykerTokenId, lunaTokenId, ariaTokenId, thaddeusTokenId],
-                [feeAttributeKey]
-            );
+        // TODO: This is broken, should be removed according to Steven
+        (, , uint256[] memory feesValues) = _batchGetUintAttributes(
+            rykerTokenId,
+            lunaTokenId,
+            ariaTokenId,
+            thaddeusTokenId,
+            feeAttributeKey
+        );
 
         require(
             feesValues[0] == feeAttributeValue &&
@@ -400,19 +403,18 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
 
     /**
      * @notice Starts a mission by setting the soulbound state for a list of tokens. Only callable by the owner or contributor.
+     * @param gameLevel The game level.
      * @param rykerTokenId The token ID for Ryker.
      * @param lunaTokenId The token ID for Luna.
      * @param ariaTokenId The token ID for Aria.
      * @param thaddeusTokenId The token ID for Thaddeus.
-     * @param key The attribute key.
      */
     function startMission(
         uint256 gameLevel,
         uint256 rykerTokenId,
         uint256 lunaTokenId,
         uint256 ariaTokenId,
-        uint256 thaddeusTokenId,
-        string memory key
+        uint256 thaddeusTokenId
     ) external onlyOwnerOrContributor {
         require(
             !_inMission[rykerCollection][rykerTokenId] ||
@@ -429,18 +431,13 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
             "One or more tokens have not paid the fee"
         );
 
-        uint256[] memory characterLevels = IAttributeManager(
-            contractAddress7508
-        ).getUintAttributes(
-                [
-                    rykerCollection,
-                    lunaCollection,
-                    ariaCollection,
-                    thaddeusCollection
-                ],
-                [rykerTokenId, lunaTokenId, ariaTokenId, thaddeusTokenId],
-                [levelAttributeKey]
-            );
+        (, , uint256[] memory characterLevels) = _batchGetUintAttributes(
+            rykerTokenId,
+            lunaTokenId,
+            ariaTokenId,
+            thaddeusTokenId,
+            levelAttributeKey
+        );
         if (
             gameLevel > characterLevels[0] + 1 ||
             gameLevel > characterLevels[1] + 1 ||
@@ -496,15 +493,16 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
 
     /**
      * @notice Ends a mission by resetting the soulbound state for a list of tokens and granting external permission. Only callable by the owner or contributor.
+     * @param gameLevel The game level.
      * @param rykerTokenId The token ID for Ryker.
      * @param lunaTokenId The token ID for Luna.
      * @param ariaTokenId The token ID for Aria.
      * @param thaddeusTokenId The token ID for Thaddeus.
-     * @param key The attribute key.
      * @param childIndex Specifies which child's permission to set (1-16).
+     * @param childAssetIds The asset IDs for the child.
      */
     function endMission(
-        uint256 missionLevel,
+        uint256 gameLevel,
         uint256 rykerTokenId,
         uint256 lunaTokenId,
         uint256 ariaTokenId,
@@ -524,46 +522,59 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
             childAssetIds
         );
 
-        uint256[] memory characterLevels = IAttributeManager(
-            contractAddress7508
-        ).getUintAttributes(
-                [
-                    rykerCollection,
-                    lunaCollection,
-                    ariaCollection,
-                    thaddeusCollection
-                ],
-                [rykerTokenId, lunaTokenId, ariaTokenId, thaddeusTokenId],
-                [levelAttributeKey]
+        (
+            address[] memory collections,
+            uint256[] memory tokenIds,
+            uint256[] memory characterLevels
+        ) = _batchGetUintAttributes(
+                rykerTokenId,
+                lunaTokenId,
+                ariaTokenId,
+                thaddeusTokenId,
+                levelAttributeKey
             );
-        if (characterLevels[0] < missionLevel) {
+
+        if (characterLevels[0] < gameLevel) {
             characterLevels[0]++;
         }
-        if (characterLevels[1] < missionLevel) {
+        if (characterLevels[1] < gameLevel) {
             characterLevels[1]++;
         }
-        if (characterLevels[2] < missionLevel) {
+        if (characterLevels[2] < gameLevel) {
             characterLevels[2]++;
         }
-        if (characterLevels[3] < missionLevel) {
+        if (characterLevels[3] < gameLevel) {
             characterLevels[3]++;
         }
 
+        IAttributeManager.UintAttribute[]
+            memory attributes = new IAttributeManager.UintAttribute[](4);
+        attributes[0] = IAttributeManager.UintAttribute(
+            levelAttributeKey,
+            characterLevels[0]
+        );
+        attributes[1] = IAttributeManager.UintAttribute(
+            levelAttributeKey,
+            characterLevels[1]
+        );
+        attributes[2] = IAttributeManager.UintAttribute(
+            levelAttributeKey,
+            characterLevels[2]
+        );
+        attributes[3] = IAttributeManager.UintAttribute(
+            levelAttributeKey,
+            characterLevels[3]
+        );
+
         IAttributeManager(contractAddress7508).setUintAttributes(
-            [
-                rykerCollection,
-                lunaCollection,
-                ariaCollection,
-                thaddeusCollection
-            ],
-            [rykerTokenId, lunaTokenId, ariaTokenId, thaddeusTokenId],
-            [levelAttributeKey],
-            characterLevels
+            collections,
+            tokenIds,
+            attributes
         );
 
         emit MissionEnded(
-            gameLevel,
             msg.sender,
+            gameLevel,
             rykerTokenId,
             lunaTokenId,
             ariaTokenId,
@@ -715,7 +726,9 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
             );
     }
 
-    function _getChildFromIndex(uint16 index) internal view returns (address) {
+    function _getChildFromIndex(
+        uint16 index
+    ) internal view returns (address childCollection) {
         require(index > 0 && index <= 16, "Invalid index value");
 
         if (index == 0) {
@@ -751,6 +764,43 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
         } else if (index == 15) {
             return thaddeusRightHandCollection;
         }
+    }
+
+    function _batchGetUintAttributes(
+        uint256 rykerTokenId,
+        uint256 lunaTokenId,
+        uint256 ariaTokenId,
+        uint256 thaddeusTokenId,
+        string memory key
+    )
+        internal
+        view
+        returns (
+            address[] memory collections,
+            uint256[] memory tokenIds,
+            uint256[] memory values
+        )
+    {
+        collections = new address[](4);
+        collections[0] = rykerCollection;
+        collections[1] = lunaCollection;
+        collections[2] = ariaCollection;
+        collections[3] = thaddeusCollection;
+
+        tokenIds = new uint256[](4);
+        tokenIds[0] = rykerTokenId;
+        tokenIds[1] = lunaTokenId;
+        tokenIds[2] = ariaTokenId;
+        tokenIds[3] = thaddeusTokenId;
+
+        string[] memory keys = new string[](1);
+        keys[0] = key;
+
+        values = IAttributeManager(contractAddress7508).getUintAttributes(
+            collections,
+            tokenIds,
+            keys
+        );
     }
 
     function _authorizeUpgrade(address) internal override onlyOwner {}
