@@ -2,26 +2,29 @@ import { HardhatUserConfig } from 'hardhat/config';
 import 'dotenv/config';
 import '@nomicfoundation/hardhat-ethers';
 import '@nomicfoundation/hardhat-toolbox';
+import '@openzeppelin/hardhat-upgrades';
 import 'hardhat-contract-sizer';
 import './tasks/emotes';
 import './tasks/attributes';
 import './tasks/metadata';
 import 'hardhat-gas-reporter'; // Import the gas reporter
 
-const accounts = process.env.PRIVATE_KEY && process.env.ADDR1_PRIVATE_KEY && process.env.ADDR2_PRIVATE_KEY && process.env.ADDR44_PRIVATE_KEY
-  ? [
-      process.env.PRIVATE_KEY,
-      process.env.ADDR1_PRIVATE_KEY,
-      process.env.ADDR2_PRIVATE_KEY,
-      process.env.ADDR44_PRIVATE_KEY
-    ]
-  : [];
-
-
+const accounts =
+  process.env.PRIVATE_KEY &&
+  process.env.ADDR1_PRIVATE_KEY &&
+  process.env.ADDR2_PRIVATE_KEY &&
+  process.env.ADDR44_PRIVATE_KEY
+    ? [
+        process.env.PRIVATE_KEY,
+        process.env.ADDR1_PRIVATE_KEY,
+        process.env.ADDR2_PRIVATE_KEY,
+        process.env.ADDR44_PRIVATE_KEY,
+      ]
+    : [];
 
 const config: HardhatUserConfig = {
   solidity: {
-    version: '0.8.21',
+    version: '0.8.22',
     settings: {
       evmVersion: 'london',
       optimizer: {
@@ -58,12 +61,10 @@ const config: HardhatUserConfig = {
     baseSepolia: {
       chainId: 84532,
       url: process.env.BASE_SEPOLIA_URL || 'https://sepolia.base.org',
-      accounts: process.env.PRIVATE_KEY && process.env.ADDR1_PRIVATE_KEY
-      ? [
-          process.env.PRIVATE_KEY,
-          process.env.ADDR1_PRIVATE_KEY
-        ]
-      : [],
+      accounts:
+        process.env.PRIVATE_KEY && process.env.ADDR1_PRIVATE_KEY
+          ? [process.env.PRIVATE_KEY, process.env.ADDR1_PRIVATE_KEY]
+          : [],
       gasPrice: 90000000,
     },
     shibuya: {
@@ -79,12 +80,10 @@ const config: HardhatUserConfig = {
     moonbeam: {
       url: process.env.MOONBEAM_URL || 'https://rpc.api.moonbeam.network',
       chainId: 1284,
-      accounts: process.env.PRIVATE_KEY && process.env.ADDR1_PRIVATE_KEY
-      ? [
-          process.env.PRIVATE_KEY,
-          process.env.ADDR1_PRIVATE_KEY
-        ]
-      : [],
+      accounts:
+        process.env.PRIVATE_KEY && process.env.ADDR1_PRIVATE_KEY
+          ? [process.env.PRIVATE_KEY, process.env.ADDR1_PRIVATE_KEY]
+          : [],
     },
     mainnet: {
       url: process.env.ETHEREUM_URL || 'https://eth.drpc.org',
@@ -128,8 +127,6 @@ const config: HardhatUserConfig = {
     //token: 'ETH', // Token name per prendere il prezzo
     showMethodSig: true,
     coinmarketcap: process.env.COIN_MARKET_CAP_KEY || '',
-
-
   },
   etherscan: {
     apiKey: {

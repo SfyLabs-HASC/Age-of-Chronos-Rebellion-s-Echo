@@ -63,6 +63,12 @@ interface IAttributeManager {
 }
 
 contract AgeOfChronosManagerV2 is UUPSUpgradeable {
+    struct Reward {
+        address childCollection;
+        uint64 assetId1;
+        uint64 assetId2;
+    }
+
     address public owner;
     address public externalAccount;
     mapping(address => bool) public contributors;
@@ -103,6 +109,8 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
     mapping(address => mapping(uint256 => bool)) private _inMission; // Mapping to track if a token is in a mission
     mapping(address => mapping(uint256 => bool)) private _hasPaidFee; // Mapping to track who has paid the fee
 
+    mapping(uint256 level => Reward[] rewards) public _rewardsPerLevel;
+
     string public name;
 
     modifier onlyOwner() {
@@ -134,7 +142,7 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
         uint256 lunaTokenId,
         uint256 ariaTokenId,
         uint256 thaddeusTokenId,
-        uint16 childIndex,
+        address childCollection,
         uint64[] childAssetIds
     );
 
@@ -179,7 +187,6 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
     function set7508Address(address _contractAddress7508) external onlyOwner {
         contractAddress7508 = _contractAddress7508;
     }
-
     /**
      * @notice Returns the 7508 contract address.
      * @return The 7508 contract address.
@@ -226,6 +233,26 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
         levelAttributeKey = key;
     }
 
+    function setRewardsForLevel(
+        uint256 level,
+        Reward[] memory rewards
+    ) external onlyOwner {
+        delete _rewardsPerLevel[level];
+        uint256 length = rewards.length;
+        for (uint256 i; i < length; ) {
+            _rewardsPerLevel[level].push(rewards[i]);
+            unchecked {
+                ++i;
+            }
+        }
+    }
+
+    function getRewardsForLevel(
+        uint256 level
+    ) external view returns (Reward[] memory) {
+        return _rewardsPerLevel[level];
+    }
+
     /**
      * @notice Allows a user to pay the fee for multiple tokens. The fee must match the preset amount.
      * @param rykerTokenId The token ID for Ryker.
@@ -244,23 +271,6 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
         _checkTokenOwnership(lunaCollection, lunaTokenId);
         _checkTokenOwnership(ariaCollection, ariaTokenId);
         _checkTokenOwnership(thaddeusCollection, thaddeusTokenId);
-
-        // TODO: This is broken, should be removed according to Steven
-        (, , uint256[] memory feesValues) = _batchGetUintAttributes(
-            rykerTokenId,
-            lunaTokenId,
-            ariaTokenId,
-            thaddeusTokenId,
-            feeAttributeKey
-        );
-
-        require(
-            feesValues[0] == feeAttributeValue &&
-                feesValues[1] == feeAttributeValue &&
-                feesValues[2] == feeAttributeValue &&
-                feesValues[3] == feeAttributeValue,
-            "One or more tokens have not paid the fee"
-        );
 
         _hasPaidFee[rykerCollection][rykerTokenId] = true;
         _hasPaidFee[lunaCollection][lunaTokenId] = true;
@@ -498,25 +508,27 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
      * @param lunaTokenId The token ID for Luna.
      * @param ariaTokenId The token ID for Aria.
      * @param thaddeusTokenId The token ID for Thaddeus.
-     * @param childIndex Specifies which child's permission to set (1-16).
-     * @param childAssetIds The asset IDs for the child.
      */
     function endMission(
         uint256 gameLevel,
         uint256 rykerTokenId,
         uint256 lunaTokenId,
         uint256 ariaTokenId,
-        uint256 thaddeusTokenId,
-        uint16 childIndex,
-        uint64[] memory childAssetIds
+        uint256 thaddeusTokenId
     ) external onlyOwnerOrContributor {
         _exitMission(rykerCollection, rykerTokenId);
         _exitMission(lunaCollection, lunaTokenId);
         _exitMission(ariaCollection, ariaTokenId);
         _exitMission(thaddeusCollection, thaddeusTokenId);
 
-        address childCollection = _getChildFromIndex(childIndex);
+        Reward memory reward = _getRandomReward(gameLevel);
+        address childCollection = reward.childCollection;
         IChild(childCollection).setExternalPermission(address(this), true);
+
+        uint64[] memory childAssetIds = new uint64[](2);
+        childAssetIds[0] = reward.assetId1;
+        childAssetIds[1] = reward.assetId2;
+
         IChild(childCollection).mintWithAssets(
             IParent(rykerCollection).ownerOf(rykerTokenId),
             childAssetIds
@@ -579,7 +591,7 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
             lunaTokenId,
             ariaTokenId,
             thaddeusTokenId,
-            childIndex,
+            childCollection,
             childAssetIds
         );
     }
@@ -670,19 +682,6 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
         uint256 tokenId
     ) internal view returns (bool) {
         return tokenId <= IParent(collection).totalSupply();
-    }
-
-    /**
-     * @dev Internal function to check if a token exists in the collection.
-     * @param collection The address of the collection contract.
-     * @param tokenId The token ID to check.
-     * @return True if the token exists, false otherwise.
-     */
-    function isTokenExists(
-        address collection,
-        uint256 tokenId
-    ) external view returns (bool) {
-        return tokenExists(collection, tokenId);
     }
 
     /**
@@ -801,6 +800,18 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
             tokenIds,
             keys
         );
+    }
+
+    function _getRandomReward(
+        uint256 level
+    ) internal view returns (Reward memory) {
+        Reward[] memory possibleRewards = _rewardsPerLevel[level];
+        require(possibleRewards.length > 0, "No rewards found for this level");
+
+        uint256 randomIndex = uint256(
+            keccak256(abi.encodePacked(block.timestamp, msg.sender, level))
+        ) % possibleRewards.length;
+        return possibleRewards[randomIndex];
     }
 
     function _authorizeUpgrade(address) internal override onlyOwner {}
