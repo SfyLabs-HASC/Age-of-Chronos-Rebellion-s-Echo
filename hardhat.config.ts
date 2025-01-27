@@ -9,18 +9,7 @@ import './tasks/attributes';
 import './tasks/metadata';
 import 'hardhat-gas-reporter'; // Import the gas reporter
 
-const accounts =
-  process.env.PRIVATE_KEY &&
-  process.env.ADDR1_PRIVATE_KEY &&
-  process.env.ADDR2_PRIVATE_KEY &&
-  process.env.ADDR44_PRIVATE_KEY
-    ? [
-        process.env.PRIVATE_KEY,
-        process.env.ADDR1_PRIVATE_KEY,
-        process.env.ADDR2_PRIVATE_KEY,
-        process.env.ADDR44_PRIVATE_KEY,
-      ]
-    : [];
+const accounts = process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [];
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -80,10 +69,7 @@ const config: HardhatUserConfig = {
     moonbeam: {
       url: process.env.MOONBEAM_URL || 'https://rpc.api.moonbeam.network',
       chainId: 1284,
-      accounts:
-        process.env.PRIVATE_KEY && process.env.ADDR1_PRIVATE_KEY
-          ? [process.env.PRIVATE_KEY, process.env.ADDR1_PRIVATE_KEY]
-          : [],
+      accounts: accounts,
     },
     mainnet: {
       url: process.env.ETHEREUM_URL || 'https://eth.drpc.org',

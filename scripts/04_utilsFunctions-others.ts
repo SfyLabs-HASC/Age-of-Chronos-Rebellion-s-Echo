@@ -89,7 +89,12 @@ export async function deployManagerV2(): Promise<AgeOfChronosManagerV2> {
   console.log(`Deploying AgeOfChronosManager to ${network.name} blockchain...`);
 
   const managerFactory = await ethers.getContractFactory('AgeOfChronosManagerV2');
+<<<<<<< HEAD
   const manager = await managerFactory.deploy();
+=======
+  // const manager = <AgeOfChronosManagerV2>managerFactory.attach('0x438aCae3bE381858739aC62e2BBA9Ae3422dEf5e');
+  const manager = <AgeOfChronosManagerV2>(<unknown>await upgrades.deployProxy(managerFactory, []));
+>>>>>>> 4f2fb46 (Minor fixes.)
   await manager.waitForDeployment();
   const managerAddress = await manager.getAddress();
 

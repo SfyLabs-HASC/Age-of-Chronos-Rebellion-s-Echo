@@ -5,10 +5,8 @@ import { configureManager, deployManagerV2 } from './04_utilsFunctions-others';
 import { AgeOfChronosManager } from '../typechain-types';
 
 async function main() {
-  const [deployer, addr1, addr2] = await ethers.getSigners();
+  const [deployer] = await ethers.getSigners();
   console.log('Deployer:', deployer.address);
-  console.log('Addr1:', addr1 ? addr1.address : 'undefined');
-  console.log('Addr2:', addr2 ? addr2.address : 'undefined');
 
   const {
     timeSquadAria,
@@ -39,7 +37,7 @@ async function main() {
   // Deploying Manager contract
   const manager = await deployManagerV2();
 
-  //configure manager (Needs to be done by owner of the collections)
+  //configure manager
   // await configureManager(timeSquadAria, [ariaBody, ariaHead, ariaLeftHand, ariaRightHand], manager);
   // await configureManager(timeSquadLuna, [lunaBody, lunaHead, lunaLeftHand, lunaRightHand], manager);
   // await configureManager(
