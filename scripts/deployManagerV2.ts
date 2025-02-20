@@ -39,20 +39,20 @@ async function main() {
   // Deploying Manager contract
   const manager = await deployManagerV2();
 
-  //configure manager
-  await configureManager(timeSquadAria, [ariaBody, ariaHead, ariaLeftHand, ariaRightHand], manager);
-  await configureManager(timeSquadLuna, [lunaBody, lunaHead, lunaLeftHand, lunaRightHand], manager);
-  await configureManager(
-    timeSquadRyker,
-    [rykerBody, rykerHead, rykerLeftHand, rykerRightHand],
-    manager,
-  );
-  await configureManager(
-    timeSquadThaddeus,
-    [thaddeusBody, thaddeusHead, thaddeusLeftHand, thaddeusRightHand],
-    manager,
-  );
-  console.log('Manager configured');
+  //configure manager (Needs to be done by owner of the collections)
+  // await configureManager(timeSquadAria, [ariaBody, ariaHead, ariaLeftHand, ariaRightHand], manager);
+  // await configureManager(timeSquadLuna, [lunaBody, lunaHead, lunaLeftHand, lunaRightHand], manager);
+  // await configureManager(
+  //   timeSquadRyker,
+  //   [rykerBody, rykerHead, rykerLeftHand, rykerRightHand],
+  //   manager,
+  // );
+  // await configureManager(
+  //   timeSquadThaddeus,
+  //   [thaddeusBody, thaddeusHead, thaddeusLeftHand, thaddeusRightHand],
+  //   manager,
+  // );
+  // console.log('Manager configured');
 
   //set parent collections
   let tx = await manager.setRykerCollection(await timeSquadRyker.getAddress());

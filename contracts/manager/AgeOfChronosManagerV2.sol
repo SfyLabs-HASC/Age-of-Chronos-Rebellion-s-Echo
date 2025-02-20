@@ -8,10 +8,6 @@
 
 pragma solidity ^0.8.21;
 
-import {
-    UUPSUpgradeable
-} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-
 interface IParent {
     function setSoulbound(uint256 tokenId, bool state) external;
 
@@ -62,7 +58,7 @@ interface IAttributeManager {
     ) external view returns (uint256[] memory attributes);
 }
 
-contract AgeOfChronosManagerV2 is UUPSUpgradeable {
+contract AgeOfChronosManagerV2 {
     struct Reward {
         address childCollection;
         uint64 assetId1;
@@ -159,7 +155,7 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
     /**
      * @notice Sets the deployer as the owner upon contract creation.
      */
-    function initialize() public initializer {
+    constructor() {
         owner = msg.sender;
         name = "ManagerAgeOfChronos";
     }
@@ -813,6 +809,4 @@ contract AgeOfChronosManagerV2 is UUPSUpgradeable {
         ) % possibleRewards.length;
         return possibleRewards[randomIndex];
     }
-
-    function _authorizeUpgrade(address) internal override onlyOwner {}
 }
