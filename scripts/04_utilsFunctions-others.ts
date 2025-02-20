@@ -89,12 +89,10 @@ export async function deployManagerV2(): Promise<AgeOfChronosManagerV2> {
   console.log(`Deploying AgeOfChronosManager to ${network.name} blockchain...`);
 
   const managerFactory = await ethers.getContractFactory('AgeOfChronosManagerV2');
-<<<<<<< HEAD
   const manager = await managerFactory.deploy();
-=======
-  // const manager = <AgeOfChronosManagerV2>managerFactory.attach('0x438aCae3bE381858739aC62e2BBA9Ae3422dEf5e');
-  const manager = <AgeOfChronosManagerV2>(<unknown>await upgrades.deployProxy(managerFactory, []));
->>>>>>> 4f2fb46 (Minor fixes.)
+  // const manager = <AgeOfChronosManagerV2>(
+  //   managerFactory.attach('0xD5C5D74C47dd879109c63134F3bA74ACf79543AC')
+  // );
   await manager.waitForDeployment();
   const managerAddress = await manager.getAddress();
 
@@ -102,7 +100,7 @@ export async function deployManagerV2(): Promise<AgeOfChronosManagerV2> {
 
   if (!isHardhatNetwork()) {
     console.log('Waiting 20 seconds before verifying contract...');
-    await delay(20000);
+    // await delay(20000);
     await run('verify:verify', {
       address: managerAddress,
       constructorArguments: [],

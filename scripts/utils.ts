@@ -20,7 +20,7 @@ import {
   ThaddeusHead,
   ThaddeusLeftHand,
   ThaddeusRightHand,
-  AgeOfChronosManager,
+  AgeOfChronosManagerV2,
   RMRKCatalogImpl,
 } from '../typechain-types';
 
@@ -30,6 +30,14 @@ export async function delay(ms: number): Promise<void> {
 
 export function isHardhatNetwork(): boolean {
   return ['hardhat', 'localhost'].includes(network.name);
+}
+
+export async function getManager(): Promise<AgeOfChronosManagerV2> {
+  const managerFactory = await ethers.getContractFactory('AgeOfChronosManagerV2');
+  const manager = <AgeOfChronosManagerV2>(
+    managerFactory.attach('0xD5C5D74C47dd879109c63134F3bA74ACf79543AC')
+  );
+  return manager;
 }
 
 export async function getDeployedContracts(): Promise<{

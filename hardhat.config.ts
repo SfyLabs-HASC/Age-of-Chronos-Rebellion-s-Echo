@@ -8,6 +8,7 @@ import './tasks/emotes';
 import './tasks/attributes';
 import './tasks/metadata';
 import 'hardhat-gas-reporter'; // Import the gas reporter
+import * as tenderly from '@tenderly/hardhat-tenderly';
 
 const accounts = process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [];
 
@@ -190,6 +191,11 @@ const config: HardhatUserConfig = {
         },
       },
     ],
+  },
+  tenderly: {
+    username: process.env.TENDERLY_USER || '',
+    project: process.env.TENDERLY_PROJECT || '',
+    privateVerification: false,
   },
 };
 

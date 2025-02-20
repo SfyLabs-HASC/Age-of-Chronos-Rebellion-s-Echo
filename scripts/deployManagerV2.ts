@@ -52,8 +52,12 @@ async function main() {
   // );
   // console.log('Manager configured');
 
+  let tx = await manager.setLevelAttribute('NomindioLabs');
+  await tx.wait();
+  console.log('level attribute set');
+
   //set parent collections
-  let tx = await manager.setRykerCollection(await timeSquadRyker.getAddress());
+  tx = await manager.setRykerCollection(await timeSquadRyker.getAddress());
   await tx.wait();
   tx = await manager.setLunaCollection(await timeSquadLuna.getAddress());
   await tx.wait();

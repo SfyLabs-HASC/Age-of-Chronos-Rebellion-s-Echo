@@ -52,22 +52,22 @@ async function main() {
   // Level 1:
   let tx = await manager.setRewardsForLevel(1, [
     {
-      childCollection: rykerRightHand,
+      childCollection: rykerRightHandAddress,
       assetId1: 7,
       assetId2: 8,
     },
     {
-      childCollection: lunaLeftHand,
+      childCollection: lunaLeftHandAddress,
       assetId1: 3,
       assetId2: 4,
     },
     {
-      childCollection: ariaRightHand,
+      childCollection: ariaRightHandAddress,
       assetId1: 3,
       assetId2: 4,
     },
     {
-      childCollection: thaddeusRightHand,
+      childCollection: thaddeusRightHandAddress,
       assetId1: 3,
       assetId2: 4,
     },
