@@ -40,7 +40,7 @@ async function getCharacterDropRates(rykerTokenId: string, lunaTokenId: string, 
 
   const engineBaseUrl = 'https://c33fdf82.engine-usw2.thirdweb.com';
   const backendWalletAddress = '0x93e7b1f3fA8f57425B8a80337D94Ae3992879911';
-  const managerContractAddress = '0xd50248022D8b254De8923109664918f707e4D074';
+  const managerContractAddress = '0xD5C5D74C47dd879109c63134F3bA74ACf79543AC';
   
   const rykerCollectionAddress = '0x972009B42a51CaCd43e059a2C56e92541EF2Bc2f';
   const lunaCollectionAddress = '0xe429fb9fD5dcFe9B148f0E6FF922C8A6d12B4f53';

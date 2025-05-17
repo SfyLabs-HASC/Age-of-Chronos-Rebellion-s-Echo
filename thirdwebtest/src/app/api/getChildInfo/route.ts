@@ -56,7 +56,7 @@ async function getChildInfo(childContract: string, tokenId: string) {
   });
 
   try {
-    const response = await axios.get(`${engineBaseUrl}/contract/${chain}/${childContract}/erc721/get`, {
+    let response = await axios.get(`${engineBaseUrl}/contract/${chain}/${childContract}/erc721/get`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`,
@@ -67,6 +67,34 @@ async function getChildInfo(childContract: string, tokenId: string) {
         tokenId: tokenId
       }
     });
+    
+    const payload1 = {
+      iss: publicKey,
+      bodyHash: createHash('sha256').update(JSON.stringify({
+        functionName: 'getActiveAssets',
+        args: [tokenId]
+      })).digest('hex'),
+    };
+  
+    const accessToken1 = jsonwebtoken.sign(payload1, privateKey, {
+      algorithm: 'ES256',
+      expiresIn: '5m',
+    });
+
+    const response1 = await axios.get(`${engineBaseUrl}/contract/${chain}/${childContract}/read`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken1}`,
+        'x-backend-wallet-address': backendWalletAddress,
+        'x-idempotency-key': Math.floor(Math.random() * 1000000).toString(), // Random number
+      },
+      params: {
+        functionName: 'getActiveAssets',
+        args: `${tokenId}`
+      }
+    });
+
+    response.data.result.metadata.assetIDs = response1.data.result;
 
     return response.data;
   } catch (error: any) {
