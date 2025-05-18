@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
     const level = Math.max(1, Math.min(30, dayDiff + 1));
     console.log('today: ' + today + '; level: ' + level);
 
-    return NextResponse.json({ message: 'Age Of Chronos will go to the Moon!!!', level: level});
+    return NextResponse.json({ message: 'Age Of Chronos will go to the Moon!!!', level: 30});
   } catch (error) {
     console.error("Error generating access token:", error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
