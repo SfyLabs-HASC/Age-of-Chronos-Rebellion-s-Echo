@@ -56,7 +56,7 @@ async function getChildInfo(childContract: string, tokenId: string) {
   });
 
   try {
-    let response = await axios.get(`${engineBaseUrl}/contract/${chain}/${childContract}/erc721/get`, {
+    const response = await axios.get(`${engineBaseUrl}/contract/${chain}/${childContract}/erc721/get`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`,
