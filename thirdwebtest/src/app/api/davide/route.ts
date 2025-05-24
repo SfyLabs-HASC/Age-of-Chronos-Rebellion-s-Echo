@@ -31,14 +31,14 @@ const targetTopic = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df
 
 export async function GET(req: NextRequest) {
   try {
-    const startDate = new Date(new Date().getFullYear(), 5, 1); // Months are 0-based (5 = June)
+    const startDate = new Date(new Date().getFullYear(), 4, 26); // Months are 0-based (5 = June)
     const today = new Date();    
     const msPerDay = 1000 * 60 * 60 * 24;
     const dayDiff = Math.floor((today.getTime() - startDate.getTime()) / msPerDay);
     const level = Math.max(1, Math.min(30, dayDiff + 1));
     console.log('today: ' + today + '; level: ' + level);
 
-    return NextResponse.json({ message: 'Age Of Chronos will go to the Moon!!!', level: 30});
+    return NextResponse.json({ message: 'Age Of Chronos will go to the Moon!!!', level: level});
   } catch (error) {
     console.error("Error generating access token:", error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
