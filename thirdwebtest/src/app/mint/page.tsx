@@ -179,11 +179,11 @@ export default function MintPage() {
           <div className="row">
             <div className="col-12 text-center">
               {account && ( isMinted.Ryker || isMinted.Aria || isMinted.Luna || isMinted.Thaddeus ) ? (
-                <a className="hex_button" target="_blank" href={`${config.nftsUrl}${account.address}/nfts/owned?tab=owned&isVerified=false&showPending=true&hideRelated=false&sortBy=minted_at:desc&page=1`}>VIEW YOUR NTFs</a>
+                <a className="hex_button" target="_blank" href={`${config.nftsUrl}${account.address}/nfts/owned?tab=owned&isVerified=false&showPending=true&hideRelated=false&sortBy=minted_at:desc&page=1`}>VIEW YOUR NFTs</a>
               ) : null}
-              <div className="aoc_panel">
+              {/*<div className="aoc_panel">
                 <p>AGE OF CHRONOS is a web-based dungeon crawler, find artifacts and unlock the potential of NFTs 2.0.<br /><span>the mint is FREe.</span><br />To play, you must have all 4 characters, you can claim 1 NFT for each character type.<br /><span>The game is coming soon.</span></p>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="row">

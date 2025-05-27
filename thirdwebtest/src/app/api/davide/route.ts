@@ -31,7 +31,7 @@ const targetTopic = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df
 
 export async function GET(req: NextRequest) {
   try {
-    const startDate = new Date(new Date().getFullYear(), 4, 26); // Months are 0-based (5 = June)
+    const startDate = new Date(new Date().getFullYear(), 4, 27); // Months are 0-based (5 = June)
     const today = new Date();    
     const msPerDay = 1000 * 60 * 60 * 24;
     const dayDiff = Math.floor((today.getTime() - startDate.getTime()) / msPerDay);
