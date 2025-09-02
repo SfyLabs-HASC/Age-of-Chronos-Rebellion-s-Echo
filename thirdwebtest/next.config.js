@@ -1,16 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    async redirects() {
-    return [
-      {
-        source: '/(.*)',
-        has: [{ type: 'host', value: 'ageofchronos.com' }],
-        permanent: true,
-        destination: 'https://www.ageofchronos.com/:1',
-      },
-    ]
-    },
-
     async headers() {
         return [
             {
